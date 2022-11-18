@@ -13,8 +13,9 @@ fn main() {
         .init();
 
     match &cli.command {
-        Commands::List => {
+        Commands::List(args) => {
             info!("Running subcommand `list`.");
+            info!("{:?}", args);
             println!("List");
         }
     }
