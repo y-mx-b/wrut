@@ -1,10 +1,11 @@
 mod cli;
 
 use crate::cli::{Cli, Commands};
+use anyhow::{Context, Result};
 use clap::Parser;
 use log::{info, warn};
 
-fn main() {
+fn main() -> Result<()> {
     let cli = Cli::parse();
 
     env_logger::builder()
@@ -17,6 +18,7 @@ fn main() {
             info!("Running subcommand `list`.");
             info!("{:?}", args);
             println!("List");
+            Ok(())
         }
     }
 }
