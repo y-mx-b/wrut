@@ -1,4 +1,4 @@
-use crate::cli::subcommands::{Init, List};
+use crate::cli::subcommands::{InitArgs, ListArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 
@@ -15,8 +15,8 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     #[clap(alias = "ls")]
-    List(List),
-    Init(Init),
+    List(ListArgs),
+    Init(InitArgs),
 }
 
 #[derive(ValueEnum, Clone, Debug, PartialEq, Eq)]
