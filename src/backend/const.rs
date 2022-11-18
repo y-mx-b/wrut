@@ -1,3 +1,5 @@
+use crate::backend::WutError;
+use anyhow::Result;
 use home::home_dir;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -10,12 +12,17 @@ pub enum Dirs {
 }
 
 impl Dirs {
-    pub fn dirs() -> HashMap<Dirs, PathBuf> {
+    pub fn dirs() -> Result<HashMap<Dirs, PathBuf>, WutError> {
         // TODO use actual errors instead of expect
-        HashMap::from([
-            (Dirs::Wut, home_dir().expect("Failed to get home directory").join(".wut")),
-            (Dirs::Config, home_dir().expect("Failed to get home directory").join(".config/wut")),
-            (Dirs::Data, home_dir().expect("Failed to get home directory").join(".wut/data"))
-        ])
+        let home;
+        match home_dir() {
+            Some(path) => home = path,
+            None => return Err(WutError::HomeDirectoryNotFound),
+        }
+        Ok(HashMap::from([
+            (Dirs::Wut, home.join(".wut")),
+            (Dirs::Config, home.join(".config/wut")),
+            (Dirs::Data, home.join(".wut/data"))
+        ]))
     }
 }

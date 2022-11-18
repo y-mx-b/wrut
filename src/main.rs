@@ -1,11 +1,11 @@
 mod backend;
 mod cli;
 
-use crate::cli::{Cli, Commands};
 use crate::backend::r#const::Dirs;
-use anyhow::{Context, Result};
+use crate::cli::{Cli, Commands};
+use anyhow::Result;
 use clap::Parser;
-use log::{info, warn};
+use log::info;
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -26,7 +26,7 @@ fn main() -> Result<()> {
             info!("Running subcommand `init`.");
             info!("{:?}", args);
             println!("Init");
-            println!("{:?}", Dirs::dirs());
+            println!("{:?}", Dirs::dirs()?);
             Ok(())
         }
     }
