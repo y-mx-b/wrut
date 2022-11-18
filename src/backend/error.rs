@@ -1,5 +1,5 @@
-use thiserror::Error;
 use std::path::PathBuf;
+use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum WutError {
@@ -11,5 +11,5 @@ pub enum WutError {
 
     // Init
     #[error("{0:?} already exist(s) but the `force` option was not set")]
-    InitDirAlreadyExists(Vec<PathBuf>) 
+    InitDirAlreadyExists(Vec<PathBuf>),
 }
