@@ -15,11 +15,7 @@ pub enum Dirs {
 
 impl Dirs {
     pub fn dirs() -> Result<HashMap<Dirs, PathBuf>, WutError> {
-        let home;
-        match home_dir() {
-            Some(path) => home = path,
-            None => return Err(WutError::HomeDirectoryNotFound),
-        }
+        let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
         Ok(HashMap::from([
             (Dirs::Config, home.join(".config/wut")),
             (Dirs::Projects, home.join(".wut/projects")),
