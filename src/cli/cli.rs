@@ -16,19 +16,24 @@ pub struct Cli {
 /// Available subcommands
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Generate shell completions
+    /// Generate shell completions.
     Comp(CompArgs),
-    /// Initialize data/config directories
+    /// Initialize data/config directories.
+    ///
+    /// Will fail if setup directories exist and `--force` is not set.
     Setup(SetupArgs),
     #[clap(alias = "ls")]
-    /// List all items of the given type
+    /// List all items of the given type.
     List(ListArgs),
-    /// Initialize a new template or project directory
+    /// Initialize a new template or project directory.
+    ///
+    /// If an entry under the provided name already exists, then it will be overwritten.
+    #[clap(verbatim_doc_comment)]
     Init(InitArgs),
 }
 
 /// Types to operate on
-#[derive(ValueEnum, Clone, Debug, PartialEq, Eq)]
+#[derive(ValueEnum, Clone, Debug, PartialEq, Eq, Copy)]
 pub enum Type {
     #[clap(alias = "p")]
     Project,

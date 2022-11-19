@@ -1,7 +1,7 @@
 mod backend;
 mod cli;
 
-use crate::backend::{comp, init, setup};
+use crate::backend::{comp, init, list, setup};
 use crate::cli::{Cli, Commands};
 use anyhow::Result;
 use clap::Parser;
@@ -32,12 +32,13 @@ fn main() -> Result<()> {
         Commands::List(args) => {
             info!("Running subcommand `list`.");
             info!("{:?}", args);
-            // TODO write actual code here
-            println!("List");
+            let list = list::list(args.type_)?;
+            println!("{:?}", list);
             Ok(())
         }
         Commands::Init(args) => {
             info!("Running subcommand `init`.");
+            // TODO prettier output
             info!("{:?}", args);
             init::init(current_dir()?, &args.name, args.type_)?;
             Ok(())
