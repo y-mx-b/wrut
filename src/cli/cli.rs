@@ -1,4 +1,4 @@
-use crate::cli::subcommands::{SetupArgs, ListArgs};
+use crate::cli::subcommands::{ListArgs, SetupArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 
