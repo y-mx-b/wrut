@@ -1,5 +1,6 @@
 use crate::backend::WutError;
-use crate::cli::subcommands::SetupArgs;
+use crate::cli::subcommands::{InitType, SetupArgs};
+use crate::cli::Type;
 use anyhow::{Context, Result};
 use home::home_dir;
 use log::info;
@@ -15,6 +16,25 @@ pub enum Dirs {
     Tags,
     Templates,
     Obj,
+}
+
+impl From<InitType> for Dirs {
+    fn from(item: InitType) -> Self {
+        match item {
+            InitType::Project => Dirs::Projects,
+            InitType::Template => Dirs::Templates,
+        }
+    }
+}
+
+impl From<Type> for Dirs {
+    fn from(item: Type) -> Self {
+        match item {
+            Type::Project => Dirs::Projects,
+            Type::Template => Dirs::Templates,
+            Type::Tag => Dirs::Tags,
+        }
+    }
 }
 
 /// Returns a `HashMap` of directory paths mapped to `Dirs` variants

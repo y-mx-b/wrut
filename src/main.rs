@@ -41,8 +41,8 @@ fn main() -> Result<()> {
             info!("{:?}", args);
             // TODO write actual code here
             println!("Init");
-            println!("{:?}", init::dirs(current_dir()?)?);
             println!("{:?}", init::files(current_dir()?)?);
+            init::init(current_dir()?, &args.name, args.type_)?;
             Ok(())
         }
     }
