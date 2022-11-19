@@ -1,5 +1,5 @@
 use crate::backend::WutError;
-use crate::cli::subcommands::{SetupArgs};
+use crate::cli::subcommands::SetupArgs;
 use crate::cli::Type;
 use anyhow::{Context, Result};
 use home::home_dir;
