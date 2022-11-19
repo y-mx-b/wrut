@@ -3,13 +3,13 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum WutError {
-    // Missing directories/files
+    // IO related errors
     #[error("Could not find home directory")]
     HomeDirectoryNotFound,
     #[error("{0:?}")]
     Io(#[from] std::io::Error),
 
-    // Init
+    // Init errors
     #[error("{0:?} already exist(s) but the `force` option was not set")]
     InitDirAlreadyExists(Vec<PathBuf>),
 }
