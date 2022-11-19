@@ -1,4 +1,4 @@
-use crate::backend::WutError;
+use crate::backend::{WutError, config::config};
 use crate::cli::subcommands::SetupArgs;
 use crate::cli::Type;
 use anyhow::{Context, Result};
@@ -6,6 +6,7 @@ use home::home_dir;
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
+use std::io::Write;
 
 /// Each variant refers to a specific directory required for `wut` to function
 #[derive(Hash, Eq, PartialEq, Debug)]
@@ -39,9 +40,22 @@ pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     ]))
 }
 
+#[derive(Hash, Eq, PartialEq, Debug)]
+pub enum Files {
+    Config,
+}
+
+pub fn files() -> Result<HashMap<Files, PathBuf>> {
+    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    Ok(HashMap::from([
+        (Files::Config, home.join(".config/wut/config.toml")),
+    ]))
+}
+
 /// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
     let dirs = dirs()?;
+    let files = files()?;
 
     // delete and create all dirs if `force` is set
     if args.force {
@@ -54,6 +68,13 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
             fs::create_dir_all(dir)?;
         }
 
+        // TODO extract, write function to make it more general
+        // write to config file
+        let config_path = files.get(&Files::Config).unwrap();
+        let config_string = config()?;
+        let mut config_file = fs::File::create(&config_path)?;
+        write!(&mut config_file, "{}", config_string)?;
+
         return Ok(());
     }
 
@@ -62,6 +83,11 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
     for dir in dirs.values() {
         if dir.is_dir() {
             exists.push(dir.clone());
+        }
+    }
+    for file in files.values() {
+        if file.is_file() {
+            exists.push(file.clone());
         }
     }
 
@@ -73,6 +99,13 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
         for dir in dirs.values() {
             fs::create_dir_all(dir)?;
         }
+
+        // TODO extract, write function to make it more general
+        // write to config file
+        let config_path = files.get(&Files::Config).unwrap();
+        let config_string = config()?;
+        let mut config_file = fs::File::create(&config_path)?;
+        write!(&mut config_file, "{}", config_string)?;
 
         Ok(())
     }
