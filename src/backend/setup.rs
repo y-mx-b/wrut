@@ -1,10 +1,11 @@
 use crate::backend::{Dirs, WutError};
 use crate::cli::subcommands::SetupArgs;
+use anyhow::{Context, Result};
 use log::info;
 use std::fs;
 
 /// Initializes all prerequisites for `wut` to function
-pub fn setup(args: &SetupArgs) -> Result<(), WutError> {
+pub fn setup(args: &SetupArgs) -> Result<()> {
     let dirs = Dirs::dirs()?;
 
     // delete and create all dirs if `force` is set
@@ -12,7 +13,8 @@ pub fn setup(args: &SetupArgs) -> Result<(), WutError> {
         for dir in dirs.values() {
             if dir.is_dir() {
                 info!("Removing directory {:?}", dir);
-                fs::remove_dir_all(dir)?;
+                fs::remove_dir_all(dir)
+                    .with_context(|| format!("Attempted to recursively remove {:?}", dir))?;
             }
 
             info!("Creating directory {:?}", dir);
@@ -32,7 +34,7 @@ pub fn setup(args: &SetupArgs) -> Result<(), WutError> {
 
     if exists.len() != 0 {
         // err if dirs already exist
-        Err(WutError::InitDirAlreadyExists(exists))
+        Err(WutError::InitDirAlreadyExists(exists).into())
     } else {
         // create dirs
         for dir in dirs.values() {
