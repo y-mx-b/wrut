@@ -1,11 +1,12 @@
 mod backend;
 mod cli;
 
-use crate::backend::{comp, setup};
+use crate::backend::{comp, init, setup};
 use crate::cli::{Cli, Commands};
 use anyhow::Result;
 use clap::Parser;
 use log::info;
+use std::env::current_dir;
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -40,6 +41,8 @@ fn main() -> Result<()> {
             info!("{:?}", args);
             // TODO write actual code here
             println!("Init");
+            println!("{:?}", init::dirs(current_dir()?)?);
+            println!("{:?}", init::files(current_dir()?)?);
             Ok(())
         }
     }

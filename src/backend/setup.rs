@@ -18,7 +18,7 @@ pub enum Dirs {
 }
 
 /// Returns a `HashMap` of directory paths mapped to `Dirs` variants
-pub fn dirs() -> Result<HashMap<Dirs, PathBuf>, WutError> {
+pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
     Ok(HashMap::from([
         (Dirs::Config, home.join(".config/wut")),
