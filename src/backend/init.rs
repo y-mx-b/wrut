@@ -47,6 +47,8 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
     }
 }
 
+// TODO extract symlink creation to separate function
+
 fn init_template(root: PathBuf, name: &String) -> Result<()> {
     let dirs = setup::dirs()?;
     let dir = dirs
@@ -91,7 +93,22 @@ fn init_project(origin: PathBuf, root: PathBuf, name: &String) -> Result<()> {
         }
     }
 
-    // TODO add symlink
+    let dirs = setup::dirs()?;
+    let dir = dirs
+        .get(&Type::Template.into())
+        .expect("Type should map to setup::Dirs");
+    let file = dir.join(name);
+    if file.try_exists()? {
+        std::fs::remove_file(&file)?;
+    }
+    symlink(&root, &file).with_context(|| {
+        format!(
+            "Failed to create symlink from {:?} at {:?}",
+            &root,
+            dir.join(name)
+        )
+    })?;
+
     Ok(())
 }
 
