@@ -1,9 +1,9 @@
 use crate::backend::{Dirs, WutError};
-use crate::cli::subcommands::InitArgs;
+use crate::cli::subcommands::SetupArgs;
 use log::info;
 use std::fs;
 
-pub fn init(args: &InitArgs) -> Result<(), WutError> {
+pub fn setup(args: &SetupArgs) -> Result<(), WutError> {
     let dirs = Dirs::dirs()?;
 
     // delete and create all dirs if `force` is set

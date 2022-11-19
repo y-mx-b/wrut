@@ -1,8 +1,8 @@
 use clap::Args;
 
-/// Contains args for `init` subcommand
+/// Contains args for `setup` subcommand
 #[derive(Args, Debug)]
-pub struct InitArgs {
+pub struct SetupArgs {
     /// Overwrite existing configuration and data
     #[clap(short, long)]
     pub force: bool,

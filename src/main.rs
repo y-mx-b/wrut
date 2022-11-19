@@ -1,7 +1,7 @@
 mod backend;
 mod cli;
 
-use crate::backend::init;
+use crate::backend::setup;
 use crate::cli::{Cli, Commands};
 use anyhow::Result;
 use clap::Parser;
@@ -22,10 +22,10 @@ fn main() -> Result<()> {
             println!("List");
             Ok(())
         }
-        Commands::Init(args) => {
-            info!("Running subcommand `init`.");
+        Commands::Setup(args) => {
+            info!("Running subcommand `setup`.");
             info!("{:?}", args);
-            init::init(args)?;
+            setup::setup(args)?;
             Ok(())
         }
     }
