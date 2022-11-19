@@ -30,10 +30,8 @@ pub fn init(root: PathBuf, name: &Option<String>, type_: InitType) -> Result<()>
 
     match type_ {
         InitType::Template => init_dir(root, &symlink_name),
-        InitType::Project => {
-            // TODO implement this man
-            todo!()
-        }
+        // TODO implement this
+        InitType::Project => todo!(),
     }
 }
 
