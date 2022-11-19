@@ -39,9 +39,6 @@ fn main() -> Result<()> {
         Commands::Init(args) => {
             info!("Running subcommand `init`.");
             info!("{:?}", args);
-            // TODO write actual code here
-            println!("Init");
-            println!("{:?}", init::files(current_dir()?)?);
             init::init(current_dir()?, &args.name, args.type_)?;
             Ok(())
         }

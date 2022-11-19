@@ -3,7 +3,6 @@ use crate::cli::subcommands::{InitType, SetupArgs};
 use crate::cli::Type;
 use anyhow::{Context, Result};
 use home::home_dir;
-use log::info;
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
@@ -57,12 +56,10 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
     if args.force {
         for dir in dirs.values() {
             if dir.is_dir() {
-                info!("Removing directory {:?}", dir);
                 fs::remove_dir_all(dir)
                     .with_context(|| format!("Attempted to recursively remove {:?}", dir))?;
             }
 
-            info!("Creating directory {:?}", dir);
             fs::create_dir_all(dir)?;
         }
 
@@ -83,7 +80,6 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
     } else {
         // create dirs
         for dir in dirs.values() {
-            info!("Creating directory: {:?}", dir);
             fs::create_dir_all(dir)?;
         }
 

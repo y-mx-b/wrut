@@ -1,19 +1,18 @@
 use crate::backend::setup;
 use crate::cli::subcommands::InitType;
 use anyhow::{Context, Result};
-use log::info;
-use std::collections::HashMap;
+// use std::collections::HashMap;
 use std::os::unix::fs;
 use std::path::PathBuf;
 
-#[derive(Hash, PartialEq, Eq, Debug)]
-pub enum Files {
-    Wut,
-}
-
-pub fn files(root: PathBuf) -> Result<HashMap<Files, PathBuf>> {
-    Ok(HashMap::from([(Files::Wut, root.join(".wut.toml"))]))
-}
+// #[derive(Hash, PartialEq, Eq, Debug)]
+// pub enum Files {
+//     Wut,
+// }
+//
+// pub fn files(root: PathBuf) -> Result<HashMap<Files, PathBuf>> {
+//     Ok(HashMap::from([(Files::Wut, root.join(".wut.toml"))]))
+// }
 
 pub fn init(root: PathBuf, name: &Option<String>, type_: InitType) -> Result<()> {
     let symlink_name: String = {
@@ -31,7 +30,6 @@ pub fn init(root: PathBuf, name: &Option<String>, type_: InitType) -> Result<()>
     let dir = dirs
         .get(&type_.into())
         .expect("InitType should map to setup::Dirs");
-    info!("dir: {:?}", dir);
     let file = dir.join(&symlink_name);
     if file.try_exists()? {
         std::fs::remove_file(file)?;
