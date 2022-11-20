@@ -1,7 +1,7 @@
 mod backend;
 mod cli;
 
-use crate::backend::{comp, init, list, setup};
+use crate::backend::{comp, config, init, list, setup};
 use crate::cli::{Cli, Commands};
 use anyhow::Result;
 use clap::Parser;
@@ -33,14 +33,14 @@ fn main() -> Result<()> {
             info!("Running subcommand `list`.");
             info!("{:?}", args);
             let list = list::list(args.type_)?;
+            // TODO prettier output
             println!("{:?}", list);
             Ok(())
         }
         Commands::Init(args) => {
             info!("Running subcommand `init`.");
-            // TODO prettier output
             info!("{:?}", args);
-            init::init(current_dir()?, &args)?;
+            init::init(current_dir()?, &args, config::get_config(cli.config)?)?;
             Ok(())
         }
     }

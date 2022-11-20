@@ -1,3 +1,4 @@
+use crate::backend::config;
 use crate::backend::{setup, WutError};
 use crate::cli::subcommands::{InitArgs, InitType};
 use anyhow::{Context, Result};
@@ -9,7 +10,7 @@ use walkdir::{DirEntry, WalkDir};
 // TODO add some info logs
 
 /// Register the current working directory under the appropriate `wut` directory as a symlink
-pub fn init(dir: PathBuf, args: &InitArgs) -> Result<()> {
+pub fn init(dir: PathBuf, args: &InitArgs, config: config::Config) -> Result<()> {
     let symlink_name: String = {
         match &args.name {
             Some(val) => val.to_string(),
@@ -31,7 +32,8 @@ pub fn init(dir: PathBuf, args: &InitArgs) -> Result<()> {
         InitType::Project => init_project(
             setup::dir(setup::Dirs::Templates)?
                 .join(args.template.as_ref().expect("Should be provided.")),
-            dir, 
+            dir,
+            config,
         ),
     }
 }
@@ -46,13 +48,8 @@ fn register(type_: InitType, dir: &PathBuf, name: &String) -> Result<()> {
     }
 
     // create the symlink
-    symlink(&dir, &file).with_context(|| {
-        format!(
-            "Failed to create symlink to {:?} at {:?}",
-            &dir,
-            &file
-        )
-    })?;
+    symlink(&dir, &file)
+        .with_context(|| format!("Failed to create symlink to {:?} at {:?}", &dir, &file))?;
 
     Ok(())
 }
@@ -63,7 +60,7 @@ fn init_template(dir: PathBuf) -> Result<()> {
     Ok(())
 }
 
-fn init_project(template: PathBuf, dir: PathBuf) -> Result<()> {
+fn init_project(template: PathBuf, dir: PathBuf, config: config::Config) -> Result<()> {
     let source_dir = &template.canonicalize()?;
     let walker = WalkDir::new(source_dir)
         .min_depth(1)
@@ -72,7 +69,7 @@ fn init_project(template: PathBuf, dir: PathBuf) -> Result<()> {
 
     // TODO use config file to get ignore dirs
     // TODO use config file to get ignore files
-    for entry in walker.filter_entry(|e| !ignore_dir(e, &[".git", "target"])) {
+    for entry in walker.filter_entry(|e| !ignore_dir(e, &config.template.ignore_dirs)) {
         let source = entry?.path().canonicalize()?;
         let dest = dir.join(&source.strip_prefix(source_dir)?);
 
@@ -88,7 +85,7 @@ fn init_project(template: PathBuf, dir: PathBuf) -> Result<()> {
     Ok(())
 }
 
-fn ignore_dir(entry: &DirEntry, dirs: &[&'static str]) -> bool {
+fn ignore_dir(entry: &DirEntry, dirs: &Vec<String>) -> bool {
     let mut b = false;
     for dir in dirs.iter() {
         b = entry.path().is_dir()

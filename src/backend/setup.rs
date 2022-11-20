@@ -73,6 +73,13 @@ pub fn files() -> Result<HashMap<Files, PathBuf>> {
     )]))
 }
 
+pub fn file(file: Files) -> Result<PathBuf> {
+    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    Ok(match file {
+        Files::Config => home.join(".config/wut/config.toml"),
+    })
+}
+
 /// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
     let dirs = dirs()?;
