@@ -42,5 +42,10 @@ fn main() -> Result<()> {
             init::init(current_dir()?, &args, config::get_config(cli.config)?)?;
             Ok(())
         }
+        Commands::Remove(args) => {
+            info!("Running subcommand `remove`.");
+            info!("{:?}", args);
+            todo!()
+        }
     }
 }
