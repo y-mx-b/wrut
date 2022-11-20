@@ -1,5 +1,5 @@
 use crate::backend::setup;
-use crate::cli::subcommands::{CompArgs, InitArgs, InitType, ListArgs, SetupArgs};
+use crate::cli::subcommands::{CompArgs, InitArgs, InitType, ListArgs, RemoveArgs, SetupArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
@@ -38,6 +38,9 @@ pub enum Commands {
     /// If an entry under the provided name already exists, then it will be overwritten.
     #[clap(alias = "i")]
     Init(InitArgs),
+    /// Remove a template or project
+    #[clap(alias = "rm")]
+    Remove(RemoveArgs),
 }
 
 /// Types to operate on
