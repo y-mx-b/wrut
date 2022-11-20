@@ -33,8 +33,7 @@ fn main() -> Result<()> {
             info!("Running subcommand `list`.");
             info!("{:?}", args);
             let list = list::list(args.type_)?;
-            // TODO prettier output
-            println!("{:?}", list);
+            println!("{}", list.join("\t"));
             Ok(())
         }
         Commands::Init(args) => {

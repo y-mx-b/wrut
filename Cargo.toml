@@ -18,8 +18,8 @@ thiserror = "1.0"
 clap_complete = "4.0"
 clap = { version = "4.0.26", features = ["derive", "string"] }
 
-# output
-termion = "2.0"
+# TODO maybe add a tui someday
+# termion = "2.0"
 
 # logging
 clap-verbosity-flag = "2.0"
