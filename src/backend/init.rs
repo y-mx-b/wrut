@@ -31,6 +31,9 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
         }
     };
 
+    // register symlink in the appropriate directory
+    register(args.type_, &root, &symlink_name)?;
+
     match args.type_ {
         InitType::Template => init_template(root, &symlink_name),
         InitType::Project => {
@@ -47,18 +50,19 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
     }
 }
 
-// TODO extract symlink creation to separate function
-
-fn init_template(root: PathBuf, name: &String) -> Result<()> {
+fn register(type_: InitType, root: &PathBuf, name: &String) -> Result<()> {
     let dirs = setup::dirs()?;
     let dir = dirs
-        .get(&Type::Template.into())
+        .get(&type_.into())
         .expect("Type should map to setup::Dirs");
     let file = dir.join(name);
 
+    // if a file by this name already exists, delete it
     if file.try_exists()? {
         std::fs::remove_file(file)?;
     }
+
+    // create the symlink
     symlink(&root, dir.join(name)).with_context(|| {
         format!(
             "Failed to create symlink from {:?} at {:?}",
@@ -66,6 +70,12 @@ fn init_template(root: PathBuf, name: &String) -> Result<()> {
             dir.join(name)
         )
     })?;
+
+    Ok(())
+}
+
+fn init_template(root: PathBuf, name: &String) -> Result<()> {
+    // TODO create .wut.toml file for macros and whatnot
 
     Ok(())
 }
@@ -92,22 +102,6 @@ fn init_project(origin: PathBuf, root: PathBuf, name: &String) -> Result<()> {
             fs::copy(&source, &dest)?;
         }
     }
-
-    let dirs = setup::dirs()?;
-    let dir = dirs
-        .get(&Type::Project.into())
-        .expect("Type should map to setup::Dirs");
-    let file = dir.join(name);
-    if file.try_exists()? {
-        std::fs::remove_file(&file)?;
-    }
-    symlink(&root, &file).with_context(|| {
-        format!(
-            "Failed to create symlink from {:?} at {:?}",
-            &root,
-            dir.join(name)
-        )
-    })?;
 
     Ok(())
 }

@@ -1,6 +1,6 @@
 use crate::backend::{WutError, config::config};
 use crate::cli::subcommands::SetupArgs;
-use crate::cli::Type;
+use crate::cli::{Type, subcommands::InitType};
 use anyhow::{Context, Result};
 use home::home_dir;
 use std::collections::HashMap;
@@ -24,6 +24,15 @@ impl From<Type> for Dirs {
             Type::Project => Dirs::Projects,
             Type::Template => Dirs::Templates,
             Type::Tag => Dirs::Tags,
+        }
+    }
+}
+
+impl From<InitType> for Dirs {
+    fn from(item: InitType) -> Self {
+        match item {
+            InitType::Project => Dirs::Projects,
+            InitType::Template => Dirs::Templates,
         }
     }
 }
