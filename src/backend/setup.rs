@@ -1,4 +1,4 @@
-use crate::backend::{config::config, WutError};
+use crate::backend::{config::default_config, WutError};
 use crate::cli::subcommands::SetupArgs;
 use crate::cli::{subcommands::InitType, Type};
 use anyhow::{Context, Result};
@@ -92,7 +92,7 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
         // TODO extract, write function to make it more general
         // write to config file
         let config_path = files.get(&Files::Config).unwrap();
-        let config_string = config()?;
+        let config_string = default_config()?;
         let mut config_file = fs::File::create(&config_path)?;
         write!(&mut config_file, "{}", config_string)?;
 
@@ -124,7 +124,7 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
         // TODO extract, write function to make it more general
         // write to config file
         let config_path = files.get(&Files::Config).unwrap();
-        let config_string = config()?;
+        let config_string = default_config()?;
         let mut config_file = fs::File::create(&config_path)?;
         write!(&mut config_file, "{}", config_string)?;
 

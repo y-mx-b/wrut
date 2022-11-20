@@ -1,5 +1,8 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
+use std::fs;
+use crate::backend::WutError;
+use std::path::PathBuf;
 
 #[derive(Deserialize, Serialize, Default)]
 pub struct Config {
@@ -18,6 +21,12 @@ pub struct Project {
     default_template: Option<String>,
 }
 
-pub fn config() -> Result<String> {
+pub fn default_config() -> Result<String> {
     Ok(toml::to_string(&Config::default())?)
+}
+
+pub fn get_config(config: PathBuf) -> Result<Config> {
+    // TODO return WutError if fail
+    let data = fs::read(&config).or(Err(WutError::FailedToReadConfigFile(config)))?;
+    Ok(toml::from_slice(data.as_slice())?)
 }
