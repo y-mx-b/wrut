@@ -10,4 +10,8 @@ pub enum WutError {
     // Setup errors
     #[error("{0:?} already exist(s) but the `force` option was not set")]
     SetupDirAlreadyExists(Vec<PathBuf>),
+
+    // Init errors
+    #[error("Failed to acquire the name of the directory at {0:?}.")]
+    FailedToAcquireDirectoryName(PathBuf),
 }

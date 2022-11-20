@@ -1,4 +1,4 @@
-use crate::backend::setup;
+use crate::backend::{setup, WutError};
 use crate::cli::subcommands::{InitArgs, InitType};
 use anyhow::{Context, Result};
 // use std::collections::HashMap;
@@ -23,9 +23,10 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
             Some(val) => val.to_string(),
             None => root
                 .file_name()
-                .expect("Current directory should have a file name")
+                // TODO remove clone() call
+                .ok_or(WutError::FailedToAcquireDirectoryName(root.clone()))?
                 .to_str()
-                .expect("Current directory should have a file name")
+                .ok_or(WutError::FailedToAcquireDirectoryName(root.clone()))?
                 .to_string(),
         }
     };
@@ -36,10 +37,7 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
     match args.type_ {
         InitType::Template => init_template(root, &symlink_name),
         InitType::Project => {
-            let dir: PathBuf = setup::dirs()?
-                .get(&setup::Dirs::Templates)
-                .expect("Directory should exist after `setup`.")
-                .to_path_buf();
+            let dir = setup::dir(setup::Dirs::Templates)?;
             init_project(
                 dir.join(args.template.as_ref().expect("Should be provided.")),
                 root,
@@ -50,10 +48,7 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
 }
 
 fn register(type_: InitType, root: &PathBuf, name: &String) -> Result<()> {
-    let dirs = setup::dirs()?;
-    let dir = dirs
-        .get(&type_.into())
-        .expect("Type should map to setup::Dirs");
+    let dir = setup::dir(type_.into())?;
     let file = dir.join(name);
 
     // if a file by this name already exists, delete it
