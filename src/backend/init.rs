@@ -1,86 +1,81 @@
 use crate::backend::{setup, WutError};
 use crate::cli::subcommands::{InitArgs, InitType};
 use anyhow::{Context, Result};
-// use std::collections::HashMap;
 use std::fs;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
 
-// #[derive(Hash, PartialEq, Eq, Debug)]
-// pub enum Files {
-//     Wut,
-// }
-//
-// pub fn files(root: PathBuf) -> Result<HashMap<Files, PathBuf>> {
-//     Ok(HashMap::from([(Files::Wut, root.join(".wut.toml"))]))
-// }
+// TODO add some info logs
 
 /// Register the current working directory under the appropriate `wut` directory as a symlink
-pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
+pub fn init(dir: PathBuf, args: &InitArgs) -> Result<()> {
     let symlink_name: String = {
         match &args.name {
             Some(val) => val.to_string(),
-            None => root
+            None => dir
                 .file_name()
                 // TODO remove clone() call
-                .ok_or(WutError::FailedToAcquireDirectoryName(root.clone()))?
+                .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
                 .to_str()
-                .ok_or(WutError::FailedToAcquireDirectoryName(root.clone()))?
+                .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
                 .to_string(),
         }
     };
 
     // register symlink in the appropriate directory
-    register(args.type_, &root, &symlink_name)?;
+    register(args.type_, &dir, &symlink_name)?;
 
     match args.type_ {
-        InitType::Template => init_template(root),
+        InitType::Template => init_template(dir),
         InitType::Project => init_project(
-            setup::dir(setup::Dirs::Projects)?
+            setup::dir(setup::Dirs::Templates)?
                 .join(args.template.as_ref().expect("Should be provided.")),
-            root,
+            dir, 
         ),
     }
 }
 
-fn register(type_: InitType, root: &PathBuf, name: &String) -> Result<()> {
-    let dir = setup::dir(type_.into())?;
-    let file = dir.join(name);
+fn register(type_: InitType, dir: &PathBuf, name: &String) -> Result<()> {
+    let registry = setup::dir(type_.into())?;
+    let file = registry.join(name);
 
     // if a file by this name already exists, delete it
     if file.try_exists()? {
-        std::fs::remove_file(file)?;
+        std::fs::remove_file(&file)?;
     }
 
+    println!("registering symlink {:?} as {:?}", &dir, &file);
     // create the symlink
-    symlink(&root, dir.join(name)).with_context(|| {
+    symlink(&dir, &file).with_context(|| {
         format!(
-            "Failed to create symlink from {:?} at {:?}",
-            &root,
-            dir.join(name)
+            "Failed to create symlink to {:?} at {:?}",
+            &dir,
+            &file
         )
     })?;
 
     Ok(())
 }
 
-fn init_template(root: PathBuf) -> Result<()> {
+fn init_template(dir: PathBuf) -> Result<()> {
     // TODO create .wut.toml file for macros and whatnot
 
     Ok(())
 }
 
-fn init_project(origin: PathBuf, root: PathBuf) -> Result<()> {
-    // TODO filter out specific files
-    let walker = WalkDir::new(&origin)
+fn init_project(template: PathBuf, dir: PathBuf) -> Result<()> {
+    let source_dir = &template.canonicalize()?;
+    let walker = WalkDir::new(source_dir)
         .min_depth(1)
         .follow_links(true)
         .into_iter();
+
+    // TODO use config file to get ignore dirs
+    // TODO use config file to get ignore files
     for entry in walker.filter_entry(|e| !ignore_dir(e, &[".git", "target"])) {
-        let source_dir = &origin.canonicalize()?;
         let source = entry?.path().canonicalize()?;
-        let dest = root.join(&source.strip_prefix(source_dir)?);
+        let dest = dir.join(&source.strip_prefix(source_dir)?);
 
         if source.is_dir() {
             println!("directory: {}", source_dir.display());
@@ -97,7 +92,6 @@ fn init_project(origin: PathBuf, root: PathBuf) -> Result<()> {
     Ok(())
 }
 
-// TODO use config file in the future
 fn ignore_dir(entry: &DirEntry, dirs: &[&'static str]) -> bool {
     let mut b = false;
     for dir in dirs.iter() {
@@ -113,3 +107,5 @@ fn ignore_dir(entry: &DirEntry, dirs: &[&'static str]) -> bool {
     }
     b
 }
+
+// TODO add ignore_file function
