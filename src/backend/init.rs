@@ -36,13 +36,11 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
 
     match args.type_ {
         InitType::Template => init_template(root),
-        InitType::Project => {
-            let dir = setup::dir(setup::Dirs::Templates)?;
-            init_project(
-                dir.join(args.template.as_ref().expect("Should be provided.")),
-                root
-            )
-        }
+        InitType::Project => init_project(
+            setup::dir(setup::Dirs::Projects)?
+                .join(args.template.as_ref().expect("Should be provided.")),
+            root,
+        ),
     }
 }
 
