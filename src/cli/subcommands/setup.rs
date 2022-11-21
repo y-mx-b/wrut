@@ -5,8 +5,8 @@ use clap::{Args, ValueEnum};
 pub struct SetupArgs {
     #[clap(short, long)]
     pub force: bool,
-    #[clap(short, long, value_delimiter = ',')] 
-    pub overwrite: Vec<SetupOverwrite>
+    #[clap(short, long, value_delimiter = ',')]
+    pub overwrite: Vec<SetupOverwrite>,
 }
 
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
