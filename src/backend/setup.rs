@@ -1,4 +1,4 @@
-use crate::cli::subcommands::{SetupArgs, SetupOverwrite, InitType, SetupOverwrite};
+use crate::cli::subcommands::{SetupArgs, SetupOverwrite, InitType};
 use crate::cli::Type;
 use crate::backend::{WutError, config::default_config};
 use anyhow::{Context, Result};
@@ -80,7 +80,7 @@ pub fn file(file: Files) -> Result<PathBuf> {
     })
 }
 
-pub fn overwrite_dir(d: Dirs) -> Result<()> {
+fn overwrite_dir(d: Dirs) -> Result<()> {
     let dir_path = dir(d)?;
     if dir_path.is_dir() { fs::remove_dir_all(&dir_path)?; }
     fs::create_dir(&dir_path)?;
@@ -88,7 +88,7 @@ pub fn overwrite_dir(d: Dirs) -> Result<()> {
     Ok(())
 }
 
-pub fn overwrite_config() -> Result<()> {
+fn overwrite_config() -> Result<()> {
     let config_path = file(Files::Config)?;
     if config_path.is_file() { fs::remove_file(&config_path)?; }
 
@@ -99,7 +99,7 @@ pub fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
-pub fn overwrite(list: Vec<SetupOverwrite>) -> Result<()> {
+fn overwrite(list: &Vec<SetupOverwrite>) -> Result<()> {
     Ok(for item in list {
         match item {
             SetupOverwrite::Config => overwrite_config()?,
@@ -130,59 +130,10 @@ pub fn overwrite(list: Vec<SetupOverwrite>) -> Result<()> {
 
 /// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
-    let dirs = dirs()?;
-    let files = files()?;
+    // overwrite necessary files
+    overwrite(&args.overwrite)?;
 
-    // delete and create all dirs if `force` is set
-    if args.force {
-        for dir in dirs.values() {
-            if dir.is_dir() {
-                fs::remove_dir_all(dir)
-                    .with_context(|| format!("Attempted to recursively remove {:?}", dir))?;
-            }
+    // TODO improve the setup, with better error handling
 
-            fs::create_dir_all(dir)?;
-        }
-
-        // TODO extract, write function to make it more general
-        // write to config file
-        let config_path = files.get(&Files::Config).unwrap();
-        let config_string = default_config()?;
-        let mut config_file = fs::File::create(&config_path)?;
-        write!(&mut config_file, "{}", config_string)?;
-
-        return Ok(());
-    }
-
-    // initial checks
-    let mut exists = Vec::new();
-    for dir in dirs.values() {
-        if dir.is_dir() {
-            exists.push(dir.clone());
-        }
-    }
-    for file in files.values() {
-        if file.is_file() {
-            exists.push(file.clone());
-        }
-    }
-
-    if exists.len() != 0 {
-        // err if dirs already exist
-        Err(WutError::SetupDirAlreadyExists(exists).into())
-    } else {
-        // create dirs
-        for dir in dirs.values() {
-            fs::create_dir_all(dir)?;
-        }
-
-        // TODO extract, write function to make it more general
-        // write to config file
-        let config_path = files.get(&Files::Config).unwrap();
-        let config_string = default_config()?;
-        let mut config_file = fs::File::create(&config_path)?;
-        write!(&mut config_file, "{}", config_string)?;
-
-        Ok(())
-    }
+    Ok(())
 }

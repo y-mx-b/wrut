@@ -3,8 +3,6 @@ use clap::{Args, ValueEnum};
 /// Contains args for `setup` subcommand.
 #[derive(Args, Debug)]
 pub struct SetupArgs {
-    #[clap(short, long)]
-    pub force: bool,
     #[clap(short, long, value_delimiter = ',')]
     pub overwrite: Vec<SetupOverwrite>,
 }
