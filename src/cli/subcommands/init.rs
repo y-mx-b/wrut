@@ -1,14 +1,6 @@
-use crate::backend::list::list;
+use clap::{builder::PossibleValuesParser, Args, ValueEnum};
+use crate::cli::util::get_values;
 use crate::cli::Type;
-use clap::{builder::PossibleValue, builder::PossibleValuesParser, Args, ValueEnum};
-
-fn get_templates() -> Vec<PossibleValue> {
-    list(Type::Template)
-        .expect("")
-        .iter()
-        .map(|template| PossibleValue::new(template))
-        .collect()
-}
 
 /// Contains args for `init` subcommand.
 #[derive(Args, Debug)]
@@ -25,7 +17,7 @@ pub struct InitArgs {
     ///
     /// A template is required when initialized a project. Will be ignored when initializing a
     /// template.
-    #[clap(long, short, hide_possible_values = true, value_parser = PossibleValuesParser::new(get_templates()))]
+    #[clap(long, short, hide_possible_values = true, value_parser = PossibleValuesParser::new(get_values(Type::Template)))]
     pub template: Option<String>,
 }
 
