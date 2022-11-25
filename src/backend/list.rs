@@ -1,6 +1,6 @@
 use crate::backend::setup;
 use crate::cli::Type;
-use anyhow::Result;
+use anyhow::{Context, Result};
 
 pub fn list(type_: Type) -> Result<Vec<String>> {
     let dirs = setup::dirs()?;
@@ -10,7 +10,12 @@ pub fn list(type_: Type) -> Result<Vec<String>> {
     let mut list: Vec<String> = Vec::new();
 
     // TODO better error handling
-    for entry in dir.read_dir().expect("Directory should exist") {
+    for entry in dir.read_dir().with_context(|| {
+        format!(
+            "Directory {:?} should exist after running `wut setup`",
+            &dir
+        )
+    })? {
         if let Ok(entry) = entry {
             list.push(
                 entry

@@ -1,6 +1,6 @@
-use clap::{builder::PossibleValuesParser, Args, ValueEnum};
 use crate::cli::util::get_values;
 use crate::cli::Type;
+use clap::{builder::PossibleValuesParser, Args, ValueEnum};
 
 /// Contains args for `init` subcommand.
 #[derive(Args, Debug)]
