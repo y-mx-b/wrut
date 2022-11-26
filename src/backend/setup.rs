@@ -94,6 +94,7 @@ fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
+// TODO use some smarter method for this
 /// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
     // TODO
