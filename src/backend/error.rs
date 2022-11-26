@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum WutError {
+pub enum WrutError {
     // IO related errors
     #[error("Could not find home directory.")]
     HomeDirectoryNotFound,
