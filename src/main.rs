@@ -2,8 +2,9 @@ mod backend;
 mod cli;
 
 use crate::cli::Cli;
-use anyhow::Result;
-use clap::Parser;
+use crate::backend::{comp, setup};
+use anyhow::{Result, Error};
+use clap::{Parser, CommandFactory};
 use log::info;
 
 fn main() -> Result<()> {
@@ -15,7 +16,20 @@ fn main() -> Result<()> {
         .init();
 
     info!("Parsing command arguments.");
-    match &cli.type_ {
-        _ => Ok(())
+    if let Some(type_) = &cli.type_ {
+        match &type_ {
+                _ => Ok(())
+        }
+    } else {
+        if !&cli.setup.is_empty() { 
+            setup::setup(&cli.setup.into())?;
+            Ok(())
+        } else if let Some(sh) = cli.sh { 
+            comp::print_completions(sh);
+            Ok(())
+        } else {
+            println!("{}", Cli::command().render_help());
+            Ok(())
+        }
     }
 }

@@ -1,6 +1,7 @@
 use crate::backend::config;
 use crate::backend::{setup, WutError};
-use crate::cli::subcommands::{InitArgs, InitType};
+use crate::cli::Type;
+use crate::cli::subcommands::{project, template};
 use anyhow::{Context, Result};
 use std::fs;
 use std::os::unix::fs::symlink;
@@ -9,36 +10,19 @@ use walkdir::{DirEntry, WalkDir};
 
 // TODO add some info logs
 
-/// Register the current working directory under the appropriate `wut` directory as a symlink
-pub fn init(dir: PathBuf, args: &InitArgs, config: config::Config) -> Result<()> {
-    let symlink_name: String = {
-        match &args.name {
-            Some(val) => val.to_string(),
-            None => dir
-                .file_name()
-                // TODO remove clone() call
-                .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
-                .to_str()
-                .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
-                .to_string(),
-        }
-    };
-
-    // register symlink in the appropriate directory
-    register(args.type_, &dir, &symlink_name)?;
-
-    match args.type_ {
-        InitType::Template => init_template(dir),
-        InitType::Project => init_project(
-            setup::dir(setup::Dirs::Templates)?
-                .join(args.template.as_ref().expect("Should be provided.")),
-            dir,
-            config,
-        ),
-    }
+fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
+    Ok(match name {
+        Some(val) => val.to_string(),
+        None => dir
+            .file_name()
+            .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
+            .to_str()
+            .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
+            .to_string()
+    })
 }
 
-fn register(type_: InitType, dir: &PathBuf, name: &String) -> Result<()> {
+fn register(type_: Type, dir: &PathBuf, name: &String) -> Result<()> {
     let registry = setup::dir(type_.into())?;
     let file = registry.join(name);
 
@@ -54,15 +38,15 @@ fn register(type_: InitType, dir: &PathBuf, name: &String) -> Result<()> {
     Ok(())
 }
 
-fn init_template(dir: PathBuf) -> Result<()> {
+pub fn init_template(dir: PathBuf) -> Result<()> {
     // TODO create .wut.toml file for macros and whatnot
 
     Ok(())
 }
 
-fn init_project(template: PathBuf, dir: PathBuf, config: config::Config) -> Result<()> {
-    let source_dir = &template.canonicalize()?;
-    let walker = WalkDir::new(source_dir)
+pub fn init_project(args: project::InitArgs, project_dir: PathBuf, config: config::Config) -> Result<()> {
+    let template_dir = setup::dir(setup::Dirs::Templates)?.join(args.template).canonicalize()?;
+    let walker = WalkDir::new(&template_dir)
         .min_depth(1)
         .follow_links(true)
         .into_iter();
@@ -71,7 +55,7 @@ fn init_project(template: PathBuf, dir: PathBuf, config: config::Config) -> Resu
     // TODO use config file to get ignore files
     for entry in walker.filter_entry(|e| !ignore_dir(e, &config.template.ignore_dirs)) {
         let source = entry?.path().canonicalize()?;
-        let dest = dir.join(&source.strip_prefix(source_dir)?);
+        let dest = project_dir.join(&source.strip_prefix(&template_dir)?);
 
         if source.is_dir() {
             fs::create_dir(&dest)?;

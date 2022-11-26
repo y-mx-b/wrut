@@ -3,7 +3,8 @@ use clap::{Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
 use crate::cli::subcommands::{project, template, tag};
-use crate::cli::subcommands::SetupArgs;
+use crate::cli::subcommands::SetupFlags;
+use clap_complete::Shell;
 
 /// Main cli struct
 #[derive(Parser, Debug)]
@@ -11,7 +12,7 @@ use crate::cli::subcommands::SetupArgs;
 #[command(propagate_version = true)]
 pub struct Cli {
     #[command(subcommand)]
-    pub type_: CommandType,
+    pub type_: Option<CommandType>,
 
     /// A configuration file [default: ~/.config/wut/config.toml]
     #[clap(short, long, hide_default_value = true)]
@@ -20,8 +21,14 @@ pub struct Cli {
     pub config: PathBuf,
     #[command(flatten)]
     pub verbose: Verbosity,
-    #[clap(flatten)]
-    pub setup: SetupArgs
+
+    /// Setup directories
+    #[clap(exclusive = true, long, short, value_delimiter = ',')]
+    pub setup: Vec<SetupFlags>,
+
+    /// Generate shell completions
+    #[clap(exclusive = true, long, short = 'z')]
+    pub sh: Option<Shell>,
 }
 
 #[derive(Subcommand, Debug)]
