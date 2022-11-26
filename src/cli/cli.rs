@@ -1,5 +1,5 @@
 use crate::backend::setup;
-use clap::{Parser, Subcommand, ValueEnum};
+use clap::{Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
 use crate::cli::subcommands::{project, template, tag};
@@ -35,9 +35,19 @@ pub enum CommandType {
 }
 
 /// Types to operate on
-#[derive(ValueEnum, Clone, Debug, PartialEq, Eq, Copy)]
+#[derive(Debug)]
 pub enum Type {
     Project,
     Tag,
     Template,
+}
+
+impl From<CommandType> for Type {
+    fn from(item: CommandType) -> Self {
+        match item {
+            CommandType::Project(_) => Self::Project,
+            CommandType::Tag(_) => Self::Tag,
+            CommandType::Template(_) => Self::Template,
+        }
+    }
 }
