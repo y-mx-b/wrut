@@ -15,7 +15,7 @@ fn main() -> Result<()> {
         .init();
 
     info!("Parsing command arguments.");
-    match &cli.command_type {
+    match &cli.type_ {
         _ => Ok(())
     }
 }
