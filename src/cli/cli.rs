@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
 use crate::cli::subcommands::{project, template, tag};
-use crate::cli::subcommands::setup::SetupArgs;
+use crate::cli::subcommands::SetupArgs;
 
 /// Main cli struct
 #[derive(Parser, Debug)]
@@ -28,7 +28,7 @@ pub struct Cli {
 pub enum CommandType {
     #[clap(alias = "p")]
     Project(project::CommandParser),
-    #[clap(alias = "f")]
+    #[clap(alias = "s")]
     Tag(tag::CommandParser),
     #[clap(alias = "t")]
     Template(template::CommandParser),
