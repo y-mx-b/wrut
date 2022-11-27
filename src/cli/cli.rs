@@ -1,10 +1,19 @@
 use crate::backend::setup;
 use crate::cli::subcommands::SetupFlag;
 use crate::cli::subcommands::{project, tag, template};
+use anyhow::Result;
 use clap::{Parser, Subcommand};
 use clap_complete::Shell;
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
+
+/// Types to operate on
+#[derive(Debug)]
+pub enum Type {
+    Project,
+    Tag,
+    Template,
+}
 
 /// Main cli struct
 #[derive(Parser, Debug)]
@@ -59,12 +68,14 @@ pub enum CommandType {
     Template(template::CommandParser),
 }
 
-/// Types to operate on
-#[derive(Debug)]
-pub enum Type {
-    Project,
-    Tag,
-    Template,
+impl CommandType {
+    pub fn run(&self) -> Result<()> {
+        match self {
+            CommandType::Project(cmd) => cmd.command.run(),
+            CommandType::Tag(cmd) => cmd.command.run(),
+            CommandType::Template(cmd) => cmd.command.run(),
+        }
+    }
 }
 
 impl From<CommandType> for Type {
