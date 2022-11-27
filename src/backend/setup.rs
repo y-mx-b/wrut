@@ -1,5 +1,5 @@
 use crate::backend::{config::default_config, WrutError};
-use crate::cli::subcommands::{SetupArgs, SetupFlags};
+use crate::cli::subcommands::SetupFlags;
 use crate::cli::Type;
 use anyhow::Result;
 use home::home_dir;
@@ -110,6 +110,7 @@ fn overwrite(flag: SetupFlags) -> Result<()> {
     Ok(match flag {
         SetupFlags::All => {
             overwrite_dir(Dirs::Data)?;
+            overwrite_dir(Dirs::Config)?;
             overwrite_config()?;
         }
         SetupFlags::Data => overwrite_dir(Dirs::Data)?,
@@ -117,7 +118,10 @@ fn overwrite(flag: SetupFlags) -> Result<()> {
         SetupFlags::Projects => overwrite_dir(Dirs::Projects)?,
         SetupFlags::Tags => overwrite_dir(Dirs::Tags)?,
         SetupFlags::Templates => overwrite_dir(Dirs::Templates)?,
-        SetupFlags::Config => overwrite_config()?,
+        SetupFlags::Config => {
+            overwrite_dir(Dirs::Config)?;
+            overwrite_config()?;
+        }
     })
 }
 
