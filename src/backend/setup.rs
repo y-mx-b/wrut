@@ -1,12 +1,39 @@
 use crate::backend::{config::default_config, WrutError};
-use crate::cli::subcommands::SetupFlag;
-use crate::cli::Type;
+use super::Type;
 use anyhow::Result;
 use home::home_dir;
 use std::collections::HashMap;
 use std::fs;
 use std::io::Write;
 use std::path::PathBuf;
+use clap::ValueEnum;
+
+#[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
+pub enum SetupFlag {
+    /// Restore everything to default (alias: 'a').
+    #[clap(alias = "a")]
+    All,
+
+    /// Set `~/.wrut` to default (alias: 'd').
+    #[clap(alias = "d")]
+    Data,
+    /// Set `~/.wrut/.obj` to default (alias: 'o').
+    #[clap(alias = "o")]
+    Obj,
+    /// Set `~/.wrut/projects` to default (alias: 'p').
+    #[clap(alias = "p")]
+    Projects,
+    /// Set `~/.wrut/templates` to default (alias: 't').
+    #[clap(alias = "t")]
+    Templates,
+    /// Set `~/.wrut/tags` to default (alias: 's').
+    #[clap(alias = "s")]
+    Tags,
+
+    /// Set `~/.config/wrut` to default (alias: 'c').
+    #[clap(alias = "c")]
+    Config,
+}
 
 /// Each variant refers to a specific directory required for `wrut` to function
 #[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]

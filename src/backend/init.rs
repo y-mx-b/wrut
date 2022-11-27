@@ -1,7 +1,6 @@
 use crate::backend::config;
 use crate::backend::{setup, WrutError};
-use crate::cli::subcommands::{project, template};
-use crate::cli::Type;
+use super::Type;
 use anyhow::{Context, Result};
 use std::fs;
 use std::os::unix::fs::symlink;
@@ -45,12 +44,12 @@ pub fn init_template(dir: PathBuf) -> Result<()> {
 }
 
 pub fn init_project(
-    args: project::InitArgs,
+    template: String,
     project_dir: PathBuf,
     config: config::Config,
 ) -> Result<()> {
     let template_dir = setup::dir(setup::Dirs::Templates)?
-        .join(args.template)
+        .join(template)
         .canonicalize()?;
     let walker = WalkDir::new(&template_dir)
         .min_depth(1)
