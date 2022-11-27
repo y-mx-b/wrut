@@ -4,11 +4,11 @@ use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 pub struct CommandParser {
     #[clap(subcommand)]
-    pub command: Commands,
+    pub command: Command,
 }
 
 #[derive(Subcommand, Debug)]
-pub enum Commands {
+pub enum Command {
     #[clap(alias = "ls")]
     List,
     #[clap(alias = "i")]

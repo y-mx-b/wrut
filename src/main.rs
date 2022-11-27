@@ -21,21 +21,21 @@ fn main() -> Result<()> {
         Ok(match &type_ {
             // TODO implement literally all of this
             CommandType::Project(cmd) => match &cmd.command {
-                project::Commands::List => {}
-                project::Commands::Init(_args) => {}
-                project::Commands::New(_args) => {}
-                project::Commands::Remove(_args) => {}
+                project::Command::List => {}
+                project::Command::Init(_args) => {}
+                project::Command::New(_args) => {}
+                project::Command::Remove(_args) => {}
             },
             CommandType::Tag(cmd) => match &cmd.command {
-                tag::Commands::List => {}
-                tag::Commands::Add => {}
-                tag::Commands::Remove => {}
+                tag::Command::List => {}
+                tag::Command::Add => {}
+                tag::Command::Remove => {}
             },
             CommandType::Template(cmd) => match &cmd.command {
-                template::Commands::List => {}
-                template::Commands::Init => {}
-                template::Commands::Add => {}
-                template::Commands::Remove => {}
+                template::Command::List => {}
+                template::Command::Init => {}
+                template::Command::Add => {}
+                template::Command::Remove => {}
             },
         })
     } else {
