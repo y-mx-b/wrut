@@ -15,7 +15,7 @@ pub enum Type {
     Template,
 }
 
-/// Main cli struct
+///A utility to manage project templates.
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
@@ -35,7 +35,7 @@ pub struct Cli {
     #[command(flatten)]
     pub verbose: Verbosity,
 
-    /// Generate shell completions
+    /// Generate shell completions.
     #[clap(exclusive = true, long, short = 'z')]
     pub sh: Option<Shell>,
 
@@ -60,10 +60,15 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum CommandType {
+    /// Project related commands (alias: 'p').
     #[clap(alias = "p")]
     Project(project::CommandParser),
+
+    /// Tag related commands (alias: 's').
     #[clap(alias = "s")]
     Tag(tag::CommandParser),
+
+    /// Template related commands (alias: 't').
     #[clap(alias = "t")]
     Template(template::CommandParser),
 }
