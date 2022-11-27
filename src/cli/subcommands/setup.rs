@@ -1,7 +1,7 @@
 use clap::ValueEnum;
 
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
-pub enum SetupFlags {
+pub enum SetupFlag {
     /// Restore everything to default (alias: 'a').
     #[clap(alias = "a")]
     All,
