@@ -2,10 +2,12 @@ use crate::backend::list::list;
 use crate::cli::Type;
 use clap::builder::PossibleValue;
 
-// TODO currently requires directly to already be setup, do so upon first running this command
+/// Returns a vector of possible values for the given type.
+///
+/// If `wrut` has not been setup, then resulting vector will be empty.
 pub fn get_values(type_: Type) -> Vec<PossibleValue> {
     list(type_)
-        .expect("")
+        .unwrap_or(Vec::new())
         .iter()
         .map(|project| PossibleValue::new(project))
         .collect()
