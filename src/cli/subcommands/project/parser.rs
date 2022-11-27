@@ -1,4 +1,4 @@
-use crate::cli::subcommands::project::InitArgs;
+use super::{InitArgs, NewArgs, RemoveArgs};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -11,8 +11,10 @@ pub struct CommandParser {
 pub enum Commands {
     #[clap(alias = "ls")]
     List,
+    #[clap(alias = "i")]
     Init(InitArgs),
-    Add,
+    #[clap(alias = "n")]
+    New(NewArgs),
     #[clap(alias = "rm")]
-    Remove,
+    Remove(RemoveArgs),
 }
