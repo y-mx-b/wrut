@@ -1,14 +1,9 @@
 use crate::backend::WrutError;
-use anyhow::Result;
+use anyhow::{Result, Error};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
-
-#[derive(Deserialize, Serialize, Default)]
-pub struct Config {
-    pub template: Template,
-    pub project: Project,
-}
+use std::fmt;
 
 #[derive(Deserialize, Serialize)]
 pub struct Template {
@@ -34,15 +29,23 @@ pub struct Project {
     pub default_template: Option<String>,
 }
 
-/// Return a default config as a `String`
-pub fn default_config() -> Result<String> {
-    Ok(toml::to_string(&Config::default())?)
+#[derive(Deserialize, Serialize, Default)]
+pub struct Config {
+    pub template: Template,
+    pub project: Project,
 }
 
-/// Read the given file and return a `Config` struct
-pub fn get_config(config: PathBuf) -> Result<Config> {
-    // TODO return WrutError if fail
-    println!("{:?}", config);
-    let data = fs::read(&config).or(Err(WrutError::FailedToReadConfigFile(config)))?;
-    Ok(toml::from_slice(data.as_slice())?)
+impl fmt::Display for Config {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", toml::to_string_pretty(self).map_err(|_| fmt::Error)?).map_err(|_| fmt::Error)
+    }
 }
+
+impl Config {
+    pub fn from_file(path: PathBuf) -> Result<Config> {
+        // TODO return WrutError if fail
+        let data = fs::read(&path).or(Err(WrutError::FailedToReadConfigFile(path)))?;
+        Ok(toml::from_slice(data.as_slice())?)
+    }
+}
+
