@@ -14,4 +14,3 @@ pub enum Commands {
     #[clap(alias = "rm")]
     Remove,
 }
-

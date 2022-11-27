@@ -1,6 +1,6 @@
 use crate::cli::util::get_values;
-use clap::{builder::PossibleValuesParser, Args};
 use crate::cli::Type;
+use clap::{builder::PossibleValuesParser, Args};
 
 #[derive(Args, Debug)]
 pub struct InitArgs {
@@ -11,5 +11,5 @@ pub struct InitArgs {
     /// The name of the project to initialize.
     ///
     /// By default, the name of the current directory will be used.
-    pub name: Option<String>
+    pub name: Option<String>,
 }

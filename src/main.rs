@@ -1,11 +1,11 @@
 mod backend;
 mod cli;
 
-use crate::cli::{Cli, CommandType};
-use crate::cli::subcommands::{project, tag, template};
 use crate::backend::{comp, setup};
-use anyhow::{Result, Error};
-use clap::{Parser, CommandFactory};
+use crate::cli::subcommands::{project, tag, template};
+use crate::cli::{Cli, CommandType};
+use anyhow::{Error, Result};
+use clap::{CommandFactory, Parser};
 use log::info;
 
 fn main() -> Result<()> {
@@ -20,35 +20,29 @@ fn main() -> Result<()> {
     if let Some(type_) = &cli.type_ {
         Ok(match &type_ {
             // TODO implement literally all of this
-            CommandType::Project(cmd) => {
-                match &cmd.command {
-                    project::Commands::List => {}
-                    project::Commands::Init(_args) => {}
-                    project::Commands::Add => {}
-                    project::Commands::Remove => {}
-                }
-            }
-            CommandType::Tag(cmd) => {
-                match &cmd.command {
-                    tag::Commands::List => {}
-                    tag::Commands::Add => {}
-                    tag::Commands::Remove => {}
-                }
-            }
-            CommandType::Template(cmd) => {
-                match &cmd.command {
-                    template::Commands::List => {}
-                    template::Commands::Init => {}
-                    template::Commands::Add => {}
-                    template::Commands::Remove => {}
-                }
-            }
+            CommandType::Project(cmd) => match &cmd.command {
+                project::Commands::List => {}
+                project::Commands::Init(_args) => {}
+                project::Commands::Add => {}
+                project::Commands::Remove => {}
+            },
+            CommandType::Tag(cmd) => match &cmd.command {
+                tag::Commands::List => {}
+                tag::Commands::Add => {}
+                tag::Commands::Remove => {}
+            },
+            CommandType::Template(cmd) => match &cmd.command {
+                template::Commands::List => {}
+                template::Commands::Init => {}
+                template::Commands::Add => {}
+                template::Commands::Remove => {}
+            },
         })
     } else {
-        if !&cli.setup.is_empty() { 
+        if !&cli.setup.is_empty() {
             setup::setup(cli.setup)?;
             Ok(())
-        } else if let Some(sh) = cli.sh { 
+        } else if let Some(sh) = cli.sh {
             comp::print_completions(sh);
             Ok(())
         } else {
