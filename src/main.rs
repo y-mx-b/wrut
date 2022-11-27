@@ -22,7 +22,7 @@ fn main() -> Result<()> {
         }
     } else {
         if !&cli.setup.is_empty() { 
-            setup::setup(&cli.setup.into())?;
+            setup::setup(cli.setup)?;
             Ok(())
         } else if let Some(sh) = cli.sh { 
             comp::print_completions(sh);
