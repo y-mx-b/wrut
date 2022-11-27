@@ -1,5 +1,5 @@
 use crate::backend::WrutError;
-use anyhow::{Result, Error};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
