@@ -21,7 +21,7 @@ impl Default for Template {
                 "target".to_string(),
                 ".build".to_string(),
             ],
-            ignore_files: vec![".wut.toml".to_string()],
+            ignore_files: vec![".wrut.toml".to_string()],
         }
     }
 }

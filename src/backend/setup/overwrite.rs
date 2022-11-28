@@ -35,7 +35,7 @@ fn overwrite_config() -> Result<()> {
         fs::remove_file(&config_path)?;
     }
 
-    let config_string = Config::default().to_string();
+    let config_string = Config::empty().to_string();
     let mut config_file = fs::File::create(&config_path)?;
     write!(&mut config_file, "{}", config_string)?;
 

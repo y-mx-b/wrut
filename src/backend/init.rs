@@ -23,8 +23,8 @@ pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
     register(Type::Template, &dir, &template_name)?;
 
     // create template config
-    let mut template_config = fs::File::create(dir.join(".wut.toml"))?;
-    write!(template_config, "{}", Config::empty().to_string())?;
+    let mut template_config = fs::File::create(dir.join(".wrut.toml"))?;
+    write!(template_config, "{}", Config::default().to_string())?;
 
     Ok(())
 }
@@ -32,7 +32,7 @@ pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
 /// Initialize a project.
 ///
 /// This function will generate a project from a given template and register a symlink to
-/// `project_dir` in `~/.wrut/projects`. 
+/// `project_dir` in `~/.wrut/projects`.
 ///
 /// # Arguments
 /// * `template` - The template to generate the project from
