@@ -32,7 +32,6 @@ pub enum Command {
 }
 
 impl Command {
-    // TODO literally all of this
     pub fn run(&self, config: PathBuf) -> Result<()> {
         Ok(match self {
             Command::List => println!("{}", list::list(Type::Project)?.join("\n")),
