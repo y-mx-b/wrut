@@ -1,6 +1,8 @@
-use super::{InitArgs, NewArgs, RemoveArgs};
+use super::{InitArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use wrut::*;
+use std::env::current_dir;
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -18,10 +20,6 @@ pub enum Command {
     #[clap(alias = "i")]
     Init(InitArgs),
 
-    /// Create and register a new template with the given name.
-    #[clap(alias = "n")]
-    New(NewArgs),
-
     /// Unregister and/or delete the given template.
     #[clap(alias = "rm")]
     Remove(RemoveArgs),
@@ -31,9 +29,8 @@ impl Command {
     // TODO literall all of this
     pub fn run(&self) -> Result<()> {
         Ok(match self {
-            Command::List => {}
-            Command::Init(_args) => {}
-            Command::New(_args) => {}
+            Command::List => println!("{}", list::list(Type::Template)?.join("\n")),
+            Command::Init(args) => init::init_template(current_dir()?, &args.name)?,
             Command::Remove(_args) => {}
         })
     }
