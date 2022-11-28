@@ -82,6 +82,11 @@ pub fn init_project(
     Ok(())
 }
 
+pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
+    // TODO create new directory + subdirectories
+    Ok(())
+}
+
 /// Determine whether to ignore a file/directory given the global and template configuration files.
 fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
     fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
