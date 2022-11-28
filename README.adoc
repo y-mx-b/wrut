@@ -10,8 +10,6 @@ endif::[]
 
 A utility to manage project templates.
 
-NOTE: This document does not reflect the current state of the project, which is undergoing a complete rewrite.
-
 [discrete]
 == Table of Contents 
 
@@ -21,20 +19,16 @@ toc::[]
 
 * Project template creation and management.
 * Project creation and management.
-* Macro expansion when creating new projects from existing templates.
-* Tags to better organize and filter templates and projects.
+* Macro expansion when creating new projects from existing templates (WIP).
+* Tags to better organize and filter templates and projects (WIP).
 
-== Setup
+== Documentation
 
-The `wrut --setup a` command will initialize two directories: `~/.wrut` and
-`~/.config/wrut`. The `~/.wrut` directory is used to store application data
-(also referred to as the "data directory") and the `~/.config/wrut` directory
-is used to store configuration data (also referred to as the "configuration
-directory," or just the "config directory").
-
-See `wrut --help` for more information about the `--setup` command.
+WARNING: TODO
 
 == Data Storage 
+
+WARNING: `wrut` is not in a complete state, so this is mostly a project goal and may change.
 
 The data directory contains the `templates`, `projects`, `tags`, and `.obj`
 subdirectories. The `.obj` directory is used by `wrut` to store internal
@@ -72,7 +66,24 @@ Example `~/.wrut` directory structure:
 
 === Configuration
 
-WARNING: Not yet implemented.
+`wrut` takes a `--config` argument, allowing you to specify the configuration
+file to use. By default, the configuration file is located at
+`~/.config/wrut/config.toml`. 
+
+==== Default Configuration
+
+[source,toml]
+----
+[template]
+ignore_dirs = [
+    '.git',
+    'target',
+    '.build',
+]
+ignore_files = ['.wut.toml']
+
+[project]
+----
 
 Configuration files are stored in the `~/.config/wrut` configuration directory.
 
@@ -83,15 +94,9 @@ You can run `wrut --help` to get the full help message.
 You can also run `wrut <TYPE> <COMMAND> --help` to get more detailed
 information about a given command.
 
-=== Basic Template Usage
+== TODO
 
-=== Basic Project Generation
-
-WARNING: Not yet implemented.
-
-=== Macros 
-
-WARNING: Not yet implemented.
-
-=== Tags
-
+* [ ] Documentation
+* [ ] Tags
+* [ ] Develop internal template format
+* [ ] Macros
