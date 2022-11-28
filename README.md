@@ -38,7 +38,9 @@ Documentation for the `wrut` utility can be viewed at
 - [x] Template creation and management
 - [x] Project creation and management
 - [x] Split backend logic into a separate library
-- [ ] Documentation
-- [ ] Tags
+- [x] Documentation
+- [ ] Tags (improve)
+- [ ] Improve list output
+- [ ] Snapshots (using git?)
 - [ ] Develop internal template format
 - [ ] Macros
