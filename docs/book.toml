@@ -1,0 +1,6 @@
+[book]
+authors = ["Slope"]
+language = "en"
+multilingual = false
+src = "src"
+title = "wrut Documentation"
