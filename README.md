@@ -21,16 +21,16 @@ A utility to manage project templates.
 
 ## Documentation
 
-**Warning**: Documentation for the `wrut` utility is still very much a
-work-in-progress.
+| ⚠️  | Documentation for the `wrut` utility is still very much a work-in-progress. |
+| --- | :-------------------------------------------------------------------------- |
 
 Documentation for the `wrut` utility can be viewed at
 <https://y-mx-b.github.io/wrut/>.
 
 ## Data Storage
 
-**Warning**: `wrut` is not in a complete state, so this is mostly a project goal
-and may change.
+| ⚠️  | `wrut` is not in a complete state, so this is mostly a project goal and may change. |
+| --- | :---------------------------------------------------------------------------------- |
 
 The data directory contains the `templates`, `projects`, `tags`, and `.obj`
 subdirectories. The `.obj` directory is used by `wrut` to store internal
