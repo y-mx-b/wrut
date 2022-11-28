@@ -1,8 +1,8 @@
 use super::{InitArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use wrut::*;
 use std::env::current_dir;
+use wrut::*;
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -31,7 +31,7 @@ impl Command {
         Ok(match self {
             Command::List => println!("{}", list::list(Type::Template)?.join("\n")),
             Command::Init(args) => init::init_template(current_dir()?, &args.name)?,
-            Command::Remove(args) => remove::remove_template(&args.template)?
+            Command::Remove(args) => remove::remove_template(&args.template)?,
         })
     }
 }

@@ -2,9 +2,9 @@ use super::{InitArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use std::env::current_dir;
+use std::fs;
 use std::path::PathBuf;
 use wrut::*;
-use std::fs;
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -36,15 +36,22 @@ impl Command {
     pub fn run(&self, config: PathBuf) -> Result<()> {
         Ok(match self {
             Command::List => println!("{}", list::list(Type::Project)?.join("\n")),
-            Command::Init(args) => init::init_project(&args.template, &current_dir()?, &args.name, config)?,
+            Command::Init(args) => {
+                init::init_project(&args.template, &current_dir()?, &args.name, config)?
+            }
             Command::New(args) => {
                 let project_dir = current_dir()?.join(&args.name);
                 fs::create_dir(&project_dir)?;
-                // TODO remove this clone 
+                // TODO remove this clone
                 // guess i should replace String with &str and some lifetimes?
-                init::init_project(&args.template, &project_dir, &Some(args.name.clone()), config)?
+                init::init_project(
+                    &args.template,
+                    &project_dir,
+                    &Some(args.name.clone()),
+                    config,
+                )?
             }
-            Command::Remove(args) => remove::remove_project(&args.project)?
+            Command::Remove(args) => remove::remove_project(&args.project)?,
         })
     }
 }

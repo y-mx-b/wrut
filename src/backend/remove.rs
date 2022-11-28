@@ -1,4 +1,4 @@
-use crate::{Type, setup};
+use crate::{setup, Type};
 use anyhow::Result;
 use std::fs;
 
