@@ -96,9 +96,9 @@ information about a given command.
 
 == TODO
 
-* [X] Template creation and management
-* [X] Project creation and management
-* [X] Split backend logic into a separate library
+* [x] Template creation and management
+* [x] Project creation and management
+* [x] Split backend logic into a separate library
 * [ ] Documentation
 * [ ] Tags
 * [ ] Develop internal template format
