@@ -32,8 +32,8 @@ impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List(_args) => {}
-            Command::New(args) => init::init_tag(&args.name, &args.templates, &args.projects)?
-            Command::Remove(args) => remove::remove_tag(&args.name)?
+            Command::New(args) => init::init_tag(&args.name, &args.templates, &args.projects)?,
+            Command::Remove(args) => remove::remove_tag(&args.name)?,
         })
     }
 }
