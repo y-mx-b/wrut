@@ -2,6 +2,7 @@ use crate::setup::overwrite;
 use anyhow::Result;
 use clap::ValueEnum;
 
+/// A set of flags to determine what directory to overwrite.
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
 pub enum SetupFlag {
     /// Restore everything to default (alias: 'a').
@@ -29,7 +30,7 @@ pub enum SetupFlag {
     Config,
 }
 
-/// Initializes all prerequisites for `wrut` to function
+/// Given a set of flags, overwrite and/or initialize the directories associated with thsoe flags.
 pub fn setup(flags: Vec<SetupFlag>) -> Result<()> {
     Ok(for flag in flags {
         overwrite(flag)?;

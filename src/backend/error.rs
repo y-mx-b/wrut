@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 use thiserror::Error;
 
+/// `wrut`-specific error cases.
 #[derive(Error, Debug)]
 pub enum WrutError {
     // IO related errors

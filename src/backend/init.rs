@@ -7,6 +7,16 @@ use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
 
+/// Initialize a template.
+///
+/// This function will create a `.wrut.toml` file in the provided directory and register a symlink
+/// to `dir` in `~/.wrut/templates`.
+///
+/// # Arguments
+/// * `dir` - The directory to initialize a template in
+///     * This directory must already exist.
+/// * `name` - The name of the template to initialize
+///     * If `name` is `None`, the name will be the name of the directory provided
 pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
     // register template
     let template_name = get_name(name, &dir)?;
@@ -19,6 +29,18 @@ pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
     Ok(())
 }
 
+/// Initialize a project.
+///
+/// This function will generate a project from a given template and register a symlink to
+/// `project_dir` in `~/.wrut/projects`. 
+///
+/// # Arguments
+/// * `template` - The template to generate the project from
+/// * `project_dir` - The directory to initialize a project in
+///     * This directory must already exist
+/// * `name` - The name of the project to initialize
+///     * If `name` is `None`, the name will be the name of the directory provided
+/// * `config` - The path to the configuration file to use
 pub fn init_project(
     template: &String,
     project_dir: &PathBuf,
@@ -60,6 +82,7 @@ pub fn init_project(
     Ok(())
 }
 
+/// Determine whether to ignore a file/directory given the global and template configuration files.
 fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
     fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
         let mut b = false;
@@ -110,6 +133,8 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
     ignore_dir(entry, ignore_dirs.into_iter()) || ignore_file(entry, ignore_files.into_iter())
 }
 
+/// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
+/// be used.
 fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
     Ok(match name {
         Some(val) => val.to_string(),
@@ -122,6 +147,7 @@ fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
     })
 }
 
+/// Register a symlink to `dir` given a name and a type.
 fn register(type_: Type, dir: &PathBuf, name: &String) -> Result<()> {
     let registry = setup::dir(type_.into())?;
     let file = registry.join(name);

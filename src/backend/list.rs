@@ -1,6 +1,10 @@
 use crate::{setup, Type};
 use anyhow::{Context, Result};
 
+/// List the entries of a given type.
+///
+/// If no such entries exist, or the required data directory itself does not exist, then an empty
+/// vector will be returned.
 pub fn list(type_: Type) -> Result<Vec<String>> {
     let dirs = setup::dirs()?;
     let dir = dirs
