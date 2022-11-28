@@ -44,7 +44,7 @@ impl Command {
                 // guess i should replace String with &str and some lifetimes?
                 init::init_project(&args.template, &project_dir, &Some(args.name.clone()), config)?
             }
-            Command::Remove(_args) => {}
+            Command::Remove(args) => remove::remove_project(&args.project)?
         })
     }
 }

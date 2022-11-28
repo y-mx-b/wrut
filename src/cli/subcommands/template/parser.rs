@@ -31,7 +31,7 @@ impl Command {
         Ok(match self {
             Command::List => println!("{}", list::list(Type::Template)?.join("\n")),
             Command::Init(args) => init::init_template(current_dir()?, &args.name)?,
-            Command::Remove(_args) => {}
+            Command::Remove(args) => remove::remove_template(&args.template)?
         })
     }
 }
