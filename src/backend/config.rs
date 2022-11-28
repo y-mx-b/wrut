@@ -25,7 +25,6 @@ impl Default for Template {
 
 #[derive(Deserialize, Serialize, Default)]
 pub struct Project {
-    pub default_template: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Default)]
@@ -47,8 +46,18 @@ impl fmt::Display for Config {
 
 impl Config {
     pub fn from_file(path: PathBuf) -> Result<Config> {
-        // TODO return WrutError if fail
         let data = fs::read(&path).or(Err(WrutError::FailedToReadConfigFile(path)))?;
         Ok(toml::from_slice(data.as_slice())?)
+    }
+
+    pub fn empty() -> Self {
+        Self {
+            template: Template {
+                ignore_dirs: Vec::new(),
+                ignore_files: Vec::new(),
+            },
+            project: Project {
+            },
+        }
     }
 }
