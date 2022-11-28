@@ -1,6 +1,6 @@
 use crate::cli::util::get_values;
-use wrut::Type;
 use clap::{builder::PossibleValuesParser, Args};
+use wrut::Type;
 
 #[derive(Args, Debug)]
 pub struct NewArgs {

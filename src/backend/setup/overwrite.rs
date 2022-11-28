@@ -1,8 +1,7 @@
+use crate::config::Config;
+use crate::setup::{dir, file, Dirs, Files, SetupFlag};
 use anyhow::Result;
 use std::fs;
-use crate::setup::{Dirs, Files, dir, file};
-use crate::setup::SetupFlag;
-use crate::config::Config;
 use std::io::Write;
 
 fn overwrite_dir(d: Dirs) -> Result<()> {
@@ -55,4 +54,3 @@ pub fn overwrite(flag: SetupFlag) -> Result<()> {
         }
     })
 }
-

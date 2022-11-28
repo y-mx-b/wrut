@@ -1,6 +1,6 @@
-use clap::ValueEnum;
-use anyhow::Result;
 use crate::setup::overwrite;
+use anyhow::Result;
+use clap::ValueEnum;
 
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
 pub enum SetupFlag {

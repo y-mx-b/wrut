@@ -1,5 +1,4 @@
-use super::setup;
-use super::Type;
+use crate::{setup, Type};
 use anyhow::{Context, Result};
 
 pub fn list(type_: Type) -> Result<Vec<String>> {

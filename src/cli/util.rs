@@ -1,6 +1,5 @@
-use wrut::list::list;
-use wrut::Type;
 use clap::builder::PossibleValue;
+use wrut::{list::list, Type};
 
 /// Returns a vector of possible values for the given type.
 ///
