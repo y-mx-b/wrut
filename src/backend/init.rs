@@ -82,6 +82,10 @@ pub fn init_project(
     Ok(())
 }
 
+/// Register a new tag and/or add projects/templates to it.
+///
+/// If the provided tag does not exist, this function will create a new tag directory under `~/.wrut/tags`.
+/// All entries in `templates` and `projects` will be added to their respective directories.
 pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
     // TODO create new directory + subdirectories
     let tag_data_dir = setup::dir(setup::Dirs::Tags)?;
@@ -97,6 +101,7 @@ pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) 
     }
 
     // add templates/projects to appropriate dirs
+    // TODO check if already exists, don't try to create if it does
     let templates_dir = setup::dir(setup::Dirs::Templates)?;
     for template in templates {
         let template_path = &templates_dir.join(&template).canonicalize()?;

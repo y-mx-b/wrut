@@ -28,7 +28,6 @@ pub enum Command {
 }
 
 impl Command {
-    // TODO literally all of this
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List(args) => println!("{}", list::list_tags(&args.name)?),
