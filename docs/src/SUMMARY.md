@@ -19,8 +19,8 @@
 
 # Tags
 
-- [Creating New Tags](<>)
-- [Managing Tags](<>)
+- [Creating New Tags](./tags/creation.md)
+- [Managing Tags](./tags/management.md)
 
 # Configuration
 
