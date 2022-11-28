@@ -1,12 +1,11 @@
 use crate::{config::Config, setup, Type, WrutError};
 use anyhow::{Context, Result};
+use std::collections::HashSet;
 use std::fs;
 use std::io::Write;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
-use std::collections::HashSet;
-use core::option::Iter;
 
 pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
     // register template
@@ -62,7 +61,7 @@ pub fn init_project(
 }
 
 fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
-    fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item=String>) -> bool {
+    fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
         let mut b = false;
         for dir in dirs {
             b = entry.path().is_dir()
@@ -78,7 +77,7 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
         b
     }
 
-    fn ignore_file(entry: &DirEntry, files: impl Iterator<Item=String>) -> bool {
+    fn ignore_file(entry: &DirEntry, files: impl Iterator<Item = String>) -> bool {
         let mut b = false;
         for file in files {
             b = entry.path().is_file()
@@ -108,8 +107,7 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
         ignore_files.into_iter().collect()
     };
 
-    ignore_dir(entry, ignore_dirs.into_iter())
-    || ignore_file(entry, ignore_files.into_iter())
+    ignore_dir(entry, ignore_dirs.into_iter()) || ignore_file(entry, ignore_files.into_iter())
 }
 
 fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {

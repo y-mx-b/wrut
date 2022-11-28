@@ -4,3 +4,7 @@ language = "en"
 multilingual = false
 src = "src"
 title = "wrut Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/y-mx-b/wrut"
+edit-url-template = "https://github.com/y-mx-b/wrut/edit/master/docs/{path}"
