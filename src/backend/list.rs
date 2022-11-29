@@ -17,7 +17,7 @@ pub fn list(type_: Type) -> Result<Vec<String>> {
     // TODO better error handling
     for entry in dir.read_dir().with_context(|| {
         format!(
-            "Directory {:?} should exist after running `wut setup`",
+            "Directory {:?} should exist after running `wrut --setup`",
             &dir
         )
     })? {

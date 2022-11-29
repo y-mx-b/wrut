@@ -3,7 +3,7 @@
 New templates can be created with the `init` subcommand:
 
 ```sh
-wut template init [NAME]
+wrut template init [NAME]
 ```
 
 Upon running this command, a template will be initialized using the current

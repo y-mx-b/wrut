@@ -6,7 +6,7 @@ Using the `init` subcommand will initialize a new project in the current
 directory:
 
 ```sh
-wut project init <TEMPLATE> [NAME]
+wrut project init <TEMPLATE> [NAME]
 ```
 
 `<TEMPLATE>` will be the template to generate the project from and `[NAME]` is
@@ -17,7 +17,7 @@ Using the `new` subcommand will create a new directory and then initialize a new
 project in that directory:
 
 ```sh
-wut project new <TEMPLATE> <NAME>
+wrut project new <TEMPLATE> <NAME>
 ```
 
 `<TEMPLATE>` will be the template to generate the project from and `<NAME>` will
