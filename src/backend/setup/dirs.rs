@@ -1,7 +1,6 @@
 use crate::{Type, WrutError};
 use anyhow::Result;
 use home::home_dir;
-use std::collections::HashMap;
 use std::path::PathBuf;
 
 /// Each variant refers to a specific directory required for `wrut` to function.
@@ -23,19 +22,6 @@ impl From<Type> for Dirs {
             Type::Tag => Dirs::Tags,
         }
     }
-}
-
-/// Returns a `HashMap` of directory paths mapped to `Dirs` variants.
-pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
-    let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
-    Ok(HashMap::from([
-        (Dirs::Config, home.join(".config/wrut")),
-        (Dirs::Data, home.join(".wrut")),
-        (Dirs::Obj, home.join(".wrut/.obj")),
-        (Dirs::Projects, home.join(".wrut/projects")),
-        (Dirs::Tags, home.join(".wrut/tags")),
-        (Dirs::Templates, home.join(".wrut/templates")),
-    ]))
 }
 
 /// Given a `Dirs` variant, it will return the path to that directory.

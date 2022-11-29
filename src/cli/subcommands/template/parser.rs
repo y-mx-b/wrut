@@ -2,7 +2,7 @@ use super::{InitArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use std::env::current_dir;
-use wrut::*;
+use wrut::Template;
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -28,9 +28,9 @@ pub enum Command {
 impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
-            Command::List => println!("{}", list::list(Type::Template)?.join("\n")),
-            Command::Init(args) => init::init_template(current_dir()?, args.name.as_deref())?,
-            Command::Remove(args) => remove::remove_template(&args.template)?,
+            Command::List => println!("{}", Template::list()?.join("\n")),
+            Command::Init(args) => Template::from(current_dir()?, args.name.as_deref())?.init()?,
+            Command::Remove(args) => Template::get(&args.template)?.remove(args.delete)?,
         })
     }
 }
