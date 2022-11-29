@@ -19,4 +19,6 @@ pub enum WrutError {
     // Missing stuff error
     #[error("Expected a project named {1:?} at {0:?}.")]
     NoSuchProject(PathBuf, String),
+    #[error("Expected a template named {1:?} at {0:?}.")]
+    NoSuchTemplate(PathBuf, String),
 }

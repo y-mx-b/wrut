@@ -2,12 +2,6 @@ use crate::{setup, Type};
 use anyhow::Result;
 use std::fs;
 
-/// Given the name of a template, unregister it.
-pub fn remove_template(name: &String) -> Result<()> {
-    unregister(Type::Template, name)
-    // TODO remove `.wrut.toml` file as well
-}
-
 pub fn remove_tag(name: &String) -> Result<()> {
     unregister(Type::Tag, name)
 }
