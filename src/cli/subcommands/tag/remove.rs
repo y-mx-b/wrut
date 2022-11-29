@@ -8,3 +8,5 @@ pub struct RemoveArgs {
     #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Tag)))]
     pub name: String,
 }
+
+// TODO allow for removing templates/projects from tag
