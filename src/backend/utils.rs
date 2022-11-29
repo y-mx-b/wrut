@@ -1,8 +1,10 @@
 use std::path::PathBuf;
 use anyhow::{Result, Context};
-use crate::{WrutError, Type};
+use crate::{WrutError, Type, config::Config};
 use crate::setup::dir;
 use std::os::unix::fs::symlink;
+use walkdir::DirEntry;
+use std::collections::HashSet;
 
 /// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
 /// be used.
@@ -53,4 +55,55 @@ pub fn unregister(type_: Type, name: &String) -> Result<()> {
     }
 
     Ok(())
+}
+
+/// Determine whether to ignore a file/directory given the global and template configuration files.
+pub fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
+    fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
+        let mut b = false;
+        for dir in dirs {
+            b = entry.path().is_dir()
+                && entry
+                    .file_name()
+                    .to_str()
+                    .map(|s| s.starts_with(&dir))
+                    .unwrap_or(false);
+            if b == true {
+                break;
+            }
+        }
+        b
+    }
+
+    fn ignore_file(entry: &DirEntry, files: impl Iterator<Item = String>) -> bool {
+        let mut b = false;
+        for file in files {
+            b = entry.path().is_file()
+                && entry
+                    .file_name()
+                    .to_str()
+                    .map(|s| s.starts_with(&file))
+                    .unwrap_or(false);
+            if b == true {
+                break;
+            }
+        }
+        b
+    }
+
+    // merge ignore lists to reduce the number of comparisons
+    let ignore_dirs: HashSet<String> = {
+        let mut ignore_dirs = global_config.template.ignore_dirs.clone();
+        ignore_dirs.append(&mut template_config.template.ignore_dirs.clone());
+
+        ignore_dirs.into_iter().collect()
+    };
+    let ignore_files: HashSet<String> = {
+        let mut ignore_files = global_config.template.ignore_files.clone();
+        ignore_files.append(&mut template_config.template.ignore_files.clone());
+
+        ignore_files.into_iter().collect()
+    };
+
+    ignore_dir(entry, ignore_dirs.into_iter()) || ignore_file(entry, ignore_files.into_iter())
 }
