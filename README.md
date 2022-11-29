@@ -39,7 +39,7 @@ Documentation for the `wrut` utility can be viewed at
 - [x] Project creation and management
 - [x] Split backend logic into a separate library
 - [x] Documentation
-- [ ] Improve backend organization
+- [x] Improve backend organization
 - [ ] Tags (improve)
 - [ ] Improve list output
 - [ ] Snapshots (using git?)
