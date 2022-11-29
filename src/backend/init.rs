@@ -1,4 +1,4 @@
-use crate::{config::Config, setup, Type, WrutError};
+use crate::{config::Config, setup, Type};
 use anyhow::{Context, Result};
 use std::collections::HashSet;
 use std::fs;
@@ -6,6 +6,7 @@ use std::io::Write;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
+use crate::backend::utils::get_name;
 
 /// Initialize a template.
 ///
@@ -25,59 +26,6 @@ pub fn init_template(dir: PathBuf, name: Option<&str>) -> Result<()> {
     // create template config
     let mut template_config = fs::File::create(dir.join(".wrut.toml"))?;
     write!(template_config, "{}", Config::default().to_string())?;
-
-    Ok(())
-}
-
-/// Initialize a project.
-///
-/// This function will generate a project from a given template and register a symlink to
-/// `project_dir` in `~/.wrut/projects`.
-///
-/// # Arguments
-/// * `template` - The template to generate the project from
-/// * `project_dir` - The directory to initialize a project in
-///     * This directory must already exist
-/// * `name` - The name of the project to initialize
-///     * If `name` is `None`, the name will be the name of the directory provided
-/// * `config` - The path to the configuration file to use
-pub fn init_project(
-    template: &String,
-    project_dir: &PathBuf,
-    name: Option<&str>,
-    config: PathBuf,
-) -> Result<()> {
-    // register project
-    let project_name = get_name(&name, &project_dir)?;
-    register(Type::Project, &project_dir, &project_name)?;
-
-    // get config
-    let config = Config::from_file(config.to_path_buf())?;
-
-    // get full template directory, initialize directory walker
-    let template_dir = setup::dir(setup::Dirs::Templates)?
-        .join(template)
-        .canonicalize()?;
-    let walker = WalkDir::new(&template_dir)
-        .min_depth(1)
-        .follow_links(true)
-        .into_iter();
-    let template_config = Config::from_file(template_dir.join(".wrut.toml"))?;
-    // traverse template directory
-    for entry in walker.filter_entry(|e| !ignore(e, &config, &template_config)) {
-        // source file/directory
-        let source = entry?.path().canonicalize()?;
-        // path to copy source to
-        let dest = project_dir.join(&source.strip_prefix(&template_dir)?);
-
-        if source.is_dir() {
-            fs::create_dir(&dest)?;
-        }
-
-        if source.is_file() {
-            fs::copy(&source, &dest)?;
-        }
-    }
 
     Ok(())
 }
@@ -119,7 +67,7 @@ pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) 
 }
 
 /// Determine whether to ignore a file/directory given the global and template configuration files.
-fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
+pub fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
     fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
         let mut b = false;
         for dir in dirs {
@@ -169,22 +117,8 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
     ignore_dir(entry, ignore_dirs.into_iter()) || ignore_file(entry, ignore_files.into_iter())
 }
 
-/// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
-/// be used.
-pub fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
-    Ok(match name {
-        Some(val) => val.to_string(),
-        None => dir
-            .file_name()
-            .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
-            .to_str()
-            .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
-            .to_string(),
-    })
-}
-
 /// Register a symlink to `dir` given a name and a type.
-fn register(type_: Type, dir: &PathBuf, name: &String) -> Result<()> {
+pub fn register(type_: Type, dir: &PathBuf, name: &String) -> Result<()> {
     let registry = setup::dir(type_.into())?;
     let file = registry.join(name);
 
