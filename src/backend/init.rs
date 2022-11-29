@@ -171,7 +171,7 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
 
 /// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
 /// be used.
-fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
+pub fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
     Ok(match name {
         Some(val) => val.to_string(),
         None => dir
