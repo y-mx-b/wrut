@@ -29,7 +29,7 @@ impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List => println!("{}", list::list(Type::Template)?.join("\n")),
-            Command::Init(args) => init::init_template(current_dir()?, &args.name)?,
+            Command::Init(args) => init::init_template(current_dir()?, args.name.as_deref())?,
             Command::Remove(args) => remove::remove_template(&args.template)?,
         })
     }
