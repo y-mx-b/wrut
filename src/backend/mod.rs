@@ -9,10 +9,12 @@ pub use error::*;
 
 mod project;
 mod template;
+mod tag;
 mod utils;
 
 pub use project::*;
 pub use template::*;
+pub use tag::*;
 
 /// Types to operate on
 #[derive(Debug)]
