@@ -2,7 +2,6 @@ use super::{InitArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use std::env::current_dir;
-use std::fs;
 use std::path::PathBuf;
 use wrut::*;
 
@@ -36,8 +35,7 @@ impl Command {
         Ok(match self {
             Command::List => println!("{}", Project::list()?.join("\n")),
             Command::Init(args) => {
-                Project::from(current_dir()?, args.name.as_deref())?
-                    .init(&args.template, config)?
+                Project::from(current_dir()?, args.name.as_deref())?.init(&args.template, config)?
             }
             Command::New(args) => {
                 Project::from(current_dir()?.join(&args.name), Some(&args.name))?

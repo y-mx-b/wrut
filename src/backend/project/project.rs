@@ -1,12 +1,12 @@
-use std::path::PathBuf;
-use crate::setup::{dir, Dirs};
 use crate::init::*;
 use crate::list::list;
-use crate::Type;
-use anyhow::Result;
-use crate::WrutError;
 use crate::remove::remove_project;
+use crate::setup::{dir, Dirs};
+use crate::Type;
+use crate::WrutError;
+use anyhow::Result;
 use std::env::current_dir;
+use std::path::PathBuf;
 
 pub struct Project {
     name: String,
@@ -27,10 +27,7 @@ impl Project {
         let path = path.into();
         let name = get_name(&name, &path)?;
 
-        Ok(Project {
-            name,
-            path,
-        })
+        Ok(Project { name, path })
     }
 
     /// Get an existing `Project` struct given its name.
@@ -42,7 +39,6 @@ impl Project {
         let name = get_name(&None, &project)?;
 
         if project.is_symlink() {
-
             Ok(Project {
                 name,
                 path: project,
@@ -52,8 +48,8 @@ impl Project {
         }
     }
 
-// TODO add list, init, new, remove methods
-    
+    // TODO add list, init, new, remove methods
+
     pub fn list() -> Result<Vec<String>> {
         list(Type::Project)
     }
