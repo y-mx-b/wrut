@@ -1,8 +1,8 @@
-use anyhow::Result;
-use crate::setup::{dir, Dirs};
-use std::os::unix::fs::symlink;
 use crate::backend::utils::unregister;
+use crate::setup::{dir, Dirs};
 use crate::Type;
+use anyhow::Result;
+use std::os::unix::fs::symlink;
 use std::process::Command;
 
 pub struct Tag {
