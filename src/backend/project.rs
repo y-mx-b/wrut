@@ -135,6 +135,15 @@ impl Project {
             std::fs::remove_dir_all(&self.path)?;
         }
 
+        // delete projects in tags dir
+        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        for tag in project_tags_dir.read_dir()? {
+            let tag = tag?;
+            // TODO make safer
+            let tag = Tag::from(tag.file_name().to_str().unwrap());
+            tag.remove(&vec![], &vec![&self.name])?;
+        }
+
         unregister(Type::Project, &self.name)
     }
 }

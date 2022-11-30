@@ -89,6 +89,15 @@ impl Template {
             std::fs::remove_dir_all(&self.path)?;
         }
 
+        // delete templates in tags dir
+        let template_tags_dir = dir(Dirs::Templates)?.join(&self.name).join("tags");
+        for tag in template_tags_dir.read_dir()? {
+            let tag = tag?;
+            // TODO make safer
+            let tag = Tag::from(tag.file_name().to_str().unwrap());
+            tag.remove(&vec![], &vec![&self.name])?;
+        }
+
         unregister(Type::Template, &self.name)
     }
 }
