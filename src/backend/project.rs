@@ -1,9 +1,10 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Type, WrutError};
+use crate::{config::Config, Tag, Type, WrutError};
 use anyhow::Result;
 use std::env::current_dir;
+use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::WalkDir;
 
@@ -32,14 +33,14 @@ impl Project {
     ///
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
-        let projects_dir = dir(Dirs::Projects)?;
-        let project = projects_dir.join(name);
+        let project = dir(Dirs::Projects)?.join(name);
+        let project_link = project.join("path").canonicalize()?;
         let name = get_name(&None, &project)?;
 
-        if project.is_symlink() {
+        if project.is_dir() {
             Ok(Project {
                 name,
-                path: project,
+                path: project_link,
             })
         } else {
             Err(WrutError::NoSuchProject(project, name))?
@@ -60,12 +61,15 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn init(&self, template: &String, config: PathBuf) -> Result<()> {
+    pub fn init(self, template: &String, config: PathBuf) -> Result<Self> {
         // register project
         register(Type::Project, &self.path, &self.name)?;
 
         // get full template directory, initialize directory walker
-        let template_dir = dir(Dirs::Templates)?.join(template).canonicalize()?;
+        let template_dir = dir(Dirs::Templates)?
+            .join(template)
+            .join("path")
+            .canonicalize()?;
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)
@@ -86,7 +90,8 @@ impl Project {
                 std::fs::copy(&source, &dest)?;
             }
         }
-        Ok(())
+
+        Ok(self)
     }
 
     /// Create a new project directory and then initialize the project.
@@ -98,13 +103,25 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn new_init(&self, template: &String, config: PathBuf) -> Result<()> {
+    pub fn new_init(self, template: &String, config: PathBuf) -> Result<Self> {
         // Create new project directory
         let project_dir = current_dir()?.join(&self.name);
         std::fs::create_dir(&project_dir)?;
 
         // call normal init
         self.init(template, config)
+    }
+
+    /// Add tags to a project.
+    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
+        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        for tag in tags {
+            let tag_dir = dir(Dirs::Tags)?.join(&tag);
+            symlink(&tag_dir, project_tags_dir.join(&tag))?;
+            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
+        }
+
+        Ok(self)
     }
 
     /// Remove the given project.
@@ -116,6 +133,15 @@ impl Project {
     pub fn remove(&self, delete: bool) -> Result<()> {
         if delete {
             std::fs::remove_dir_all(&self.path)?;
+        }
+
+        // delete projects in tags dir
+        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        for tag in project_tags_dir.read_dir()? {
+            let tag = tag?;
+            // TODO make safer
+            let tag = Tag::from(tag.file_name().to_str().unwrap());
+            tag.remove(&vec![], &vec![&self.name])?;
         }
 
         unregister(Type::Project, &self.name)
