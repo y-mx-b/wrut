@@ -60,16 +60,22 @@ impl Template {
         register(Type::Template, &self.path, &self.name)?;
 
         // add tags to the template
+        self.add_tags(tags)?;
+
+        // create template config
+        let mut template_config = std::fs::File::create(&self.path.join(".wrut.toml"))?;
+        write!(template_config, "{}", Config::default().to_string())?;
+
+        Ok(())
+    }
+
+    pub fn add_tags(&self, tags: &Vec<String>) -> Result<()> {
         let template_tags_dir = dir(Dirs::Templates)?.join(&self.name).join("tags");
         for tag in tags {
             let tag_dir = dir(Dirs::Tags)?.join(&tag);
             symlink(&tag_dir, template_tags_dir.join(&tag))?;
             Tag::from(&tag).init(&vec![], &vec![&self.name])?;
         }
-
-        // create template config
-        let mut template_config = std::fs::File::create(&self.path.join(".wrut.toml"))?;
-        write!(template_config, "{}", Config::default().to_string())?;
 
         Ok(())
     }
