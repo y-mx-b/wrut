@@ -1,11 +1,12 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Type, WrutError};
+use crate::{config::Config, Type, WrutError, Tag};
 use anyhow::Result;
 use std::env::current_dir;
 use std::path::PathBuf;
 use walkdir::WalkDir;
+use std::os::unix::fs::symlink;
 
 /// A struct representing a `wrut` project.
 pub struct Project {
@@ -60,9 +61,17 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn init(&self, template: &String, config: PathBuf) -> Result<()> {
+    pub fn init(&self, template: &String, tags: &Vec<String>, config: PathBuf) -> Result<()> {
         // register project
         register(Type::Project, &self.path, &self.name)?;
+
+        // add tags to the project
+        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        for tag in tags {
+            let tag_dir = dir(Dirs::Tags)?.join(&tag);
+            symlink(&tag_dir, project_tags_dir.join(&tag))?;
+            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
+        }
 
         // get full template directory, initialize directory walker
         let template_dir = dir(Dirs::Templates)?.join(template).join("path").canonicalize()?;
@@ -86,6 +95,7 @@ impl Project {
                 std::fs::copy(&source, &dest)?;
             }
         }
+
         Ok(())
     }
 
@@ -98,13 +108,13 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn new_init(&self, template: &String, config: PathBuf) -> Result<()> {
+    pub fn new_init(&self, template: &String, tags: &Vec<String>, config: PathBuf) -> Result<()> {
         // Create new project directory
         let project_dir = current_dir()?.join(&self.name);
         std::fs::create_dir(&project_dir)?;
 
         // call normal init
-        self.init(template, config)
+        self.init(template, tags, config)
     }
 
     /// Remove the given project.

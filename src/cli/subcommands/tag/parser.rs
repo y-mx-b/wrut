@@ -31,7 +31,7 @@ impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List(args) => println!("{}", Tag::list(&args.name)?),
-            Command::New(args) => Tag::from(&args.name).init(&args.templates, &args.projects)?,
+            Command::New(args) => Tag::from(&args.name).init(&args.templates.iter().map(|t| t.as_ref()).collect(), &args.projects.iter().map(|p| p.as_ref()).collect())?,
             Command::Remove(args) => Tag::from(&args.name).remove(&args.templates, &args.projects)?,
         })
     }
