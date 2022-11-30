@@ -61,12 +61,9 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn init(&self, template: &String, tags: &Vec<String>, config: PathBuf) -> Result<()> {
+    pub fn init(self, template: &String, config: PathBuf) -> Result<Self> {
         // register project
         register(Type::Project, &self.path, &self.name)?;
-
-        // add tags to the project
-        self.add_tags(tags)?;
 
         // get full template directory, initialize directory walker
         let template_dir = dir(Dirs::Templates)?.join(template).join("path").canonicalize()?;
@@ -91,7 +88,7 @@ impl Project {
             }
         }
 
-        Ok(())
+        Ok(self)
     }
 
     /// Create a new project directory and then initialize the project.
@@ -103,17 +100,17 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn new_init(&self, template: &String, tags: &Vec<String>, config: PathBuf) -> Result<()> {
+    pub fn new_init(self, template: &String, config: PathBuf) -> Result<Self> {
         // Create new project directory
         let project_dir = current_dir()?.join(&self.name);
         std::fs::create_dir(&project_dir)?;
 
         // call normal init
-        self.init(template, tags, config)
+        self.init(template, config)
     }
 
     /// Add tags to a project.
-    pub fn add_tags(&self, tags: &Vec<String>) -> Result<()> { 
+    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> { 
         let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
         for tag in tags {
             let tag_dir = dir(Dirs::Tags)?.join(&tag);
@@ -121,7 +118,7 @@ impl Project {
             Tag::from(&tag).init(&vec![], &vec![&self.name])?;
         }
 
-        Ok(())
+        Ok(self)
     }
 
     /// Remove the given project.
