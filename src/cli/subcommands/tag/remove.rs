@@ -4,9 +4,19 @@ use wrut::Type;
 
 #[derive(Args, Debug)]
 pub struct RemoveArgs {
-    /// The tag to delete.
+    /// The relevant tag.
+    ///
+    /// If `--templates` and `--projects` aren't set, the tag itself will be removed.
     #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Tag)))]
     pub name: String,
-}
 
-// TODO allow for removing templates/projects from tag
+    /// The templates to remove from this tag.
+    #[clap(long, short, hide_possible_values = true)]
+    #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Template)))]
+    pub templates: Vec<String>,
+
+    /// The projects to remove from this tag.
+    #[clap(long, short, hide_possible_values = true, value_delimiter = ',')]
+    #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Project)))]
+    pub projects: Vec<String>,
+}
