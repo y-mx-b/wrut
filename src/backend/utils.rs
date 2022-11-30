@@ -22,32 +22,32 @@ pub fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
 
 pub fn register(type_: Type, path: &PathBuf, name: &String) -> Result<()> {
     let registry = dir(type_.into())?;
-    let file = registry.join(name);
+
+    let entry = registry.join(name);
+    let link = entry.join("path");
+    let entry_tags_dir = entry.join("tags");
 
     // if a file by this name already exists, delete it
-    if file.try_exists()? {
-        std::fs::remove_file(&file)?;
+    if entry.is_dir() {
+        std::fs::remove_dir_all(&entry)?;
     }
 
+    // create the entry dir
+    std::fs::create_dir(entry)?;
     // create the symlink
-    // TODO make cross-platform (someday)
-    symlink(&path, &file)
-        .with_context(|| format!("Failed to create symlink to {:?} at {:?}", &path, &file))?;
+    symlink(&path, &link)
+        .with_context(|| format!("Failed to create symlink to {:?} at {:?}", &path, &link))?;
+    std::fs::create_dir(&entry_tags_dir)?;
 
     Ok(())
 }
 
-/// Delete the symlink to a project/template or delete a tag directory.
 pub fn unregister(type_: Type, name: &String) -> Result<()> {
     let target = dir(type_.into())?.join(name);
     let template_config = target.canonicalize()?.join(".wrut.toml");
 
     if template_config.is_file() {
         std::fs::remove_file(&template_config)?;
-    }
-
-    if target.is_symlink() {
-        std::fs::remove_file(&target)?;
     }
 
     if target.is_dir() {
