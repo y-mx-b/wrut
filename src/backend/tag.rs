@@ -40,14 +40,18 @@ impl Tag {
         for template in templates {
             let template_path = &templates_dir.join(&template).canonicalize()?;
             let tag_template_symlink = &tag_templates_dir.join(&template);
-            if !tag_template_symlink.is_symlink() { symlink(template_path, tag_template_symlink)?; }
+            if !tag_template_symlink.is_symlink() {
+                symlink(template_path, tag_template_symlink)?;
+            }
         }
 
         let projects_dir = dir(Dirs::Projects)?;
         for project in projects {
             let project_path = &projects_dir.join(&project).canonicalize()?;
             let tag_project_symlink = &tag_projects_dir.join(&project);
-            if !tag_project_symlink.is_symlink() { symlink(project_path, tag_project_symlink)?; }
+            if !tag_project_symlink.is_symlink() {
+                symlink(project_path, tag_project_symlink)?;
+            }
         }
 
         Ok(())
@@ -75,7 +79,7 @@ impl Tag {
         } else {
             let tag_templates_dir = dir(Dirs::Tags)?.join(&self.name).join("templates");
             let tag_projects_dir = dir(Dirs::Tags)?.join(&self.name).join("projects");
-            
+
             for template in templates {
                 let template_link = tag_templates_dir.join(template);
                 if template_link.is_symlink() {

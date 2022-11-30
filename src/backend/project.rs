@@ -1,12 +1,12 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Type, WrutError, Tag};
+use crate::{config::Config, Tag, Type, WrutError};
 use anyhow::Result;
 use std::env::current_dir;
+use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::WalkDir;
-use std::os::unix::fs::symlink;
 
 /// A struct representing a `wrut` project.
 pub struct Project {
@@ -66,7 +66,10 @@ impl Project {
         register(Type::Project, &self.path, &self.name)?;
 
         // get full template directory, initialize directory walker
-        let template_dir = dir(Dirs::Templates)?.join(template).join("path").canonicalize()?;
+        let template_dir = dir(Dirs::Templates)?
+            .join(template)
+            .join("path")
+            .canonicalize()?;
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)
@@ -110,7 +113,7 @@ impl Project {
     }
 
     /// Add tags to a project.
-    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> { 
+    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
         let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
         for tag in tags {
             let tag_dir = dir(Dirs::Tags)?.join(&tag);
