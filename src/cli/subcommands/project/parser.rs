@@ -35,12 +35,12 @@ impl Command {
             Command::List => println!("{}", Project::list()?.join("\n")),
             Command::Init(args) => {
                 Project::from(current_dir()?, args.name.as_deref())?
-                    .init(&args.template)?
+                    .init(&Template::get(&args.template)?)?
                     .add_tags(&args.tags)?;
             }
             Command::New(args) => {
                 Project::from(current_dir()?.join(&args.name), Some(&args.name))?
-                    .new_init(&args.template)?
+                    .new_init(&Template::get(&args.template)?)?
                     .add_tags(&args.tags)?;
             }
             Command::Remove(args) => Project::get(&args.project)?.remove(args.delete)?,
