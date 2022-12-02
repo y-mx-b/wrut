@@ -1,6 +1,6 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
-use crate::setup::{dir, Dirs};
+use crate::backend::setup::{dir, Dirs};
 use crate::{config::TemplateConfig, Tag, Type, WrutError, Template};
 use anyhow::Result;
 use std::env::current_dir;
@@ -120,7 +120,7 @@ impl Project {
 
     /// Add tags to a project.
     pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
-        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        let project_tags_dir = self.tag_dir()?;
         for tag in tags {
             let tag_dir = dir(Dirs::Tags)?.join(&tag);
             symlink(&tag_dir, project_tags_dir.join(&tag))?;

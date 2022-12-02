@@ -17,7 +17,7 @@ fn main() -> Result<()> {
     info!("Parsing command arguments.");
     // check for setup, then completions, then commands
     if !&cli.setup.is_empty() {
-        setup::setup(cli.setup)
+        setup(cli.setup)
     } else if let Some(sh) = cli.sh {
         Ok(comp::print_completions(sh))
     } else if let Some(type_) = &cli.type_ {

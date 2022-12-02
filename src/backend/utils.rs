@@ -1,4 +1,4 @@
-use crate::setup::dir;
+use crate::backend::setup::dir;
 use crate::{config::TemplateConfig, Type, WrutError};
 use anyhow::{Context, Result};
 use std::collections::HashSet;
