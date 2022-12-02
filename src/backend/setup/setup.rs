@@ -24,10 +24,6 @@ pub enum SetupFlag {
     /// Set `~/.wrut/tags` to default (alias: 's').
     #[clap(alias = "s")]
     Tags,
-
-    /// Set `~/.config/wrut` to default (alias: 'c').
-    #[clap(alias = "c")]
-    Config,
 }
 
 /// Given a set of flags, overwrite and/or initialize the directories associated with thsoe flags.
