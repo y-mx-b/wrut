@@ -21,7 +21,7 @@ fn main() -> Result<()> {
     } else if let Some(sh) = cli.sh {
         Ok(comp::print_completions(sh))
     } else if let Some(type_) = &cli.type_ {
-        type_.run(cli.config)
+        type_.run()
     } else {
         // print help message if nothing else is given
         Ok(println!("{}", Cli::command().render_help()))

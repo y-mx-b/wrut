@@ -1,7 +1,7 @@
 use crate::backend::utils::{get_name, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Tag, Type, WrutError};
+use crate::{config::TemplateConfig, Tag, Type, WrutError};
 use anyhow::Result;
 use std::io::Write;
 use std::os::unix::fs::symlink;
@@ -61,7 +61,7 @@ impl Template {
 
         // create template config
         let mut template_config = std::fs::File::create(&self.path.join(".wrut.toml"))?;
-        write!(template_config, "{}", Config::default().to_string())?;
+        write!(template_config, "{}", TemplateConfig::default().to_string())?;
 
         Ok(self)
     }

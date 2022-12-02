@@ -1,5 +1,5 @@
 use crate::setup::dir;
-use crate::{config::Config, Type, WrutError};
+use crate::{config::TemplateConfig, Type, WrutError};
 use anyhow::{Context, Result};
 use std::collections::HashSet;
 use std::os::unix::fs::symlink;
@@ -58,7 +58,7 @@ pub fn unregister(type_: Type, name: &String) -> Result<()> {
 }
 
 /// Determine whether to ignore a file/directory given the global and template configuration files.
-pub fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
+pub fn ignore(entry: &DirEntry, template_config: &TemplateConfig) -> bool {
     fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item = String>) -> bool {
         let mut b = false;
         for dir in dirs {
@@ -91,19 +91,9 @@ pub fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config
         b
     }
 
-    // merge ignore lists to reduce the number of comparisons
-    let ignore_dirs: HashSet<String> = {
-        let mut ignore_dirs = global_config.template.ignore_dirs.clone();
-        ignore_dirs.append(&mut template_config.template.ignore_dirs.clone());
-
-        ignore_dirs.into_iter().collect()
-    };
-    let ignore_files: HashSet<String> = {
-        let mut ignore_files = global_config.template.ignore_files.clone();
-        ignore_files.append(&mut template_config.template.ignore_files.clone());
-
-        ignore_files.into_iter().collect()
-    };
+    // merge ignore lists to reduce the number of comparisons if there are duplicates
+    let ignore_dirs: HashSet<String> = template_config.ignore_dirs.iter().cloned().collect();
+    let ignore_files: HashSet<String> = template_config.ignore_files.iter().cloned().collect();
 
     ignore_dir(entry, ignore_dirs.into_iter()) || ignore_file(entry, ignore_files.into_iter())
 }

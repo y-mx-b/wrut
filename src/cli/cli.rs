@@ -3,7 +3,6 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use clap_complete::Shell;
 use clap_verbosity_flag::Verbosity;
-use std::path::PathBuf;
 use wrut::{setup, Type};
 
 ///A utility to manage project templates.
@@ -14,13 +13,6 @@ pub struct Cli {
     #[command(subcommand)]
     pub type_: Option<CommandType>,
 
-    /// A configuration file to use for configurations [default: ~/.config/wrut/config.toml]
-    #[clap(short, long, hide_default_value = true)]
-    #[clap(default_value = setup::file(setup::Files::Config)
-            .expect("Could not get home directory.")
-            .display()
-            .to_string())]
-    pub config: PathBuf,
     #[command(flatten)]
     pub verbose: Verbosity,
 
@@ -63,9 +55,9 @@ pub enum CommandType {
 }
 
 impl CommandType {
-    pub fn run(&self, config: PathBuf) -> Result<()> {
+    pub fn run(&self) -> Result<()> {
         match self {
-            CommandType::Project(cmd) => cmd.command.run(config),
+            CommandType::Project(cmd) => cmd.command.run(),
             CommandType::Tag(cmd) => cmd.command.run(),
             CommandType::Template(cmd) => cmd.command.run(),
         }
