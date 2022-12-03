@@ -1,4 +1,4 @@
-use crate::setup::{dir, Dirs, SetupFlag};
+use crate::backend::setup::{dir, Dirs, SetupFlag};
 use anyhow::Result;
 use std::fs;
 

@@ -3,7 +3,7 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use clap_complete::Shell;
 use clap_verbosity_flag::Verbosity;
-use wrut::{setup, Type};
+use wrut::{SetupFlag, Type};
 
 ///A utility to manage project templates.
 #[derive(Parser, Debug)]
@@ -36,7 +36,7 @@ pub struct Cli {
         value_delimiter = ',',
         value_name = "DIRECTORIES"
     )]
-    pub setup: Vec<setup::SetupFlag>,
+    pub setup: Vec<SetupFlag>,
 }
 
 #[derive(Subcommand, Debug)]
