@@ -1,4 +1,3 @@
-use crate::backend::setup::{dir, Dirs};
 use crate::backend::utils::{get_name, unregister};
 use crate::list::list;
 use crate::{Tag, Type, WrutError};
@@ -43,20 +42,6 @@ impl Template {
         } else {
             Err(WrutError::NoSuchTemplate(template_path, name))?
         }
-    }
-
-    pub fn global_store() -> Result<PathBuf> {
-        Ok(dir(Dirs::Templates)?)
-    }
-
-    /// Return the storage directory for a template.
-    pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Templates)?.join(&self.name))
-    }
-
-    /// Return the tag directory for a template.
-    pub fn tag_dir(&self) -> Result<PathBuf> {
-        Ok(self.store()?.join("tags"))
     }
 
     /// Get a `Vec<String>` of containing a list of all currently registered projects.

@@ -9,6 +9,7 @@ mod template;
 mod utils;
 
 mod init;
+mod dirs;
 
 pub use error::WrutError;
 pub use project::Project;

@@ -45,16 +45,6 @@ impl Project {
         }
     }
 
-    /// Return the storage directory for a project.
-    pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Projects)?.join(&self.name))
-    }
-
-    /// Return the tag directory for a project.
-    pub fn tag_dir(&self) -> Result<PathBuf> {
-        Ok(self.store()?.join("tags"))
-    }
-
     /// Get a `Vec<String>` of containing a list of all currently registered projects.
     pub fn list() -> Result<Vec<String>> {
         list(Type::Project)

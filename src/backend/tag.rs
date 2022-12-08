@@ -16,20 +16,8 @@ impl Tag {
         }
     }
 
-    pub fn global_store() -> Result<PathBuf> {
-        Ok(dir(Dirs::Tags)?)
-    }
-
     pub fn path(&self) -> Result<PathBuf> {
         Ok(dir(Dirs::Tags)?.join(&self.name))
-    }
-
-    pub fn templates_dir(&self) -> Result<PathBuf> {
-        Ok(self.path()?.join("templates"))
-    }
-
-    pub fn projects_dir(&self) -> Result<PathBuf> {
-        Ok(self.path()?.join("projects"))
     }
 
     // TODO use termtree instead of this hack
