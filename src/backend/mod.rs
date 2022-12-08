@@ -8,6 +8,8 @@ mod tag;
 mod template;
 mod utils;
 
+mod init;
+
 pub use error::WrutError;
 pub use project::Project;
 pub use tag::Tag;
