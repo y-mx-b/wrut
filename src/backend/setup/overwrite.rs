@@ -30,7 +30,6 @@ pub fn overwrite(flag: SetupFlag) -> Result<()> {
     Ok(match flag {
         SetupFlag::All => {
             overwrite_dir(Dirs::Data)?;
-            overwrite_dir(Dirs::Config)?;
         }
         SetupFlag::Data => overwrite_dir(Dirs::Data)?,
         SetupFlag::Obj => overwrite_dir(Dirs::Obj)?,
