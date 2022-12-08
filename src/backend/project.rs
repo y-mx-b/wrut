@@ -1,6 +1,6 @@
+use crate::backend::setup::{dir, Dirs};
 use crate::backend::utils::{get_name, unregister};
 use crate::list::list;
-use crate::backend::setup::{dir, Dirs};
 use crate::{Tag, Type, WrutError};
 use anyhow::Result;
 use std::os::unix::fs::symlink;

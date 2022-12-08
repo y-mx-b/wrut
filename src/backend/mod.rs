@@ -12,9 +12,9 @@ mod init;
 
 pub use error::WrutError;
 pub use project::Project;
+pub use setup::{setup, SetupFlag};
 pub use tag::Tag;
 pub use template::Template;
-pub use setup::{setup, SetupFlag};
 
 /// Types to operate on
 #[derive(Debug)]

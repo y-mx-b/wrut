@@ -1,9 +1,8 @@
-use crate::backend::utils::{get_name, register, unregister};
-use crate::list::list;
 use crate::backend::setup::{dir, Dirs};
-use crate::{config::TemplateConfig, Tag, Type, WrutError};
+use crate::backend::utils::{get_name, unregister};
+use crate::list::list;
+use crate::{Tag, Type, WrutError};
 use anyhow::Result;
-use std::io::Write;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 
@@ -63,21 +62,6 @@ impl Template {
     /// Get a `Vec<String>` of containing a list of all currently registered projects.
     pub fn list() -> Result<Vec<String>> {
         list(Type::Template)
-    }
-
-    /// Initialize a template.
-    ///
-    /// This function will create a `.wrut.toml` file in the provided directory and register a symlink
-    /// to `dir` in `~/.wrut/templates`.
-    pub fn init(self) -> Result<Self> {
-        // register template
-        register(Type::Template, &self.path, &self.name)?;
-
-        // create template config
-        let mut template_config = std::fs::File::create(&self.path.join(".wrut.toml"))?;
-        write!(template_config, "{}", TemplateConfig::default().to_string())?;
-
-        Ok(self)
     }
 
     /// Add tags to a template.
