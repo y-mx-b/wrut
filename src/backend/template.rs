@@ -1,5 +1,4 @@
 use crate::backend::utils::{get_name, unregister};
-use crate::list::list;
 use crate::{Tag, Type, WrutError};
 use anyhow::Result;
 use std::os::unix::fs::symlink;
@@ -42,11 +41,6 @@ impl Template {
         } else {
             Err(WrutError::NoSuchTemplate(template_path, name))?
         }
-    }
-
-    /// Get a `Vec<String>` of containing a list of all currently registered projects.
-    pub fn list() -> Result<Vec<String>> {
-        list(Type::Template)
     }
 
     /// Add tags to a template.

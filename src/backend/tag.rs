@@ -3,7 +3,6 @@ use crate::backend::utils::unregister;
 use crate::Type;
 use anyhow::Result;
 use std::path::PathBuf;
-use std::process::Command;
 
 pub struct Tag {
     name: String,
@@ -18,22 +17,6 @@ impl Tag {
 
     pub fn path(&self) -> Result<PathBuf> {
         Ok(dir(Dirs::Tags)?.join(&self.name))
-    }
-
-    // TODO use termtree instead of this hack
-    /// List the projects/templates of a given tag. If `tag` is `None`, list all tags and their
-    /// projects/templates.
-    pub fn list(tag: &Option<String>) -> Result<String> {
-        let tag_dir = if let Some(tag) = tag {
-            Tag::from(tag).path()?
-        } else {
-            Tag::global_store()?
-        };
-
-        let output = Command::new("tree")
-            .arg(tag_dir.display().to_string())
-            .output()?;
-        Ok(std::str::from_utf8(&output.stdout)?.to_string())
     }
 
     pub fn remove(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
