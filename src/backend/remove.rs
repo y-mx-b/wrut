@@ -2,7 +2,7 @@ use crate::{Project, Tag, Type, Template};
 use crate::backend::setup::{dir, Dirs};
 use anyhow::Result;
 
-pub fn unregister(type_: Type, name: &str) -> Result<()> {
+fn unregister(type_: Type, name: &str) -> Result<()> {
     let target = dir(type_.into())?.join(name);
     let template_config = target.canonicalize()?.join(".wrut.toml");
 
