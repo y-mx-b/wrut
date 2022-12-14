@@ -26,7 +26,7 @@ impl Project {
     /// the project will only be unregistered from `~/.wrut/projects`.
     pub fn remove(&self, delete: bool) -> Result<()> {
         if delete {
-            std::fs::remove_dir_all(&self.path)?;
+            std::fs::remove_dir_all(&self.path())?;
         }
 
         // delete projects in tags dir

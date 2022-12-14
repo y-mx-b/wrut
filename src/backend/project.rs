@@ -7,7 +7,7 @@ use std::path::PathBuf;
 /// A struct representing a `wrut` project.
 pub struct Project {
     name: String,
-    pub path: PathBuf,
+    path: PathBuf,
 }
 
 impl Project {
@@ -43,7 +43,14 @@ impl Project {
         }
     }
 
+    /// Get the project's name.
     pub fn name(&self) -> &str {
         &self.name
+    }
+
+    // TODO: maybe change to AsRef<Path> someday? who knows, sounds unnecessary right now
+    /// Get the project's path.
+    pub fn path(&self) -> &PathBuf {
+        &self.path
     }
 }

@@ -83,7 +83,7 @@ impl Project {
     /// * `config` - The path to the configuration file to use
     pub fn init(self, template: &Template) -> Result<Self> {
         // register project
-        register(Type::Project, &self.path, &self.name())?;
+        register(Type::Project, &self.path(), &self.name())?;
 
         // get full template directory, initialize directory walker
         let template_dir = &template.path;
@@ -97,7 +97,7 @@ impl Project {
 
         for entry in walker.filter_entry(|e| !ignore(e, &template_config)) {
             let source = entry?.path().canonicalize()?;
-            let dest = self.path.join(&source.strip_prefix(&template_dir)?);
+            let dest = self.path().join(&source.strip_prefix(&template_dir)?);
 
             // check if source is file or dir
             if source.is_dir() {
@@ -176,8 +176,9 @@ impl Tag {
         }
 
         for project in projects {
-            let project_path = Project::get(project)?.path;
-            let tag_project_symlink = &tag_projects_dir.join(&project);
+            let project = Project::get(project)?;
+            let project_path = project.path();
+            let tag_project_symlink = &tag_projects_dir.join(project.name());
             if !tag_project_symlink.is_symlink() {
                 symlink(project_path, tag_project_symlink)?;
             }
