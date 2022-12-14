@@ -10,6 +10,7 @@ mod utils;
 
 mod init;
 mod dirs;
+mod remove;
 
 pub use error::WrutError;
 pub use project::Project;

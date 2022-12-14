@@ -1,5 +1,5 @@
-use crate::backend::utils::{get_name, unregister};
-use crate::{Tag, Type, WrutError};
+use crate::backend::utils::get_name;
+use crate::{Tag, WrutError};
 use anyhow::Result;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
@@ -53,28 +53,5 @@ impl Template {
         }
 
         Ok(self)
-    }
-
-    /// Remove the given project.
-    ///
-    /// # Arguments
-    ///
-    /// * `delete` - If `delete` is `true`, the project directory will be deleted. If `false`, then
-    /// the project will only be unregistered from `~/.wrut/projects`.
-    pub fn remove(&self, delete: bool) -> Result<()> {
-        if delete {
-            std::fs::remove_dir_all(&self.path)?;
-        }
-
-        // delete templates in tags dir
-        let template_tags_dir = self.tag_dir()?;
-        for tag in template_tags_dir.read_dir()? {
-            let tag = tag?;
-            // TODO make safer
-            let tag = Tag::from(tag.file_name().to_str().unwrap());
-            tag.remove(&vec![], &vec![&self.name])?;
-        }
-
-        unregister(Type::Template, &self.name)
     }
 }

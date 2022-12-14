@@ -1,5 +1,4 @@
-use crate::backend::setup::dir;
-use crate::{Type, WrutError};
+use crate::WrutError;
 use anyhow::Result;
 use std::path::PathBuf;
 
@@ -16,19 +15,3 @@ pub fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
             .to_string(),
     })
 }
-
-pub fn unregister(type_: Type, name: &String) -> Result<()> {
-    let target = dir(type_.into())?.join(name);
-    let template_config = target.canonicalize()?.join(".wrut.toml");
-
-    if template_config.is_file() {
-        std::fs::remove_file(&template_config)?;
-    }
-
-    if target.is_dir() {
-        std::fs::remove_dir_all(target)?;
-    }
-
-    Ok(())
-}
-
