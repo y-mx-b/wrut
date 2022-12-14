@@ -5,7 +5,7 @@ use crate::{Project, Template};
 use std::os::unix::fs::symlink;
 
 pub struct Tag {
-    pub name: String,
+    name: String,
 }
 
 impl Tag {
@@ -17,6 +17,10 @@ impl Tag {
 
     pub fn path(&self) -> Result<PathBuf> {
         Ok(dir(Dirs::Tags)?.join(&self.name))
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }
 

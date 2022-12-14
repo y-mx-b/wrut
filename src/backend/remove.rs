@@ -70,10 +70,10 @@ impl Template {
 impl Tag {
     pub fn remove(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
         if templates.len() == 0 && projects.len() == 0 {
-            unregister(Type::Tag, &self.name)
+            unregister(Type::Tag, &self.name())
         } else {
-            let tag_templates_dir = dir(Dirs::Tags)?.join(&self.name).join("templates");
-            let tag_projects_dir = dir(Dirs::Tags)?.join(&self.name).join("projects");
+            let tag_templates_dir = dir(Dirs::Tags)?.join(&self.name()).join("templates");
+            let tag_projects_dir = dir(Dirs::Tags)?.join(&self.name()).join("projects");
 
             for template in templates {
                 let template_link = tag_templates_dir.join(template);
