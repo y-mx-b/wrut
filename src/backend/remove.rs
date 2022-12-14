@@ -33,7 +33,7 @@ impl Project {
         let project_tags_dir = self.tag_dir()?;
         for tag in project_tags_dir.read_dir()? {
             let tag = tag?;
-            // TODO make safer
+            // TODO: make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
             tag.remove(&vec![], &vec![&self.name()])?;
         }
@@ -58,7 +58,7 @@ impl Template {
         let template_tags_dir = self.tag_dir()?;
         for tag in template_tags_dir.read_dir()? {
             let tag = tag?;
-            // TODO make safer
+            // TODO: make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
             tag.remove(&vec![], &vec![&self.name()])?;
         }

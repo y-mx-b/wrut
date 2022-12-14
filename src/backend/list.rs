@@ -10,7 +10,7 @@ pub fn list(type_: Type) -> Result<Vec<String>> {
     let dir = setup::dir(type_.into())?;
     let mut list: Vec<String> = Vec::new();
 
-    // TODO better error handling
+    // TODO: better error handling
     for entry in dir.read_dir().with_context(|| {
         format!(
             "Directory {:?} should exist after running `wrut --setup`",
@@ -45,7 +45,7 @@ impl Template {
 }
 
 impl Tag {
-    // TODO use termtree instead of this hack
+    // TODO: use termtree instead of this hack
     /// List the projects/templates of a given tag. If `tag` is `None`, list all tags and their
     /// projects/templates.
     pub fn list(tag: &Option<String>) -> Result<String> {
