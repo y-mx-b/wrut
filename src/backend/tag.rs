@@ -27,7 +27,7 @@ impl Project {
         for tag in tags {
             let tag_dir = dir(Dirs::Tags)?.join(&tag);
             symlink(&tag_dir, project_tags_dir.join(&tag))?;
-            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
+            Tag::from(&tag).init(&vec![], &vec![&self.name()])?;
         }
 
         Ok(self)

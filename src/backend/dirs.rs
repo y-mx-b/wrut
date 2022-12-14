@@ -6,7 +6,7 @@ use std::path::PathBuf;
 impl Project {
     /// Return the storage directory for a project.
     pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Projects)?.join(&self.name))
+        Ok(dir(Dirs::Projects)?.join(&self.name()))
     }
 
     /// Return the tag directory for a project.

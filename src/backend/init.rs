@@ -8,7 +8,7 @@ use walkdir::{WalkDir, DirEntry};
 use std::path::PathBuf;
 use crate::backend::setup::dir;
 
-fn register(type_: Type, path: &PathBuf, name: &String) -> Result<()> {
+fn register(type_: Type, path: &PathBuf, name: &str) -> Result<()> {
     let registry = dir(type_.into())?;
 
     let entry = registry.join(name);
@@ -83,7 +83,7 @@ impl Project {
     /// * `config` - The path to the configuration file to use
     pub fn init(self, template: &Template) -> Result<Self> {
         // register project
-        register(Type::Project, &self.path, &self.name)?;
+        register(Type::Project, &self.path, &self.name())?;
 
         // get full template directory, initialize directory walker
         let template_dir = &template.path;
@@ -121,7 +121,7 @@ impl Project {
     /// * `config` - The path to the configuration file to use
     pub fn new_init(self, template: &Template) -> Result<Self> {
         // Create new project directory
-        let project_dir = current_dir()?.join(&self.name);
+        let project_dir = current_dir()?.join(&self.name());
         std::fs::create_dir(&project_dir)?;
 
         // call normal init

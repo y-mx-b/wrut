@@ -2,7 +2,7 @@ use crate::{Project, Tag, Type, Template};
 use crate::backend::setup::{dir, Dirs};
 use anyhow::Result;
 
-pub fn unregister(type_: Type, name: &String) -> Result<()> {
+pub fn unregister(type_: Type, name: &str) -> Result<()> {
     let target = dir(type_.into())?.join(name);
     let template_config = target.canonicalize()?.join(".wrut.toml");
 
@@ -35,10 +35,10 @@ impl Project {
             let tag = tag?;
             // TODO make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
-            tag.remove(&vec![], &vec![&self.name])?;
+            tag.remove(&vec![], &vec![&self.name()])?;
         }
 
-        unregister(Type::Project, &self.name)
+        unregister(Type::Project, &self.name())
     }
 }
 

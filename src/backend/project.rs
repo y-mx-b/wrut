@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 /// A struct representing a `wrut` project.
 pub struct Project {
-    pub name: String,
+    name: String,
     pub path: PathBuf,
 }
 
@@ -41,5 +41,9 @@ impl Project {
         } else {
             Err(WrutError::NoSuchProject(project_path, name))?
         }
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }
