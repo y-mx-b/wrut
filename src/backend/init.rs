@@ -86,7 +86,7 @@ impl Project {
         register(Type::Project, &self.path(), &self.name())?;
 
         // get full template directory, initialize directory walker
-        let template_dir = &template.path;
+        let template_dir = &template.path();
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)
@@ -136,10 +136,10 @@ impl Template {
     /// to `dir` in `~/.wrut/templates`.
     pub fn init(self) -> Result<Self> {
         // register template
-        register(Type::Template, &self.path, &self.name)?;
+        register(Type::Template, &self.path(), &self.name())?;
 
         // create template config
-        let mut template_config = std::fs::File::create(&self.path.join(".wrut.toml"))?;
+        let mut template_config = std::fs::File::create(&self.path().join(".wrut.toml"))?;
         write!(template_config, "{}", TemplateConfig::default().to_string())?;
 
         Ok(self)

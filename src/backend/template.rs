@@ -5,8 +5,8 @@ use std::path::PathBuf;
 
 /// A struct representing a `wrut` template.
 pub struct Template {
-    pub name: String,
-    pub path: PathBuf,
+    name: String,
+    path: PathBuf,
 }
 
 impl Template {
@@ -40,5 +40,16 @@ impl Template {
         } else {
             Err(WrutError::NoSuchTemplate(template_path, name))?
         }
+    }
+
+    /// Get the template's name.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    // TODO: maybe change to AsRef<Path> someday? who knows, sounds unnecessary right now
+    /// Get the template's path.
+    pub fn path(&self) -> &PathBuf {
+        &self.path
     }
 }

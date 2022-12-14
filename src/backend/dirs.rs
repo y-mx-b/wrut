@@ -22,7 +22,7 @@ impl Template {
 
     /// Return the storage directory for a template.
     pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Templates)?.join(&self.name))
+        Ok(dir(Dirs::Templates)?.join(&self.name()))
     }
 
     /// Return the tag directory for a template.

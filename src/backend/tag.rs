@@ -41,7 +41,7 @@ impl Template {
         for tag in tags {
             let tag_dir = Tag::from(&tag).path()?;
             symlink(&tag_dir, template_tags_dir.join(&tag))?;
-            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
+            Tag::from(&tag).init(&vec![], &vec![&self.name()])?;
         }
 
         Ok(self)

@@ -51,7 +51,7 @@ impl Template {
     /// the project will only be unregistered from `~/.wrut/projects`.
     pub fn remove(&self, delete: bool) -> Result<()> {
         if delete {
-            std::fs::remove_dir_all(&self.path)?;
+            std::fs::remove_dir_all(&self.path())?;
         }
 
         // delete templates in tags dir
@@ -60,10 +60,10 @@ impl Template {
             let tag = tag?;
             // TODO make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
-            tag.remove(&vec![], &vec![&self.name])?;
+            tag.remove(&vec![], &vec![&self.name()])?;
         }
 
-        unregister(Type::Template, &self.name)
+        unregister(Type::Template, &self.name())
     }
 }
 
