@@ -1,7 +1,6 @@
 use crate::backend::utils::get_name;
-use crate::{Tag, WrutError};
+use crate::WrutError;
 use anyhow::Result;
-use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 
 /// A struct representing a `wrut` template.
@@ -41,17 +40,5 @@ impl Template {
         } else {
             Err(WrutError::NoSuchTemplate(template_path, name))?
         }
-    }
-
-    /// Add tags to a template.
-    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
-        let template_tags_dir = self.tag_dir()?;
-        for tag in tags {
-            let tag_dir = Tag::from(&tag).path()?;
-            symlink(&tag_dir, template_tags_dir.join(&tag))?;
-            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
-        }
-
-        Ok(self)
     }
 }

@@ -1,8 +1,7 @@
 use crate::backend::setup::{dir, Dirs};
 use crate::backend::utils::get_name;
-use crate::{Tag, WrutError};
+use crate::WrutError;
 use anyhow::Result;
-use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 
 /// A struct representing a `wrut` project.
@@ -42,17 +41,5 @@ impl Project {
         } else {
             Err(WrutError::NoSuchProject(project_path, name))?
         }
-    }
-
-    /// Add tags to a project.
-    pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
-        let project_tags_dir = self.tag_dir()?;
-        for tag in tags {
-            let tag_dir = dir(Dirs::Tags)?.join(&tag);
-            symlink(&tag_dir, project_tags_dir.join(&tag))?;
-            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
-        }
-
-        Ok(self)
     }
 }
