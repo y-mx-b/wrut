@@ -1,4 +1,3 @@
-use crate::backend::setup::{dir, Dirs};
 use anyhow::Result;
 use std::path::PathBuf;
 use crate::{Project, Template};
@@ -15,8 +14,9 @@ impl Tag {
         }
     }
 
+    // TODO: make reference?
     pub fn path(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Tags)?.join(&self.name))
+        Ok(Tag::global_store()?.join(self.name()))
     }
 
     pub fn name(&self) -> &str {
@@ -29,9 +29,9 @@ impl Project {
     pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
         let project_tags_dir = self.tag_dir()?;
         for tag in tags {
-            let tag_dir = dir(Dirs::Tags)?.join(tag);
-            symlink(&tag_dir, project_tags_dir.join(tag))?;
-            Tag::from(tag).init(&vec![], &vec![self.name()])?;
+            let tag = Tag::from(tag);
+            symlink(tag.path()?, project_tags_dir.join(tag.name()))?;
+            tag.init(&vec![], &vec![self.name()])?;
         }
 
         Ok(self)

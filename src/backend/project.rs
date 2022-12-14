@@ -1,4 +1,3 @@
-use crate::backend::setup::{dir, Dirs};
 use crate::backend::utils::get_name;
 use crate::WrutError;
 use anyhow::Result;
@@ -29,7 +28,7 @@ impl Project {
     ///
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
-        let project = dir(Dirs::Projects)?.join(name);
+        let project = Project::global_store()?.join(name);
         let project_path = project.join("path").canonicalize()?;
         let name = get_name(&None, &project)?;
 

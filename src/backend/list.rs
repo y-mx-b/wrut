@@ -1,13 +1,14 @@
-use crate::{backend::setup, Type, Project, Tag, Template};
+use crate::{Type, Project, Tag, Template};
 use std::process::Command;
 use anyhow::{Context, Result};
+use crate::backend::dirs::dir;
 
 /// List the entries of a given type.
-///
+//
 /// If no such entries exist, or the required data directory itself does not exist, then an empty
 /// vector will be returned.
 pub fn list(type_: Type) -> Result<Vec<String>> {
-    let dir = setup::dir(type_.into())?;
+    let dir = dir(type_.into())?;
     let mut list: Vec<String> = Vec::new();
 
     // TODO: better error handling
@@ -48,7 +49,7 @@ impl Tag {
     /// projects/templates.
     pub fn list(tag: &Option<String>) -> Result<String> {
         let tag_dir = if let Some(tag) = tag {
-            Tag::from(tag).path()?
+            Tag::from(tag).path()?.to_path_buf()
         } else {
             Tag::global_store()?
         };

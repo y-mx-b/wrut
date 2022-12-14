@@ -1,6 +1,6 @@
 use crate::{Project, Tag, Type, Template};
-use crate::backend::setup::{dir, Dirs};
 use anyhow::Result;
+use crate::backend::dirs::dir;
 
 fn unregister(type_: Type, name: &str) -> Result<()> {
     let target = dir(type_.into())?.join(name);
@@ -72,8 +72,8 @@ impl Tag {
         if templates.is_empty() && projects.is_empty() {
             unregister(Type::Tag, self.name())
         } else {
-            let tag_templates_dir = dir(Dirs::Tags)?.join(self.name()).join("templates");
-            let tag_projects_dir = dir(Dirs::Tags)?.join(self.name()).join("projects");
+            let tag_templates_dir = self.templates_dir()?;
+            let tag_projects_dir = self.projects_dir()?;
 
             for template in templates {
                 let template_link = tag_templates_dir.join(template);

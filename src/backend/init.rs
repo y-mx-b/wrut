@@ -6,7 +6,7 @@ use std::io::Write;
 use std::os::unix::fs::symlink;
 use walkdir::{WalkDir, DirEntry};
 use std::path::PathBuf;
-use crate::backend::setup::dir;
+use crate::backend::dirs::dir;
 
 fn register(type_: Type, path: &PathBuf, name: &str) -> Result<()> {
     let registry = dir(type_.into())?;
