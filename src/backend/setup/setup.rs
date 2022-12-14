@@ -1,3 +1,6 @@
+#![allow(clippy::module_inception)]
+// TODO: reorganize setup module
+
 use crate::backend::setup::overwrite;
 use anyhow::Result;
 use clap::ValueEnum;
@@ -28,7 +31,8 @@ pub enum SetupFlag {
 
 /// Given a set of flags, overwrite and/or initialize the directories associated with thsoe flags.
 pub fn setup(flags: Vec<SetupFlag>) -> Result<()> {
-    Ok(for flag in flags {
+    for flag in flags {
         overwrite(flag)?;
-    })
+    }
+    Ok(())
 }

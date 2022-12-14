@@ -23,7 +23,7 @@ fn register(type_: Type, path: &PathBuf, name: &str) -> Result<()> {
     // create the entry dir
     std::fs::create_dir(entry)?;
     // create the symlink
-    symlink(&path, &link)
+    symlink(path, &link)
         .with_context(|| format!("Failed to create symlink to {:?} at {:?}", &path, &link))?;
     std::fs::create_dir(&entry_tags_dir)?;
 
@@ -41,9 +41,7 @@ fn ignore(entry: &DirEntry, template_config: &TemplateConfig) -> bool {
                     .to_str()
                     .map(|s| s.starts_with(&dir))
                     .unwrap_or(false);
-            if b == true {
-                break;
-            }
+            if b { break; }
         }
         b
     }
@@ -57,9 +55,7 @@ fn ignore(entry: &DirEntry, template_config: &TemplateConfig) -> bool {
                     .to_str()
                     .map(|s| s.starts_with(&file))
                     .unwrap_or(false);
-            if b == true {
-                break;
-            }
+            if b { break; }
         }
         b
     }
@@ -83,11 +79,11 @@ impl Project {
     /// * `config` - The path to the configuration file to use
     pub fn init(self, template: &Template) -> Result<Self> {
         // register project
-        register(Type::Project, &self.path(), &self.name())?;
+        register(Type::Project, self.path(), self.name())?;
 
         // get full template directory, initialize directory walker
         let template_dir = &template.path();
-        let walker = WalkDir::new(&template_dir)
+        let walker = WalkDir::new(template_dir)
             .min_depth(1)
             .follow_links(true)
             .into_iter();
@@ -97,7 +93,7 @@ impl Project {
 
         for entry in walker.filter_entry(|e| !ignore(e, &template_config)) {
             let source = entry?.path().canonicalize()?;
-            let dest = self.path().join(&source.strip_prefix(&template_dir)?);
+            let dest = self.path().join(source.strip_prefix(template_dir)?);
 
             // check if source is file or dir
             if source.is_dir() {
@@ -121,7 +117,7 @@ impl Project {
     /// * `config` - The path to the configuration file to use
     pub fn new_init(self, template: &Template) -> Result<Self> {
         // Create new project directory
-        let project_dir = current_dir()?.join(&self.name());
+        let project_dir = current_dir()?.join(self.name());
         std::fs::create_dir(&project_dir)?;
 
         // call normal init
@@ -136,11 +132,11 @@ impl Template {
     /// to `dir` in `~/.wrut/templates`.
     pub fn init(self) -> Result<Self> {
         // register template
-        register(Type::Template, &self.path(), &self.name())?;
+        register(Type::Template, self.path(), self.name())?;
 
         // create template config
-        let mut template_config = std::fs::File::create(&self.path().join(".wrut.toml"))?;
-        write!(template_config, "{}", TemplateConfig::default().to_string())?;
+        let mut template_config = std::fs::File::create(self.path().join(".wrut.toml"))?;
+        write!(template_config, "{}", TemplateConfig::default())?;
 
         Ok(self)
     }
@@ -168,8 +164,8 @@ impl Tag {
         // check if already exists, don't try to create if it does
         let templates_dir = Template::global_store()?;
         for template in templates {
-            let template_path = &templates_dir.join(&template).canonicalize()?;
-            let tag_template_symlink = &tag_templates_dir.join(&template);
+            let template_path = &templates_dir.join(template).canonicalize()?;
+            let tag_template_symlink = &tag_templates_dir.join(template);
             if !tag_template_symlink.is_symlink() {
                 symlink(template_path, tag_template_symlink)?;
             }

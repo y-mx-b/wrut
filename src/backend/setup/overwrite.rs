@@ -27,7 +27,7 @@ fn overwrite_dir(d: Dirs) -> Result<()> {
 /// Given a `SetupFlag` variant, overwrite and/or initialize the directories and files associated
 /// with the given flag.
 pub fn overwrite(flag: SetupFlag) -> Result<()> {
-    Ok(match flag {
+    match flag {
         SetupFlag::All => {
             overwrite_dir(Dirs::Data)?;
         }
@@ -36,5 +36,6 @@ pub fn overwrite(flag: SetupFlag) -> Result<()> {
         SetupFlag::Projects => overwrite_dir(Dirs::Projects)?,
         SetupFlag::Tags => overwrite_dir(Dirs::Tags)?,
         SetupFlag::Templates => overwrite_dir(Dirs::Templates)?,
-    })
+    }
+    Ok(())
 }

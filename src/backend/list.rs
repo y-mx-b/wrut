@@ -16,15 +16,13 @@ pub fn list(type_: Type) -> Result<Vec<String>> {
             "Directory {:?} should exist after running `wrut --setup`",
             &dir
         )
-    })? {
-        if let Ok(entry) = entry {
-            list.push(
-                entry
-                    .file_name()
-                    .into_string()
-                    .expect("File name should exist"),
-            );
-        }
+    })?.flatten() {
+        list.push(
+            entry
+                .file_name()
+                .into_string()
+                .expect("File name should exist"),
+        );
     }
 
     Ok(list)

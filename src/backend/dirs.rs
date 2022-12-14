@@ -6,7 +6,7 @@ use std::path::PathBuf;
 impl Project {
     /// Return the storage directory for a project.
     pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Projects)?.join(&self.name()))
+        Ok(dir(Dirs::Projects)?.join(self.name()))
     }
 
     /// Return the tag directory for a project.
@@ -17,12 +17,12 @@ impl Project {
 
 impl Template {
     pub fn global_store() -> Result<PathBuf> {
-        Ok(dir(Dirs::Templates)?)
+        dir(Dirs::Templates)
     }
 
     /// Return the storage directory for a template.
     pub fn store(&self) -> Result<PathBuf> {
-        Ok(dir(Dirs::Templates)?.join(&self.name()))
+        Ok(dir(Dirs::Templates)?.join(self.name()))
     }
 
     /// Return the tag directory for a template.
@@ -33,7 +33,7 @@ impl Template {
 
 impl Tag {
     pub fn global_store() -> Result<PathBuf> {
-        Ok(dir(Dirs::Tags)?)
+        dir(Dirs::Tags)
     }
 
     pub fn templates_dir(&self) -> Result<PathBuf> {

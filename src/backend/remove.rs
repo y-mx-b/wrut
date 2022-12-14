@@ -26,7 +26,7 @@ impl Project {
     /// the project will only be unregistered from `~/.wrut/projects`.
     pub fn remove(&self, delete: bool) -> Result<()> {
         if delete {
-            std::fs::remove_dir_all(&self.path())?;
+            std::fs::remove_dir_all(self.path())?;
         }
 
         // delete projects in tags dir
@@ -35,10 +35,10 @@ impl Project {
             let tag = tag?;
             // TODO: make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
-            tag.remove(&vec![], &vec![&self.name()])?;
+            tag.remove(&vec![], &vec![self.name()])?;
         }
 
-        unregister(Type::Project, &self.name())
+        unregister(Type::Project, self.name())
     }
 }
 
@@ -51,7 +51,7 @@ impl Template {
     /// the project will only be unregistered from `~/.wrut/projects`.
     pub fn remove(&self, delete: bool) -> Result<()> {
         if delete {
-            std::fs::remove_dir_all(&self.path())?;
+            std::fs::remove_dir_all(self.path())?;
         }
 
         // delete templates in tags dir
@@ -60,20 +60,20 @@ impl Template {
             let tag = tag?;
             // TODO: make safer
             let tag = Tag::from(tag.file_name().to_str().unwrap());
-            tag.remove(&vec![], &vec![&self.name()])?;
+            tag.remove(&vec![], &vec![self.name()])?;
         }
 
-        unregister(Type::Template, &self.name())
+        unregister(Type::Template, self.name())
     }
 }
 
 impl Tag {
     pub fn remove(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
-        if templates.len() == 0 && projects.len() == 0 {
-            unregister(Type::Tag, &self.name())
+        if templates.is_empty() && projects.is_empty() {
+            unregister(Type::Tag, self.name())
         } else {
-            let tag_templates_dir = dir(Dirs::Tags)?.join(&self.name()).join("templates");
-            let tag_projects_dir = dir(Dirs::Tags)?.join(&self.name()).join("projects");
+            let tag_templates_dir = dir(Dirs::Tags)?.join(self.name()).join("templates");
+            let tag_projects_dir = dir(Dirs::Tags)?.join(self.name()).join("projects");
 
             for template in templates {
                 let template_link = tag_templates_dir.join(template);
