@@ -49,7 +49,7 @@ impl Tag {
     /// projects/templates.
     pub fn list(tag: &Option<String>) -> Result<String> {
         let tag_dir = if let Some(tag) = tag {
-            Tag::from(tag).path()?.to_path_buf()
+            Tag::from(tag).path()?
         } else {
             Tag::global_store()?
         };
