@@ -5,6 +5,7 @@ use crate::backend::setup::overwrite;
 use anyhow::Result;
 use clap::ValueEnum;
 
+// TODO: replace with struct, move enum to wrut cli
 /// A set of flags to determine what directory to overwrite.
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone)]
 pub enum SetupFlag {
