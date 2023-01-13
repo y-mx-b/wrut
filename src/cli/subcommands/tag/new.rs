@@ -16,7 +16,7 @@ pub struct NewArgs {
     pub templates: Vec<String>,
 
     /// The projects to register with this tag.
-    #[clap(long, short, hide_possible_values = true)]
+    #[clap(long, short, hide_possible_values = true, value_delimiter = ',')]
     #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Project)))]
     pub projects: Vec<String>,
 }

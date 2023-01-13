@@ -2,20 +2,18 @@
 
 [Overview](../../README.md)
 
-# Installation
+# Setup
 
-- [Installing `wrut`](<>)
+- [Installing `wrut`](./setup/installation.md)
+- [Setting up `wrut`](./setup/setup.md)
 
-# Template Management
+# Templates and Projects
 
-- [Creating New Templates](./template/creation.md)
-- [Managing Templates](./template/management.md)
-- [Macros](./template/macros.md)
-
-# Project Management
-
-- [Creating New Projects](./project/creation.md)
-- [Managing Projects](./project/management.md)
+- [Creating New Templates](./templates_and_projects/creating_new_templates.md)
+- [Creating New Projects](./templates_and_projects/creating_new_projects.md)
+- [Managing Templates](./templates_and_projects/managing_templates.md)
+- [Managing Projects](./templates_and_projects/managing_projects.md)
+- [Macros](./templates_and_projects/macros.md)
 
 # Tags
 
@@ -30,5 +28,3 @@
 # Implementation
 
 - [Data Storage](./implementation/data_storage.md)
-
-# Build
