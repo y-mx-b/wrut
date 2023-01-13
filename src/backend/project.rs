@@ -1,7 +1,7 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::TemplateConfig, Tag, Type, WrutError};
+use crate::{config::TemplateConfig, Tag, Type, WrutError, Template};
 use anyhow::Result;
 use std::env::current_dir;
 use std::os::unix::fs::symlink;
@@ -10,8 +10,8 @@ use walkdir::WalkDir;
 
 /// A struct representing a `wrut` project.
 pub struct Project {
-    name: String,
-    path: PathBuf,
+    pub name: String,
+    pub path: PathBuf,
 }
 
 impl Project {
@@ -47,6 +47,16 @@ impl Project {
         }
     }
 
+    /// Return the storage directory for a project.
+    pub fn store(&self) -> Result<PathBuf> {
+        Ok(dir(Dirs::Projects)?.join(&self.name))
+    }
+
+    /// Return the tag directory for a project.
+    pub fn tag_dir(&self) -> Result<PathBuf> {
+        Ok(self.store()?.join("tags"))
+    }
+
     /// Get a `Vec<String>` of containing a list of all currently registered projects.
     pub fn list() -> Result<Vec<String>> {
         list(Type::Project)
@@ -61,15 +71,12 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn init(self, template: &String) -> Result<Self> {
+    pub fn init(self, template: &Template) -> Result<Self> {
         // register project
         register(Type::Project, &self.path, &self.name)?;
 
         // get full template directory, initialize directory walker
-        let template_dir = dir(Dirs::Templates)?
-            .join(template)
-            .join("path")
-            .canonicalize()?;
+        let template_dir = &template.path;
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)
@@ -102,7 +109,7 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn new_init(self, template: &String) -> Result<Self> {
+    pub fn new_init(self, template: &Template) -> Result<Self> {
         // Create new project directory
         let project_dir = current_dir()?.join(&self.name);
         std::fs::create_dir(&project_dir)?;
@@ -135,7 +142,7 @@ impl Project {
         }
 
         // delete projects in tags dir
-        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        let project_tags_dir = self.tag_dir()?;
         for tag in project_tags_dir.read_dir()? {
             let tag = tag?;
             // TODO make safer

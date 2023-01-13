@@ -1,9 +1,10 @@
 use crate::backend::utils::unregister;
 use crate::setup::{dir, Dirs};
-use crate::Type;
+use crate::{Type, Project, Template};
 use anyhow::Result;
 use std::os::unix::fs::symlink;
 use std::process::Command;
+use std::path::PathBuf;
 
 pub struct Tag {
     name: String,
@@ -16,16 +17,27 @@ impl Tag {
         }
     }
 
+    pub fn path(&self) -> Result<PathBuf> {
+        Ok(dir(Dirs::Tags)?.join(&self.name))
+    }
+
+    pub fn templates_dir(&self) -> Result<PathBuf> {
+        Ok(self.path()?.join("templates"))
+    }
+
+    pub fn projects_dir(&self) -> Result<PathBuf> {
+        Ok(self.path()?.join("projects"))
+    }
+
     /// Register a new tag and/or add projects/templates to it.
     ///
     /// If the provided tag does not exist, this function will create a new tag directory under
     /// `~/.wrut/tags`. All entries in `templates` and `projects` will be added to their respective
     /// directories.
     pub fn init(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
-        let tag_data_dir = dir(Dirs::Tags)?;
-        let tag_dir = tag_data_dir.join(&self.name);
-        let tag_templates_dir = &tag_dir.join("templates");
-        let tag_projects_dir = &tag_dir.join("projects");
+        let tag_dir = self.path()?;
+        let tag_templates_dir = self.templates_dir()?;
+        let tag_projects_dir = self.projects_dir()?;
 
         // create tag_dir and projects/templates subdirs if they don't exist
         if !tag_dir.is_dir() {
@@ -45,9 +57,8 @@ impl Tag {
             }
         }
 
-        let projects_dir = dir(Dirs::Projects)?;
         for project in projects {
-            let project_path = &projects_dir.join(&project).canonicalize()?;
+            let project_path = Project::get(project)?.path;
             let tag_project_symlink = &tag_projects_dir.join(&project);
             if !tag_project_symlink.is_symlink() {
                 symlink(project_path, tag_project_symlink)?;
