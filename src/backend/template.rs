@@ -1,11 +1,11 @@
 use crate::backend::utils::{get_name, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Type, WrutError, Tag};
+use crate::{config::Config, Tag, Type, WrutError};
 use anyhow::Result;
 use std::io::Write;
-use std::path::PathBuf;
 use std::os::unix::fs::symlink;
+use std::path::PathBuf;
 
 /// A struct representing a `wrut` template.
 pub struct Template {
