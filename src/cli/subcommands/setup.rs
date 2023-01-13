@@ -3,7 +3,7 @@ use clap::{Args, ValueEnum};
 #[derive(Args, Debug, Clone, Copy, Default)]
 pub struct SetupArgs {
     pub all: bool,
-   
+
     // Directories
     pub data: bool,
     pub obj: bool,
@@ -19,7 +19,7 @@ pub struct SetupArgs {
 pub enum SetupFlags {
     #[clap(alias = "a")]
     All,
- 
+
     // Directories
     #[clap(alias = "d")]
     Data,

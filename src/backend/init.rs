@@ -1,7 +1,7 @@
 use crate::backend::config;
 use crate::backend::{setup, WrutError};
-use crate::cli::Type;
 use crate::cli::subcommands::{project, template};
+use crate::cli::Type;
 use anyhow::{Context, Result};
 use std::fs;
 use std::os::unix::fs::symlink;
@@ -18,7 +18,7 @@ fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
             .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
             .to_str()
             .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
-            .to_string()
+            .to_string(),
     })
 }
 
@@ -44,8 +44,14 @@ pub fn init_template(dir: PathBuf) -> Result<()> {
     Ok(())
 }
 
-pub fn init_project(args: project::InitArgs, project_dir: PathBuf, config: config::Config) -> Result<()> {
-    let template_dir = setup::dir(setup::Dirs::Templates)?.join(args.template).canonicalize()?;
+pub fn init_project(
+    args: project::InitArgs,
+    project_dir: PathBuf,
+    config: config::Config,
+) -> Result<()> {
+    let template_dir = setup::dir(setup::Dirs::Templates)?
+        .join(args.template)
+        .canonicalize()?;
     let walker = WalkDir::new(&template_dir)
         .min_depth(1)
         .follow_links(true)

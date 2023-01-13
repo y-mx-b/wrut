@@ -1,10 +1,10 @@
 use crate::backend::setup;
+use crate::cli::subcommands::SetupFlags;
+use crate::cli::subcommands::{project, tag, template};
 use clap::{Parser, Subcommand};
+use clap_complete::Shell;
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
-use crate::cli::subcommands::{project, template, tag};
-use crate::cli::subcommands::SetupFlags;
-use clap_complete::Shell;
 
 /// Main cli struct
 #[derive(Parser, Debug)]

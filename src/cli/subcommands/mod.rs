@@ -1,6 +1,6 @@
 pub mod project;
-pub mod template;
-pub mod tag;
 mod setup;
+pub mod tag;
+pub mod template;
 
 pub use setup::*;
