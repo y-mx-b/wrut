@@ -1,6 +1,6 @@
 use crate::backend::utils::{get_name, register, unregister};
 use crate::list::list;
-use crate::setup::{dir, Dirs};
+use crate::backend::setup::{dir, Dirs};
 use crate::{config::TemplateConfig, Tag, Type, WrutError};
 use anyhow::Result;
 use std::io::Write;
@@ -9,8 +9,8 @@ use std::path::PathBuf;
 
 /// A struct representing a `wrut` template.
 pub struct Template {
-    name: String,
-    path: PathBuf,
+    pub name: String,
+    pub path: PathBuf,
 }
 
 impl Template {
@@ -32,7 +32,7 @@ impl Template {
     ///
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
-        let template = dir(Dirs::Templates)?.join(name);
+        let template = Template::global_store()?.join(name);
         let template_path = template.join("path").canonicalize()?;
         let name = get_name(&None, &template)?;
 
@@ -44,6 +44,20 @@ impl Template {
         } else {
             Err(WrutError::NoSuchTemplate(template_path, name))?
         }
+    }
+
+    pub fn global_store() -> Result<PathBuf> {
+        Ok(dir(Dirs::Templates)?)
+    }
+
+    /// Return the storage directory for a template.
+    pub fn store(&self) -> Result<PathBuf> {
+        Ok(dir(Dirs::Templates)?.join(&self.name))
+    }
+
+    /// Return the tag directory for a template.
+    pub fn tag_dir(&self) -> Result<PathBuf> {
+        Ok(self.store()?.join("tags"))
     }
 
     /// Get a `Vec<String>` of containing a list of all currently registered projects.
@@ -68,9 +82,9 @@ impl Template {
 
     /// Add tags to a template.
     pub fn add_tags(self, tags: &Vec<String>) -> Result<Self> {
-        let template_tags_dir = dir(Dirs::Templates)?.join(&self.name).join("tags");
+        let template_tags_dir = self.tag_dir()?;
         for tag in tags {
-            let tag_dir = dir(Dirs::Tags)?.join(&tag);
+            let tag_dir = Tag::from(&tag).path()?;
             symlink(&tag_dir, template_tags_dir.join(&tag))?;
             Tag::from(&tag).init(&vec![], &vec![&self.name])?;
         }
@@ -90,7 +104,7 @@ impl Template {
         }
 
         // delete templates in tags dir
-        let template_tags_dir = dir(Dirs::Templates)?.join(&self.name).join("tags");
+        let template_tags_dir = self.tag_dir()?;
         for tag in template_tags_dir.read_dir()? {
             let tag = tag?;
             // TODO make safer

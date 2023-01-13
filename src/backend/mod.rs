@@ -1,7 +1,7 @@
 pub mod config;
 mod error;
 pub mod list;
-pub mod setup;
+mod setup;
 
 mod project;
 mod tag;
@@ -12,6 +12,7 @@ pub use error::WrutError;
 pub use project::Project;
 pub use tag::Tag;
 pub use template::Template;
+pub use setup::{setup, SetupFlag};
 
 /// Types to operate on
 #[derive(Debug)]
