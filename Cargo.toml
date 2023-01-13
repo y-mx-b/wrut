@@ -15,9 +15,17 @@ anyhow = "1.0"
 thiserror = "1.0"
 
 # cli
+clap_complete = "4.0"
+clap = { version = "4.0.26", features = ["derive", "string"] }
+
+# output
+termion = "2.0"
+
+# logging
 clap-verbosity-flag = "2.0"
 log = "0.4"
-clap_complete = "4.0"
-termion = "2.0"
 env_logger = "0.9"
-clap = { version = "4.0.26", features = ["derive", "string"] }
+
+# config
+toml = "0.5"
+serde = "1.0"
