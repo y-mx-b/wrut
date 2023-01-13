@@ -24,7 +24,9 @@ toc::[]
 
 == Documentation
 
-WARNING: TODO
+WARNING: Documentation for the `wrut` utility is still very much a work-in-progress.
+
+Documentation for the `wrut` utility can be viewed at https://y-mx-b.github.io/wrut/.
 
 == Data Storage 
 
