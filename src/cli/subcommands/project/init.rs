@@ -12,4 +12,9 @@ pub struct InitArgs {
     ///
     /// By default, the name of the current directory will be used.
     pub name: Option<String>,
+
+    /// Tags to add to the project
+    #[clap(long, short, value_delimiter = ',')]
+    #[clap(hide_possible_values = true, value_parser = PossibleValuesParser::new(get_values(Type::Tag)))]
+    pub tags: Vec<String>,
 }
