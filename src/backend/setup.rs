@@ -3,6 +3,7 @@ use crate::cli::subcommands::SetupArgs;
 use log::info;
 use std::fs;
 
+/// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<(), WutError> {
     let dirs = Dirs::dirs()?;
 

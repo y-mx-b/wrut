@@ -21,6 +21,7 @@ pub enum Commands {
     List(ListArgs),
     /// Initialize data/config directories
     Setup(SetupArgs),
+    /// Generate shell completions
     Comp(CompArgs),
 }
 
