@@ -1,4 +1,14 @@
-use clap::{Args, ValueEnum};
+use crate::backend::list::list;
+use crate::cli::Type;
+use clap::{builder::PossibleValue, builder::PossibleValuesParser, Args, ValueEnum};
+
+fn get_templates() -> Vec<PossibleValue> {
+    list(Type::Template)
+        .expect("")
+        .iter()
+        .map(|template| PossibleValue::new(template))
+        .collect()
+}
 
 /// Contains args for `init` subcommand.
 #[derive(Args, Debug)]
@@ -11,6 +21,12 @@ pub struct InitArgs {
     /// By default, the name of the current directory will be used.
     #[clap(long, short)]
     pub name: Option<String>,
+    /// The template to initialize a project from.
+    ///
+    /// A template is required when initialized a project. Will be ignored when initializing a
+    /// template.
+    #[clap(long, short, hide_possible_values = true, value_parser = PossibleValuesParser::new(get_templates()))]
+    pub template: Option<String>,
 }
 
 /// The types allowed to be initialized from directories

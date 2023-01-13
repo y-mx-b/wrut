@@ -40,7 +40,7 @@ fn main() -> Result<()> {
             info!("Running subcommand `init`.");
             // TODO prettier output
             info!("{:?}", args);
-            init::init(current_dir()?, &args.name, args.type_)?;
+            init::init(current_dir()?, &args)?;
             Ok(())
         }
     }
