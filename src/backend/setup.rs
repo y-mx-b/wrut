@@ -49,6 +49,17 @@ pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     ]))
 }
 
+pub fn dir(dir: Dirs) -> Result<PathBuf> {
+    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    Ok(match dir {
+        Dirs::Config => home.join(".config/wut"),
+        Dirs::Projects => home.join(".wut/projects"),
+        Dirs::Tags => home.join(".wut/tags"),
+        Dirs::Templates => home.join(".wut/templates"),
+        Dirs::Obj => home.join(".wut/.obj"),
+    })
+}
+
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Files {
     Config,
