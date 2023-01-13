@@ -32,7 +32,7 @@ impl Command {
         Ok(match self {
             Command::List(args) => println!("{}", Tag::list(&args.name)?),
             Command::New(args) => Tag::from(&args.name).init(&args.templates, &args.projects)?,
-            Command::Remove(args) => Tag::from(&args.name).remove()?,
+            Command::Remove(args) => Tag::from(&args.name).remove(&args.templates, &args.projects)?,
         })
     }
 }
