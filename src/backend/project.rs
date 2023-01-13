@@ -1,7 +1,7 @@
 use crate::backend::utils::{get_name, ignore, register, unregister};
 use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{config::Config, Tag, Type, WrutError};
+use crate::{config::TemplateConfig, Tag, Type, WrutError};
 use anyhow::Result;
 use std::env::current_dir;
 use std::os::unix::fs::symlink;
@@ -61,7 +61,7 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn init(self, template: &String, config: PathBuf) -> Result<Self> {
+    pub fn init(self, template: &String) -> Result<Self> {
         // register project
         register(Type::Project, &self.path, &self.name)?;
 
@@ -76,10 +76,9 @@ impl Project {
             .into_iter();
 
         // get configs
-        let config = Config::from_file(config.to_path_buf())?;
-        let template_config = Config::from_file(template_dir.join(".wrut.toml"))?;
+        let template_config = TemplateConfig::from_file(template_dir.join(".wrut.toml"))?;
 
-        for entry in walker.filter_entry(|e| !ignore(e, &config, &template_config)) {
+        for entry in walker.filter_entry(|e| !ignore(e, &template_config)) {
             let source = entry?.path().canonicalize()?;
             let dest = self.path.join(&source.strip_prefix(&template_dir)?);
 
@@ -103,13 +102,13 @@ impl Project {
     ///
     /// * `template` - The template to generate the project from
     /// * `config` - The path to the configuration file to use
-    pub fn new_init(self, template: &String, config: PathBuf) -> Result<Self> {
+    pub fn new_init(self, template: &String) -> Result<Self> {
         // Create new project directory
         let project_dir = current_dir()?.join(&self.name);
         std::fs::create_dir(&project_dir)?;
 
         // call normal init
-        self.init(template, config)
+        self.init(template)
     }
 
     /// Add tags to a project.

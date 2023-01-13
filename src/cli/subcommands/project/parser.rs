@@ -2,7 +2,6 @@ use super::{InitArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use std::env::current_dir;
-use std::path::PathBuf;
 use wrut::*;
 
 #[derive(Parser, Debug)]
@@ -31,17 +30,17 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn run(&self, config: PathBuf) -> Result<()> {
+    pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List => println!("{}", Project::list()?.join("\n")),
             Command::Init(args) => {
                 Project::from(current_dir()?, args.name.as_deref())?
-                    .init(&args.template, config)?
+                    .init(&args.template)?
                     .add_tags(&args.tags)?;
             }
             Command::New(args) => {
                 Project::from(current_dir()?.join(&args.name), Some(&args.name))?
-                    .new_init(&args.template, config)?
+                    .new_init(&args.template)?
                     .add_tags(&args.tags)?;
             }
             Command::Remove(args) => Project::get(&args.project)?.remove(args.delete)?,
