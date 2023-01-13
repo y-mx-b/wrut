@@ -62,7 +62,7 @@ pub fn init_project(
         .min_depth(1)
         .follow_links(true)
         .into_iter();
-    let template_config = Config::from_file(template_dir.join(".wut.toml"))?;
+    let template_config = Config::from_file(template_dir.join(".wrut.toml"))?;
     // traverse template directory
     for entry in walker.filter_entry(|e| !ignore(e, &config, &template_config)) {
         // source file/directory
