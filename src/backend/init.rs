@@ -35,13 +35,12 @@ pub fn init(root: PathBuf, args: &InitArgs) -> Result<()> {
     register(args.type_, &root, &symlink_name)?;
 
     match args.type_ {
-        InitType::Template => init_template(root, &symlink_name),
+        InitType::Template => init_template(root),
         InitType::Project => {
             let dir = setup::dir(setup::Dirs::Templates)?;
             init_project(
                 dir.join(args.template.as_ref().expect("Should be provided.")),
-                root,
-                &symlink_name,
+                root
             )
         }
     }
@@ -68,13 +67,13 @@ fn register(type_: InitType, root: &PathBuf, name: &String) -> Result<()> {
     Ok(())
 }
 
-fn init_template(root: PathBuf, name: &String) -> Result<()> {
+fn init_template(root: PathBuf) -> Result<()> {
     // TODO create .wut.toml file for macros and whatnot
 
     Ok(())
 }
 
-fn init_project(origin: PathBuf, root: PathBuf, name: &String) -> Result<()> {
+fn init_project(origin: PathBuf, root: PathBuf) -> Result<()> {
     // TODO filter out specific files
     let walker = WalkDir::new(&origin)
         .min_depth(1)
