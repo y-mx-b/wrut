@@ -10,11 +10,11 @@ pub fn init(args: &InitArgs) -> Result<(), WutError> {
     if args.force {
         for dir in dirs.values() {
             if dir.is_dir() {
+                info!("Removing directory {:?}", dir);
                 fs::remove_dir_all(dir)?;
             }
-        }
 
-        for dir in dirs.values() {
+            info!("Creating directory {:?}", dir);
             fs::create_dir_all(dir)?;
         }
 
