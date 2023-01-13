@@ -17,8 +17,9 @@ anyhow = "1.0"
 thiserror = "1.0"
 
 # cli
-clap_complete = "4.0"
-clap = { version = "4.0.26", features = ["derive", "string"] }
+clap = { version = "4.0.26", features = ["derive", "string"] } 
+clap_complete = "4.0" 
+termtree = "0.4" 
 
 # TODO maybe add a tui someday
 # termion = "2.0"
