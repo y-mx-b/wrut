@@ -1,5 +1,6 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use super::{NewArgs, InitArgs, RemoveArgs};
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -9,23 +10,30 @@ pub struct CommandParser {
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
+    /// List templates.
     #[clap(alias = "ls")]
     List,
+
+    /// Initialize and register a template in the current directory.
     #[clap(alias = "i")]
-    Init,
+    Init(InitArgs),
+
+    /// Create and register a new template with the given name.
     #[clap(alias = "n")]
-    New,
+    New(NewArgs),
+
+    /// Unregister and/or delete the given template.
     #[clap(alias = "rm")]
-    Remove,
+    Remove(RemoveArgs),
 }
 
 impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List => {}
-            Command::Init => {}
-            Command::New => {}
-            Command::Remove => {}
+            Command::Init(_args) => {}
+            Command::New(_args) => {}
+            Command::Remove(_args) => {}
         })
     }
 }
