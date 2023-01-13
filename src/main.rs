@@ -31,13 +31,15 @@ fn main() -> Result<()> {
         Commands::List(args) => {
             info!("Running subcommand `list`.");
             info!("{:?}", args);
+            // TODO write actual code here
             println!("List");
             Ok(())
         }
         Commands::Init(args) => {
             info!("Running subcommand `init`.");
             info!("{:?}", args);
-            println!("Args");
+            // TODO write actual code here
+            println!("Init");
             Ok(())
         }
     }
