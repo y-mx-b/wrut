@@ -68,7 +68,10 @@ impl Project {
         self.init(template, config)
     }
 
-    pub fn remove(&self) -> Result<()> {
+    pub fn remove(&self, delete: bool) -> Result<()> {
+        if delete {
+            std::fs::remove_dir_all(&self.path)?;
+        }
         remove_project(&self.name)
     }
 }

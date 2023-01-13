@@ -9,4 +9,8 @@ pub struct RemoveArgs {
     #[clap(hide_possible_values = true,
         value_parser = PossibleValuesParser::new(get_values(Type::Project)))]
     pub project: String,
+
+    /// If set, it will recursively delete the project directory as well
+    #[clap(long, short)]
+    pub delete: bool,
 }

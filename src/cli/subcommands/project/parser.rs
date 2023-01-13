@@ -41,7 +41,7 @@ impl Command {
                 Project::from(current_dir()?.join(&args.name), Some(&args.name))?
                     .new_init(&args.template, config)?;
             }
-            Command::Remove(args) => remove::remove_project(&args.project)?,
+            Command::Remove(args) => Project::get(&args.project)?.remove(args.delete)?,
         })
     }
 }
