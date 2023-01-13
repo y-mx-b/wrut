@@ -17,9 +17,9 @@ use walkdir::{DirEntry, WalkDir};
 ///     * This directory must already exist.
 /// * `name` - The name of the template to initialize
 ///     * If `name` is `None`, the name will be the name of the directory provided
-pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
+pub fn init_template(dir: PathBuf, name: Option<&str>) -> Result<()> {
     // register template
-    let template_name = get_name(name, &dir)?;
+    let template_name = get_name(&name, &dir)?;
     register(Type::Template, &dir, &template_name)?;
 
     // create template config
@@ -44,11 +44,11 @@ pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
 pub fn init_project(
     template: &String,
     project_dir: &PathBuf,
-    name: &Option<String>,
+    name: Option<&str>,
     config: PathBuf,
 ) -> Result<()> {
     // register project
-    let project_name = get_name(name, &project_dir)?;
+    let project_name = get_name(&name, &project_dir)?;
     register(Type::Project, &project_dir, &project_name)?;
 
     // get config
@@ -87,7 +87,6 @@ pub fn init_project(
 /// If the provided tag does not exist, this function will create a new tag directory under `~/.wrut/tags`.
 /// All entries in `templates` and `projects` will be added to their respective directories.
 pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
-    // TODO create new directory + subdirectories
     let tag_data_dir = setup::dir(setup::Dirs::Tags)?;
     let tag_dir = tag_data_dir.join(name);
     let tag_templates_dir = &tag_dir.join("templates");
@@ -101,7 +100,7 @@ pub fn init_tag(name: &String, templates: &Vec<String>, projects: &Vec<String>) 
     }
 
     // add templates/projects to appropriate dirs
-    // TODO check if already exists, don't try to create if it does
+    // check if already exists, don't try to create if it does
     let templates_dir = setup::dir(setup::Dirs::Templates)?;
     for template in templates {
         let template_path = &templates_dir.join(&template).canonicalize()?;
@@ -172,7 +171,7 @@ fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) ->
 
 /// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
 /// be used.
-fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
+fn get_name(name: &Option<&str>, dir: &PathBuf) -> Result<String> {
     Ok(match name {
         Some(val) => val.to_string(),
         None => dir
