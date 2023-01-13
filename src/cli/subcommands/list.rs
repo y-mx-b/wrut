@@ -1,10 +1,10 @@
 use crate::cli::Type;
 use clap::Args;
 
-/// Contains args for `list` subcommand
-#[derive(Args, Debug)]
+/// Contains args for `list` subcommand.
+#[derive(Args, Debug, Clone, Copy)]
 pub struct ListArgs {
-    /// Type to operate on
+    /// Type to operate on.
     #[clap(value_enum, default_value_t = Type::Project)]
-    type_: Type,
+    pub type_: Type,
 }
