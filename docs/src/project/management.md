@@ -12,4 +12,5 @@ You can remove projects with the `remove` subcommand.
 wrut project remove <PROJECT>
 ```
 
-Removing a project will only delete the symlink to the project directory.
+Removing a project will only delete the symlink to the project directory. You
+can use the `--delete` flag in order to delete the project directory as well.
