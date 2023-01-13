@@ -5,7 +5,6 @@ use std::fs;
 /// Given the name of a project, unregister it.
 pub fn remove_project(name: &String) -> Result<()> {
     unregister(Type::Project, name)
-
 }
 
 /// Given the name of a template, unregister it.
