@@ -7,7 +7,7 @@ pub enum WutError {
     #[error("Could not find home directory")]
     HomeDirectoryNotFound,
 
-    // Init errors
+    // Setup errors
     #[error("{0:?} already exist(s) but the `force` option was not set")]
-    InitDirAlreadyExists(Vec<PathBuf>),
+    SetupDirAlreadyExists(Vec<PathBuf>),
 }

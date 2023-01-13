@@ -34,7 +34,7 @@ pub fn setup(args: &SetupArgs) -> Result<()> {
 
     if exists.len() != 0 {
         // err if dirs already exist
-        Err(WutError::InitDirAlreadyExists(exists).into())
+        Err(WutError::SetupDirAlreadyExists(exists).into())
     } else {
         // create dirs
         for dir in dirs.values() {
