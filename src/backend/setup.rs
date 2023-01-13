@@ -9,7 +9,7 @@ use std::io::Write;
 use std::path::PathBuf;
 
 /// Each variant refers to a specific directory required for `wrut` to function
-#[derive(Hash, Eq, PartialEq, Debug)]
+#[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
 pub enum Dirs {
     Config,
     Data,
