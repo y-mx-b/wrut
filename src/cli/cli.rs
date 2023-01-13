@@ -16,11 +16,9 @@ pub struct Cli {
 
     /// A configuration file to use for configurations [default: ~/.config/wrut/config.toml]
     #[clap(short, long, hide_default_value = true)]
-    // TODO figure out how to make this safer
     #[clap(default_value = setup::file(setup::Files::Config)
             .expect("Could not get home directory.")
-            .to_str()
-            .expect("Could not get string")
+            .display()
             .to_string())]
     pub config: PathBuf,
     #[command(flatten)]
