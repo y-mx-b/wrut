@@ -2,7 +2,7 @@ use crate::backend::setup;
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
-use crate::cli::subcommands::project::ProjectCommandParser;
+use crate::cli::subcommands::{project, template, tag};
 use crate::cli::subcommands::setup::SetupArgs;
 
 /// Main cli struct
@@ -11,7 +11,7 @@ use crate::cli::subcommands::setup::SetupArgs;
 #[command(propagate_version = true)]
 pub struct Cli {
     #[command(subcommand)]
-    pub command_type: CommandType,
+    pub type_: CommandType,
 
     /// A configuration file [default: ~/.config/wut/config.toml]
     #[clap(short, long, hide_default_value = true)]
@@ -27,11 +27,11 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum CommandType {
     #[clap(alias = "p")]
-    Project(ProjectCommandParser),
+    Project(project::CommandParser),
     #[clap(alias = "f")]
-    Tag,
+    Tag(tag::CommandParser),
     #[clap(alias = "t")]
-    Template,
+    Template(template::CommandParser),
 }
 
 /// Types to operate on
