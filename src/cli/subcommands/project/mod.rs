@@ -1,9 +1,9 @@
 mod init;
+mod new;
 mod parser;
 mod remove;
-mod new;
 
 pub use init::*;
+pub use new::*;
 pub use parser::*;
 pub use remove::*;
-pub use new::*;
