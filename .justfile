@@ -40,4 +40,4 @@ doc TARGET:
 format:
     cargo fmt
     mdformat docs --wrap 80
-
+    mdformat README.md --wrap 80

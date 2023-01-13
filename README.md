@@ -1,36 +1,36 @@
-= `wrut`
-:toc: macro
-:toc-title: 
-ifdef::env-github[]
-:tip-caption: :bulb:
-:note-caption: :information_source:
-:important-caption: :heavy_exclamation_mark:
-:warning-caption: :warning:
-endif::[]
+# `wrut`
 
 A utility to manage project templates.
 
-[discrete]
-== Table of Contents 
+## Table of Contents
 
-toc::[]
+- [Feature Overview](#feature-overview)
+- [Documentation](#documentation)
+- [Data Storage](#data-storage)
+- [Configuration](#configuration)
+  - [Default Configuration](#default-configuration)
+- [Command-Line Usage](#command-line-usage)
+- [TODO](#todo)
 
-== Feature Overview
+## Feature Overview
 
-* Project template creation and management.
-* Project creation and management.
-* Macro expansion when creating new projects from existing templates (WIP).
-* Tags to better organize and filter templates and projects (WIP).
+- Project template creation and management.
+- Project creation and management.
+- Macro expansion when creating new projects from existing templates (WIP).
+- Tags to better organize and filter templates and projects (WIP).
 
-== Documentation
+## Documentation
 
-WARNING: Documentation for the `wrut` utility is still very much a work-in-progress.
+**Warning**: Documentation for the `wrut` utility is still very much a
+work-in-progress.
 
-Documentation for the `wrut` utility can be viewed at https://y-mx-b.github.io/wrut/.
+Documentation for the `wrut` utility can be viewed at
+<https://y-mx-b.github.io/wrut/>.
 
-== Data Storage 
+## Data Storage
 
-WARNING: `wrut` is not in a complete state, so this is mostly a project goal and may change.
+**Warning**: `wrut` is not in a complete state, so this is mostly a project goal
+and may change.
 
 The data directory contains the `templates`, `projects`, `tags`, and `.obj`
 subdirectories. The `.obj` directory is used by `wrut` to store internal
@@ -44,14 +44,14 @@ directories contains a `templates` and `projects` directory, which each contain
 an empty file named after the appropriate template/project.
 
 Example `~/.wrut` directory structure:
-[source,sh]
-----
+
+```sh
 .wrut
 ├── projects
 │   ├── Essay         # symlink; could point to ~/foo/bar, doesn't matter
 │   └── wrut           # file name and real path are considered separately
 ├── tags
-│   ├── Programming 
+│   ├── Programming
 │   │   ├── projects
 │   │   │   └── wrut
 │   │   └── templates
@@ -64,18 +64,17 @@ Example `~/.wrut` directory structure:
 └── templates
     ├── Rust          # symlink; same as with projects
     └── LaTeX
-----
+```
 
-=== Configuration
+## Configuration
 
 `wrut` takes a `--config` argument, allowing you to specify the configuration
 file to use. By default, the configuration file is located at
-`~/.config/wrut/config.toml`. 
+`~/.config/wrut/config.toml`.
 
-==== Default Configuration
+### Default Configuration
 
-[source,toml]
-----
+```toml
 [template]
 ignore_dirs = [
     '.git',
@@ -85,23 +84,23 @@ ignore_dirs = [
 ignore_files = ['.wut.toml']
 
 [project]
-----
+```
 
 Configuration files are stored in the `~/.config/wrut` configuration directory.
 
-== Command-Line Usage
+## Command-Line Usage
 
 You can run `wrut --help` to get the full help message.
 
-You can also run `wrut <TYPE> <COMMAND> --help` to get more detailed
-information about a given command.
+You can also run `wrut <TYPE> <COMMAND> --help` to get more detailed information
+about a given command.
 
-== TODO
+## TODO
 
-* [x] Template creation and management
-* [x] Project creation and management
-* [x] Split backend logic into a separate library
-* [ ] Documentation
-* [ ] Tags
-* [ ] Develop internal template format
-* [ ] Macros
+- [x] Template creation and management
+- [x] Project creation and management
+- [x] Split backend logic into a separate library
+- [ ] Documentation
+- [ ] Tags
+- [ ] Develop internal template format
+- [ ] Macros
