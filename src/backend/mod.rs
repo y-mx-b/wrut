@@ -1,3 +1,4 @@
+pub mod comp;
 mod r#const;
 mod error;
 pub mod setup;
