@@ -2,33 +2,9 @@ use crate::{config::Config, setup, Type};
 use anyhow::{Context, Result};
 use std::collections::HashSet;
 use std::fs;
-use std::io::Write;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
-use walkdir::{DirEntry, WalkDir};
-use crate::backend::utils::get_name;
-
-/// Initialize a template.
-///
-/// This function will create a `.wrut.toml` file in the provided directory and register a symlink
-/// to `dir` in `~/.wrut/templates`.
-///
-/// # Arguments
-/// * `dir` - The directory to initialize a template in
-///     * This directory must already exist.
-/// * `name` - The name of the template to initialize
-///     * If `name` is `None`, the name will be the name of the directory provided
-pub fn init_template(dir: PathBuf, name: Option<&str>) -> Result<()> {
-    // register template
-    let template_name = get_name(&name, &dir)?;
-    register(Type::Template, &dir, &template_name)?;
-
-    // create template config
-    let mut template_config = fs::File::create(dir.join(".wrut.toml"))?;
-    write!(template_config, "{}", Config::default().to_string())?;
-
-    Ok(())
-}
+use walkdir::DirEntry;
 
 /// Register a new tag and/or add projects/templates to it.
 ///

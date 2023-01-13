@@ -1,14 +1,12 @@
-use crate::list::list;
-use crate::remove::remove_project;
-use crate::backend::utils::unregister;
 use crate::setup::{dir, Dirs};
 use crate::{Type, WrutError, config::Config};
 use anyhow::Result;
 use std::env::current_dir;
 use std::path::PathBuf;
-use crate::init::{register, ignore};
+use crate::init::ignore;
 use walkdir::WalkDir;
-use crate::backend::utils::get_name;
+use crate::backend::utils::{unregister, get_name, register};
+use crate::list::list;
 
 pub struct Project {
     name: String,
