@@ -24,8 +24,7 @@ impl Default for Template {
 }
 
 #[derive(Deserialize, Serialize, Default)]
-pub struct Project {
-}
+pub struct Project {}
 
 #[derive(Deserialize, Serialize, Default)]
 pub struct Config {
@@ -56,8 +55,7 @@ impl Config {
                 ignore_dirs: Vec::new(),
                 ignore_files: Vec::new(),
             },
-            project: Project {
-            },
+            project: Project {},
         }
     }
 }

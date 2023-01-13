@@ -63,9 +63,9 @@ pub enum CommandType {
 }
 
 impl CommandType {
-    pub fn run(&self) -> Result<()> {
+    pub fn run(&self, config: PathBuf) -> Result<()> {
         match self {
-            CommandType::Project(cmd) => cmd.command.run(),
+            CommandType::Project(cmd) => cmd.command.run(config),
             CommandType::Tag(cmd) => cmd.command.run(),
             CommandType::Template(cmd) => cmd.command.run(),
         }

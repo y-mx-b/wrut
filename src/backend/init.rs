@@ -19,14 +19,17 @@ pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
 }
 
 pub fn init_project(
-    template: String,
-    project_dir: PathBuf,
+    template: &String,
+    project_dir: &PathBuf,
     name: &Option<String>,
-    config: Config,
+    config: PathBuf,
 ) -> Result<()> {
     // register project
     let project_name = get_name(name, &project_dir)?;
     register(Type::Project, &project_dir, &project_name)?;
+
+    // get config
+    let config = Config::from_file(config.to_path_buf())?;
 
     // get full template directory, initialize directory walker
     let template_dir = setup::dir(setup::Dirs::Templates)?
