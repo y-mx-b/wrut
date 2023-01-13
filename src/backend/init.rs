@@ -14,6 +14,7 @@ use std::path::PathBuf;
 //     Ok(HashMap::from([(Files::Wut, root.join(".wut.toml"))]))
 // }
 
+/// Register the current working directory under the appropriate `wut` directory as a symlink
 pub fn init(root: PathBuf, name: &Option<String>, type_: InitType) -> Result<()> {
     let symlink_name: String = {
         match name {
