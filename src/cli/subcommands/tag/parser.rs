@@ -1,3 +1,4 @@
+use super::{ListArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
@@ -9,20 +10,29 @@ pub struct CommandParser {
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
+    /// List tags.
+    ///
+    /// If a tag is provided, then the projects/templates registered under the provided tag will be
+    /// printed.
     #[clap(alias = "ls")]
-    List,
+    List(ListArgs),
+
+    /// Register a new tag and/or register projects/templates under the given tag.
     #[clap(alias = "n")]
-    New,
+    New(NewArgs),
+
+    /// Remove the given tag.
     #[clap(alias = "rm")]
-    Remove,
+    Remove(RemoveArgs),
 }
 
 impl Command {
+    // TODO literally all of this
     pub fn run(&self) -> Result<()> {
         Ok(match self {
-            Command::List => {}
-            Command::New => {}
-            Command::Remove => {}
+            Command::List(_args) => {}
+            Command::New(_args) => {}
+            Command::Remove(_args) => {}
         })
     }
 }
