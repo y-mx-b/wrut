@@ -16,10 +16,10 @@ fn main() -> Result<()> {
         .init();
 
     match &cli.command {
-        Commands::List(args) => {
-            info!("Running subcommand `list`.");
+        Commands::Comp(args) => {
+            info!("Running subcommand `comp`.");
             info!("{:?}", args);
-            println!("List");
+            comp::print_completions(args.shell);
             Ok(())
         }
         Commands::Setup(args) => {
@@ -28,10 +28,16 @@ fn main() -> Result<()> {
             setup::setup(args)?;
             Ok(())
         }
-        Commands::Comp(args) => {
-            info!("Running subcommand `comp`.");
+        Commands::List(args) => {
+            info!("Running subcommand `list`.");
             info!("{:?}", args);
-            comp::print_completions(args.shell);
+            println!("List");
+            Ok(())
+        }
+        Commands::Init(args) => {
+            info!("Running subcommand `init`.");
+            info!("{:?}", args);
+            println!("Args");
             Ok(())
         }
     }
