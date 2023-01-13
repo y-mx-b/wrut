@@ -1,9 +1,10 @@
 use crate::cli::subcommands::{CompArgs, InitArgs, InitType, ListArgs, SetupArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
+use std::path::PathBuf;
 
 /// Main cli struct
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
 pub struct Cli {
@@ -11,6 +12,8 @@ pub struct Cli {
     pub command: Commands,
     #[command(flatten)]
     pub verbose: Verbosity,
+    #[clap(short, long, default_value = "~/.config/wut")]
+    pub config: PathBuf,
 }
 
 /// Available subcommands

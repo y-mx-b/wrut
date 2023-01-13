@@ -1,11 +1,11 @@
 use crate::backend::setup;
-use crate::cli::subcommands::{InitType, InitArgs};
+use crate::cli::subcommands::{InitArgs, InitType};
 use crate::cli::Type;
 use anyhow::{Context, Result};
 // use std::collections::HashMap;
 use std::fs;
 use std::os::unix::fs::symlink;
-use std::path::{PathBuf};
+use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
 
 // #[derive(Hash, PartialEq, Eq, Debug)]
