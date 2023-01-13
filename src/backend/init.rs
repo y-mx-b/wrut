@@ -27,20 +27,33 @@ pub fn init(root: PathBuf, name: &Option<String>, type_: InitType) -> Result<()>
                 .to_string(),
         }
     };
+
+    match type_ {
+        InitType::Template => init_dir(root, &symlink_name),
+        InitType::Project => {
+            // TODO implement this man
+            todo!()
+        }
+    }
+}
+
+fn init_dir(root: PathBuf, name: &String) -> Result<()> {
     let dirs = setup::dirs()?;
     let dir = dirs
-        .get(&type_.into())
+        .get(&InitType::Template.into())
         .expect("InitType should map to setup::Dirs");
-    let file = dir.join(&symlink_name);
+    let file = dir.join(name);
+
     if file.try_exists()? {
         std::fs::remove_file(file)?;
     }
-    fs::symlink(&root, dir.join(&symlink_name)).with_context(|| {
+    fs::symlink(&root, dir.join(name)).with_context(|| {
         format!(
             "Failed to create symlink from {:?} at {:?}",
             &root,
-            dir.join(&symlink_name)
+            dir.join(name)
         )
     })?;
+
     Ok(())
 }
