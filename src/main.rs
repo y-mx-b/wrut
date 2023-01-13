@@ -1,7 +1,8 @@
 mod backend;
 mod cli;
 
-use crate::cli::Cli;
+use crate::cli::{Cli, CommandType};
+use crate::cli::subcommands::{project, tag, template};
 use crate::backend::{comp, setup};
 use anyhow::{Result, Error};
 use clap::{Parser, CommandFactory};
@@ -17,9 +18,32 @@ fn main() -> Result<()> {
 
     info!("Parsing command arguments.");
     if let Some(type_) = &cli.type_ {
-        match &type_ {
-                _ => Ok(())
-        }
+        Ok(match &type_ {
+            // TODO implement literally all of this
+            CommandType::Project(cmd) => {
+                match &cmd.command {
+                    project::Commands::List => {}
+                    project::Commands::Init(_args) => {}
+                    project::Commands::Add => {}
+                    project::Commands::Remove => {}
+                }
+            }
+            CommandType::Tag(cmd) => {
+                match &cmd.command {
+                    tag::Commands::List => {}
+                    tag::Commands::Add => {}
+                    tag::Commands::Remove => {}
+                }
+            }
+            CommandType::Template(cmd) => {
+                match &cmd.command {
+                    template::Commands::List => {}
+                    template::Commands::Init => {}
+                    template::Commands::Add => {}
+                    template::Commands::Remove => {}
+                }
+            }
+        })
     } else {
         if !&cli.setup.is_empty() { 
             setup::setup(cli.setup)?;
