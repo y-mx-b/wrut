@@ -1,6 +1,7 @@
 use super::{ListArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use wrut::*;
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
@@ -31,8 +32,8 @@ impl Command {
     pub fn run(&self) -> Result<()> {
         Ok(match self {
             Command::List(_args) => {}
-            Command::New(_args) => {}
-            Command::Remove(_args) => {}
+            Command::New(args) => init::init_tag(&args.name, &args.templates, &args.projects)?
+            Command::Remove(args) => remove::remove_tag(&args.name)?
         })
     }
 }

@@ -31,3 +31,13 @@ pub fn list(type_: Type) -> Result<Vec<String>> {
 
     Ok(list)
 }
+
+/// List all tags and their related projects/templates
+pub fn list_tags() -> Result<String> {
+    Ok(())
+}
+
+/// List the projects/templates of a given tag
+pub fn list_tag(tag: &String) -> Result<String> {
+    Ok(())
+}
