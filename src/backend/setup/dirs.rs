@@ -4,7 +4,7 @@ use home::home_dir;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-/// Each variant refers to a specific directory required for `wrut` to function
+/// Each variant refers to a specific directory required for `wrut` to function.
 #[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
 pub enum Dirs {
     Config,
@@ -25,7 +25,7 @@ impl From<Type> for Dirs {
     }
 }
 
-/// Returns a `HashMap` of directory paths mapped to `Dirs` variants
+/// Returns a `HashMap` of directory paths mapped to `Dirs` variants.
 pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(HashMap::from([
@@ -38,6 +38,7 @@ pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     ]))
 }
 
+/// Given a `Dirs` variant, it will return the path to that directory.
 pub fn dir(dir: Dirs) -> Result<PathBuf> {
     let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(match dir {

@@ -4,6 +4,9 @@ use anyhow::Result;
 use std::fs;
 use std::io::Write;
 
+/// Overwrite the directory associated with given a `Dirs` variant.
+///
+/// If the directory does not exist, it will be created.
 fn overwrite_dir(d: Dirs) -> Result<()> {
     let dir_path = dir(d)?;
     if dir_path.is_dir() {
@@ -23,6 +26,9 @@ fn overwrite_dir(d: Dirs) -> Result<()> {
     Ok(())
 }
 
+/// Overwrite the configuration directory and the global configuration file.
+///
+/// If the directory and/or file does not exist, it will be created.
 fn overwrite_config() -> Result<()> {
     let config_path = file(Files::Config)?;
     if config_path.is_file() {
@@ -36,6 +42,8 @@ fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
+/// Given a `SetupFlag` variant, overwrite and/or initialize the directories and files associated
+/// with the given flag.
 pub fn overwrite(flag: SetupFlag) -> Result<()> {
     Ok(match flag {
         SetupFlag::All => {
