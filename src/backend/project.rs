@@ -8,6 +8,7 @@ use walkdir::WalkDir;
 use crate::backend::utils::{unregister, get_name, register};
 use crate::list::list;
 
+/// A struct representing a `wrut` project.
 pub struct Project {
     name: String,
     path: PathBuf,

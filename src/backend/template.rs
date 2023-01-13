@@ -7,6 +7,7 @@ use crate::{WrutError, Type};
 use std::io::Write;
 use crate::config::Config;
 
+/// A struct representing a `wrut` template.
 pub struct Template {
     name: String,
     path: PathBuf,
