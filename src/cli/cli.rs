@@ -1,3 +1,4 @@
+use crate::backend::setup;
 use crate::cli::subcommands::{CompArgs, InitArgs, InitType, ListArgs, SetupArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
@@ -12,7 +13,10 @@ pub struct Cli {
     pub command: Commands,
     #[command(flatten)]
     pub verbose: Verbosity,
-    #[clap(short, long, default_value = "~/.config/wut")]
+    /// A configuration file [default: ~/.config/wut/config.toml]
+    #[clap(short, long, hide_default_value = true)]
+    // TODO figure out how to make this safer
+    #[clap(default_value = setup::file(setup::Files::Config).unwrap().into_os_string())]
     pub config: PathBuf,
 }
 
