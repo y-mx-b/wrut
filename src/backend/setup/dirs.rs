@@ -1,8 +1,8 @@
 use crate::{Type, WrutError};
+use anyhow::Result;
+use home::home_dir;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use home::home_dir;
-use anyhow::Result;
 
 /// Each variant refers to a specific directory required for `wrut` to function
 #[derive(Hash, Eq, PartialEq, Debug, Clone, Copy)]
@@ -49,4 +49,3 @@ pub fn dir(dir: Dirs) -> Result<PathBuf> {
         Dirs::Templates => home.join(".wrut/templates"),
     })
 }
-

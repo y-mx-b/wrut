@@ -1,9 +1,8 @@
-use crate::backend::WrutError;
+use crate::WrutError;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::fs;
 use std::path::PathBuf;
-use std::fmt;
+use std::{fmt, fs};
 
 #[derive(Deserialize, Serialize)]
 pub struct Template {
@@ -37,7 +36,12 @@ pub struct Config {
 
 impl fmt::Display for Config {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", toml::to_string_pretty(self).map_err(|_| fmt::Error)?).map_err(|_| fmt::Error)
+        write!(
+            f,
+            "{}",
+            toml::to_string_pretty(self).map_err(|_| fmt::Error)?
+        )
+        .map_err(|_| fmt::Error)
     }
 }
 
@@ -48,4 +52,3 @@ impl Config {
         Ok(toml::from_slice(data.as_slice())?)
     }
 }
-

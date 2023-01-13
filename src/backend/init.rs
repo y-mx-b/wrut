@@ -1,6 +1,4 @@
-use crate::backend::config;
-use crate::backend::{setup, WrutError};
-use super::Type;
+use crate::{config, setup, Type, WrutError};
 use anyhow::{Context, Result};
 use std::fs;
 use std::os::unix::fs::symlink;
@@ -43,11 +41,7 @@ pub fn init_template(dir: PathBuf) -> Result<()> {
     Ok(())
 }
 
-pub fn init_project(
-    template: String,
-    project_dir: PathBuf,
-    config: config::Config,
-) -> Result<()> {
+pub fn init_project(template: String, project_dir: PathBuf, config: config::Config) -> Result<()> {
     let template_dir = setup::dir(setup::Dirs::Templates)?
         .join(template)
         .canonicalize()?;

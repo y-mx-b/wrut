@@ -1,8 +1,8 @@
 use crate::WrutError;
+use anyhow::Result;
+use home::home_dir;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use home::home_dir;
-use anyhow::Result;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Files {
@@ -23,4 +23,3 @@ pub fn file(file: Files) -> Result<PathBuf> {
         Files::Config => home.join(".config/wrut/config.toml"),
     })
 }
-

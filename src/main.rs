@@ -1,6 +1,6 @@
 mod cli;
 
-use crate::cli::{Cli, subcommands::comp};
+use crate::cli::{subcommands::comp, Cli};
 use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use log::info;

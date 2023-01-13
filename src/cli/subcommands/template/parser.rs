@@ -1,6 +1,6 @@
+use super::{InitArgs, NewArgs, RemoveArgs};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use super::{NewArgs, InitArgs, RemoveArgs};
 
 #[derive(Parser, Debug)]
 pub struct CommandParser {
