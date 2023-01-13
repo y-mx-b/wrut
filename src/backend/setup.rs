@@ -1,5 +1,5 @@
 use crate::backend::{config::default_config, WrutError};
-use crate::cli::subcommands::SetupArgs;
+use crate::cli::subcommands::{SetupArgs, SetupFlags};
 use crate::cli::Type;
 use anyhow::Result;
 use home::home_dir;
@@ -12,10 +12,11 @@ use std::path::PathBuf;
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Dirs {
     Config,
+    Data,
+    Obj,
     Projects,
     Tags,
     Templates,
-    Obj,
 }
 
 impl From<Type> for Dirs {
@@ -33,10 +34,11 @@ pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
     let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(HashMap::from([
         (Dirs::Config, home.join(".config/wrut")),
+        (Dirs::Data, home.join(".wrut")),
+        (Dirs::Obj, home.join(".wrut/.obj")),
         (Dirs::Projects, home.join(".wrut/projects")),
         (Dirs::Tags, home.join(".wrut/tags")),
         (Dirs::Templates, home.join(".wrut/templates")),
-        (Dirs::Obj, home.join(".wrut/.obj")),
     ]))
 }
 
@@ -44,10 +46,11 @@ pub fn dir(dir: Dirs) -> Result<PathBuf> {
     let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(match dir {
         Dirs::Config => home.join(".config/wrut"),
+        Dirs::Data => home.join(".wrut"),
+        Dirs::Obj => home.join(".wrut/.obj"),
         Dirs::Projects => home.join(".wrut/projects"),
         Dirs::Tags => home.join(".wrut/tags"),
         Dirs::Templates => home.join(".wrut/templates"),
-        Dirs::Obj => home.join(".wrut/.obj"),
     })
 }
 
@@ -76,7 +79,16 @@ fn overwrite_dir(d: Dirs) -> Result<()> {
     if dir_path.is_dir() {
         fs::remove_dir_all(&dir_path)?;
     }
+
     fs::create_dir(&dir_path)?;
+
+    // Special case for overwriting data dir
+    if d == Dirs::Data {
+        fs::create_dir(dir(Dirs::Obj)?)?;
+        fs::create_dir(dir(Dirs::Projects)?)?;
+        fs::create_dir(dir(Dirs::Tags)?)?;
+        fs::create_dir(dir(Dirs::Templates)?)?;
+    }
 
     Ok(())
 }
@@ -94,21 +106,24 @@ fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
-// TODO use some smarter method for this
+fn overwrite(flag: SetupFlags) -> Result<()> {
+    Ok(match flag {
+        SetupFlags::All => {
+            overwrite_dir(Dirs::Data)?;
+            overwrite_config()?;
+        }
+        SetupFlags::Data => overwrite_dir(Dirs::Data)?,
+        SetupFlags::Obj => overwrite_dir(Dirs::Obj)?,
+        SetupFlags::Projects => overwrite_dir(Dirs::Projects)?,
+        SetupFlags::Tags => overwrite_dir(Dirs::Tags)?,
+        SetupFlags::Templates => overwrite_dir(Dirs::Templates)?,
+        SetupFlags::Config => overwrite_config()?,
+    })
+}
+
 /// Initializes all prerequisites for `wrut` to function
-pub fn setup(args: &SetupArgs) -> Result<()> {
-    // TODO
-    if args.all {}
-
-    if args.obj { overwrite_dir(Dirs::Obj)?; }
-    // TODO
-    if args.data {}
-    if args.projects { overwrite_dir(Dirs::Projects)?; }
-    if args.templates { overwrite_dir(Dirs::Templates)?; }
-    if args.tags { overwrite_dir(Dirs::Tags)?; }
-
-    if args.config { overwrite_config()?; }
-
-
-    Ok(())
+pub fn setup(flags: Vec<SetupFlags>) -> Result<()> {
+    Ok(for flag in flags {
+        overwrite(flag)?;
+    })
 }
