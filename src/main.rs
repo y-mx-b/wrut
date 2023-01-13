@@ -20,5 +20,11 @@ fn main() -> Result<()> {
             println!("List");
             Ok(())
         }
+        Commands::Init(args) => {
+            info!("Running subcommand `init`.");
+            info!("{:?}", args);
+            println!("Init");
+            Ok(())
+        }
     }
 }
