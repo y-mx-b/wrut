@@ -33,16 +33,16 @@ impl Template {
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
         let template = dir(Dirs::Templates)?.join(name);
-        let template_link = template.join("path").canonicalize()?;
+        let template_path = template.join("path").canonicalize()?;
         let name = get_name(&None, &template)?;
 
-        if template.is_symlink() {
+        if template.is_dir() {
             Ok(Self {
                 name,
-                path: template_link,
+                path: template_path,
             })
         } else {
-            Err(WrutError::NoSuchProject(template, name))?
+            Err(WrutError::NoSuchTemplate(template_path, name))?
         }
     }
 

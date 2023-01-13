@@ -34,16 +34,16 @@ impl Project {
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
         let project = dir(Dirs::Projects)?.join(name);
-        let project_link = project.join("path").canonicalize()?;
+        let project_path = project.join("path").canonicalize()?;
         let name = get_name(&None, &project)?;
 
         if project.is_dir() {
             Ok(Project {
                 name,
-                path: project_link,
+                path: project_path,
             })
         } else {
-            Err(WrutError::NoSuchProject(project, name))?
+            Err(WrutError::NoSuchProject(project_path, name))?
         }
     }
 
