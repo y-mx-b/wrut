@@ -2,7 +2,7 @@ use anyhow::Result;
 use std::fs;
 use crate::setup::{Dirs, Files, dir, file};
 use crate::setup::SetupFlag;
-use crate::config::default_config;
+use crate::config::Config;
 use std::io::Write;
 
 fn overwrite_dir(d: Dirs) -> Result<()> {
@@ -30,7 +30,7 @@ fn overwrite_config() -> Result<()> {
         fs::remove_file(&config_path)?;
     }
 
-    let config_string = default_config()?;
+    let config_string = Config::default().to_string();
     let mut config_file = fs::File::create(&config_path)?;
     write!(&mut config_file, "{}", config_string)?;
 
