@@ -3,9 +3,8 @@ use crate::{Type, WrutError, config::Config};
 use anyhow::Result;
 use std::env::current_dir;
 use std::path::PathBuf;
-use crate::init::ignore;
 use walkdir::WalkDir;
-use crate::backend::utils::{unregister, get_name, register};
+use crate::backend::utils::{unregister, get_name, register, ignore};
 use crate::list::list;
 
 /// A struct representing a `wrut` project.
