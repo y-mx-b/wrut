@@ -1,5 +1,5 @@
 use crate::backend::setup;
-use crate::cli::subcommands::SetupFlags;
+use crate::cli::subcommands::SetupFlag;
 use crate::cli::subcommands::{project, tag, template};
 use clap::{Parser, Subcommand};
 use clap_complete::Shell;
@@ -46,7 +46,7 @@ pub struct Cli {
         value_delimiter = ',',
         value_name = "DIRECTORIES"
     )]
-    pub setup: Vec<SetupFlags>,
+    pub setup: Vec<SetupFlag>,
 }
 
 #[derive(Subcommand, Debug)]

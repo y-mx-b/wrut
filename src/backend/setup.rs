@@ -1,5 +1,5 @@
 use crate::backend::{config::default_config, WrutError};
-use crate::cli::subcommands::SetupFlags;
+use crate::cli::subcommands::SetupFlag;
 use crate::cli::Type;
 use anyhow::Result;
 use home::home_dir;
@@ -106,19 +106,19 @@ fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
-fn overwrite(flag: SetupFlags) -> Result<()> {
+fn overwrite(flag: SetupFlag) -> Result<()> {
     Ok(match flag {
-        SetupFlags::All => {
+        SetupFlag::All => {
             overwrite_dir(Dirs::Data)?;
             overwrite_dir(Dirs::Config)?;
             overwrite_config()?;
         }
-        SetupFlags::Data => overwrite_dir(Dirs::Data)?,
-        SetupFlags::Obj => overwrite_dir(Dirs::Obj)?,
-        SetupFlags::Projects => overwrite_dir(Dirs::Projects)?,
-        SetupFlags::Tags => overwrite_dir(Dirs::Tags)?,
-        SetupFlags::Templates => overwrite_dir(Dirs::Templates)?,
-        SetupFlags::Config => {
+        SetupFlag::Data => overwrite_dir(Dirs::Data)?,
+        SetupFlag::Obj => overwrite_dir(Dirs::Obj)?,
+        SetupFlag::Projects => overwrite_dir(Dirs::Projects)?,
+        SetupFlag::Tags => overwrite_dir(Dirs::Tags)?,
+        SetupFlag::Templates => overwrite_dir(Dirs::Templates)?,
+        SetupFlag::Config => {
             overwrite_dir(Dirs::Config)?;
             overwrite_config()?;
         }
@@ -126,7 +126,7 @@ fn overwrite(flag: SetupFlags) -> Result<()> {
 }
 
 /// Initializes all prerequisites for `wrut` to function
-pub fn setup(flags: Vec<SetupFlags>) -> Result<()> {
+pub fn setup(flags: Vec<SetupFlag>) -> Result<()> {
     Ok(for flag in flags {
         overwrite(flag)?;
     })
