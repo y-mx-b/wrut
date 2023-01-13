@@ -1,4 +1,4 @@
-use crate::backend::{config::default_config, WutError};
+use crate::backend::{config::default_config, WrutError};
 use crate::cli::subcommands::SetupArgs;
 use crate::cli::Type;
 use anyhow::Result;
@@ -8,7 +8,7 @@ use std::fs;
 use std::io::Write;
 use std::path::PathBuf;
 
-/// Each variant refers to a specific directory required for `wut` to function
+/// Each variant refers to a specific directory required for `wrut` to function
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Dirs {
     Config,
@@ -30,24 +30,24 @@ impl From<Type> for Dirs {
 
 /// Returns a `HashMap` of directory paths mapped to `Dirs` variants
 pub fn dirs() -> Result<HashMap<Dirs, PathBuf>> {
-    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(HashMap::from([
-        (Dirs::Config, home.join(".config/wut")),
-        (Dirs::Projects, home.join(".wut/projects")),
-        (Dirs::Tags, home.join(".wut/tags")),
-        (Dirs::Templates, home.join(".wut/templates")),
-        (Dirs::Obj, home.join(".wut/.obj")),
+        (Dirs::Config, home.join(".config/wrut")),
+        (Dirs::Projects, home.join(".wrut/projects")),
+        (Dirs::Tags, home.join(".wrut/tags")),
+        (Dirs::Templates, home.join(".wrut/templates")),
+        (Dirs::Obj, home.join(".wrut/.obj")),
     ]))
 }
 
 pub fn dir(dir: Dirs) -> Result<PathBuf> {
-    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(match dir {
-        Dirs::Config => home.join(".config/wut"),
-        Dirs::Projects => home.join(".wut/projects"),
-        Dirs::Tags => home.join(".wut/tags"),
-        Dirs::Templates => home.join(".wut/templates"),
-        Dirs::Obj => home.join(".wut/.obj"),
+        Dirs::Config => home.join(".config/wrut"),
+        Dirs::Projects => home.join(".wrut/projects"),
+        Dirs::Tags => home.join(".wrut/tags"),
+        Dirs::Templates => home.join(".wrut/templates"),
+        Dirs::Obj => home.join(".wrut/.obj"),
     })
 }
 
@@ -57,17 +57,17 @@ pub enum Files {
 }
 
 pub fn files() -> Result<HashMap<Files, PathBuf>> {
-    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(HashMap::from([(
         Files::Config,
-        home.join(".config/wut/config.toml"),
+        home.join(".config/wrut/config.toml"),
     )]))
 }
 
 pub fn file(file: Files) -> Result<PathBuf> {
-    let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
+    let home = home_dir().ok_or(WrutError::HomeDirectoryNotFound)?;
     Ok(match file {
-        Files::Config => home.join(".config/wut/config.toml"),
+        Files::Config => home.join(".config/wrut/config.toml"),
     })
 }
 
@@ -95,7 +95,7 @@ fn overwrite_config() -> Result<()> {
 }
 
 // TODO use some smarter method for this
-/// Initializes all prerequisites for `wut` to function
+/// Initializes all prerequisites for `wrut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
     // TODO
     if args.all {}

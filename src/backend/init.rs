@@ -1,5 +1,5 @@
 use crate::backend::config;
-use crate::backend::{setup, WutError};
+use crate::backend::{setup, WrutError};
 use crate::cli::Type;
 use crate::cli::subcommands::{project, template};
 use anyhow::{Context, Result};
@@ -15,9 +15,9 @@ fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
         Some(val) => val.to_string(),
         None => dir
             .file_name()
-            .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
+            .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
             .to_str()
-            .ok_or(WutError::FailedToAcquireDirectoryName(dir.clone()))?
+            .ok_or(WrutError::FailedToAcquireDirectoryName(dir.clone()))?
             .to_string()
     })
 }

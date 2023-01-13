@@ -1,4 +1,4 @@
-use crate::backend::WutError;
+use crate::backend::WrutError;
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -41,8 +41,8 @@ pub fn default_config() -> Result<String> {
 
 /// Read the given file and return a `Config` struct
 pub fn get_config(config: PathBuf) -> Result<Config> {
-    // TODO return WutError if fail
+    // TODO return WrutError if fail
     println!("{:?}", config);
-    let data = fs::read(&config).or(Err(WutError::FailedToReadConfigFile(config)))?;
+    let data = fs::read(&config).or(Err(WrutError::FailedToReadConfigFile(config)))?;
     Ok(toml::from_slice(data.as_slice())?)
 }
