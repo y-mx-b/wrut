@@ -4,6 +4,8 @@ use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
 
+// TODO change cli to `wut <TYPE> <COMMAND>`
+
 /// Main cli struct
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
