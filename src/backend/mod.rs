@@ -7,6 +7,10 @@ pub mod setup;
 
 pub use error::*;
 
+mod project;
+
+pub use project::*;
+
 /// Types to operate on
 #[derive(Debug)]
 pub enum Type {

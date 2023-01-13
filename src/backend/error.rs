@@ -15,4 +15,8 @@ pub enum WrutError {
     // Config errors
     #[error("Failed to read configuration file at {0:?}.")]
     FailedToReadConfigFile(PathBuf),
+
+    // Missing stuff error
+    #[error("Expected a project named {1:?} at {0:?}.")]
+    NoSuchProject(PathBuf, String),
 }
