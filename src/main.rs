@@ -23,8 +23,8 @@ fn main() -> Result<()> {
             CommandType::Project(cmd) => match &cmd.command {
                 project::Commands::List => {}
                 project::Commands::Init(_args) => {}
-                project::Commands::Add => {}
-                project::Commands::Remove => {}
+                project::Commands::New(_args) => {}
+                project::Commands::Remove(_args) => {}
             },
             CommandType::Tag(cmd) => match &cmd.command {
                 tag::Commands::List => {}
