@@ -1,5 +1,5 @@
 use crate::backend::utils::unregister;
-use crate::setup::{dir, Dirs};
+use crate::backend::setup::{dir, Dirs};
 use crate::{Type, Project, Template};
 use anyhow::Result;
 use std::os::unix::fs::symlink;
@@ -15,6 +15,10 @@ impl Tag {
         Self {
             name: name.to_string(),
         }
+    }
+
+    pub fn global_store() -> Result<PathBuf> {
+        Ok(dir(Dirs::Tags)?)
     }
 
     pub fn path(&self) -> Result<PathBuf> {
@@ -48,7 +52,7 @@ impl Tag {
 
         // add templates/projects to appropriate dirs
         // check if already exists, don't try to create if it does
-        let templates_dir = dir(Dirs::Templates)?;
+        let templates_dir = Template::global_store()?;
         for template in templates {
             let template_path = &templates_dir.join(&template).canonicalize()?;
             let tag_template_symlink = &tag_templates_dir.join(&template);
@@ -73,9 +77,9 @@ impl Tag {
     /// projects/templates.
     pub fn list(tag: &Option<String>) -> Result<String> {
         let tag_dir = if let Some(tag) = tag {
-            dir(Dirs::Tags)?.join(tag)
+            Tag::from(tag).path()?
         } else {
-            dir(Dirs::Tags)?
+            Tag::global_store()?
         };
 
         let output = Command::new("tree")

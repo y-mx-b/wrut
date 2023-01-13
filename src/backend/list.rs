@@ -1,4 +1,4 @@
-use crate::{setup, Type};
+use crate::{backend::setup, Type};
 use anyhow::{Context, Result};
 
 /// List the entries of a given type.
