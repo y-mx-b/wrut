@@ -73,7 +73,7 @@ impl Tag {
         Ok(std::str::from_utf8(&output.stdout)?.to_string())
     }
 
-    pub fn remove(&self, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
+    pub fn remove(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
         if templates.len() == 0 && projects.len() == 0 {
             unregister(Type::Tag, &self.name)
         } else {

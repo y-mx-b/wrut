@@ -36,7 +36,10 @@ impl Command {
                 &args.projects.iter().map(|p| p.as_ref()).collect(),
             )?,
             Command::Remove(args) => {
-                Tag::from(&args.name).remove(&args.templates, &args.projects)?
+                Tag::from(&args.name).remove(
+                    &args.templates.iter().map(|t| t.as_ref()).collect(), 
+                    &args.projects.iter().map(|p| p.as_ref()).collect(),
+                )?
             }
         })
     }
