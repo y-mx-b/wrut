@@ -1,10 +1,9 @@
 use crate::backend::setup;
-use crate::cli::subcommands::{CompArgs, InitArgs, InitType, ListArgs, RemoveArgs, SetupArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
-
-// TODO change cli to `wut <TYPE> <COMMAND>`
+use crate::cli::subcommands::project::ProjectCommandParser;
+use crate::cli::subcommands::setup::SetupArgs;
 
 /// Main cli struct
 #[derive(Parser, Debug)]
@@ -12,55 +11,33 @@ use std::path::PathBuf;
 #[command(propagate_version = true)]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Commands,
-    #[command(flatten)]
-    pub verbose: Verbosity,
+    pub command_type: CommandType,
+
     /// A configuration file [default: ~/.config/wut/config.toml]
     #[clap(short, long, hide_default_value = true)]
     // TODO figure out how to make this safer
     #[clap(default_value = setup::file(setup::Files::Config).unwrap().into_os_string())]
     pub config: PathBuf,
+    #[command(flatten)]
+    pub verbose: Verbosity,
+    #[clap(flatten)]
+    pub setup: SetupArgs
 }
 
-/// Available subcommands
 #[derive(Subcommand, Debug)]
-pub enum Commands {
-    /// Generate shell completions.
-    #[clap(alias = "sh")]
-    Comp(CompArgs),
-    /// Initialize data/config directories.
-    ///
-    /// Will fail if setup directories exist and `--force` is not set.
-    Setup(SetupArgs),
-    /// List all items of the given type.
-    #[clap(alias = "ls")]
-    List(ListArgs),
-    /// Initialize a new template or project directory.
-    ///
-    /// If an entry under the provided name already exists, then it will be overwritten.
-    #[clap(alias = "i")]
-    Init(InitArgs),
-    /// Remove a template or project
-    #[clap(alias = "rm")]
-    Remove(RemoveArgs),
-}
-
-/// Types to operate on
-#[derive(ValueEnum, Clone, Debug, PartialEq, Eq, Copy)]
-pub enum Type {
+pub enum CommandType {
     #[clap(alias = "p")]
-    Project,
+    Project(ProjectCommandParser),
     #[clap(alias = "f")]
     Tag,
     #[clap(alias = "t")]
     Template,
 }
 
-impl From<InitType> for Type {
-    fn from(item: InitType) -> Self {
-        match item {
-            InitType::Project => Type::Project,
-            InitType::Template => Type::Template,
-        }
-    }
+/// Types to operate on
+#[derive(ValueEnum, Clone, Debug, PartialEq, Eq, Copy)]
+pub enum Type {
+    Project,
+    Tag,
+    Template,
 }
