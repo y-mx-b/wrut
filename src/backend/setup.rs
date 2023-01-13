@@ -1,7 +1,7 @@
 use crate::backend::{config::default_config, WutError};
-use crate::cli::subcommands::{InitType, SetupArgs, SetupOverwrite};
+use crate::cli::subcommands::SetupArgs;
 use crate::cli::Type;
-use anyhow::{Context, Result};
+use anyhow::Result;
 use home::home_dir;
 use std::collections::HashMap;
 use std::fs;
@@ -24,15 +24,6 @@ impl From<Type> for Dirs {
             Type::Project => Dirs::Projects,
             Type::Template => Dirs::Templates,
             Type::Tag => Dirs::Tags,
-        }
-    }
-}
-
-impl From<InitType> for Dirs {
-    fn from(item: InitType) -> Self {
-        match item {
-            InitType::Project => Dirs::Projects,
-            InitType::Template => Dirs::Templates,
         }
     }
 }
@@ -103,41 +94,20 @@ fn overwrite_config() -> Result<()> {
     Ok(())
 }
 
-fn overwrite(list: &Vec<SetupOverwrite>) -> Result<()> {
-    Ok(for item in list {
-        match item {
-            SetupOverwrite::Config => overwrite_config()?,
-
-            SetupOverwrite::Projects => overwrite_dir(Dirs::Projects)?,
-            SetupOverwrite::Templates => overwrite_dir(Dirs::Templates)?,
-            SetupOverwrite::Tags => overwrite_dir(Dirs::Tags)?,
-            SetupOverwrite::Obj => overwrite_dir(Dirs::Obj)?,
-
-            SetupOverwrite::Data => {
-                overwrite_dir(Dirs::Projects)?;
-                overwrite_dir(Dirs::Templates)?;
-                overwrite_dir(Dirs::Tags)?;
-                overwrite_dir(Dirs::Obj)?;
-            }
-
-            SetupOverwrite::All => {
-                overwrite_config()?;
-
-                overwrite_dir(Dirs::Projects)?;
-                overwrite_dir(Dirs::Templates)?;
-                overwrite_dir(Dirs::Tags)?;
-                overwrite_dir(Dirs::Obj)?;
-            }
-        }
-    })
-}
-
 /// Initializes all prerequisites for `wut` to function
 pub fn setup(args: &SetupArgs) -> Result<()> {
-    // overwrite necessary files
-    overwrite(&args.overwrite)?;
+    // TODO
+    if args.all {}
 
-    // TODO improve the setup, with better error handling
+    if args.obj { overwrite_dir(Dirs::Obj)?; }
+    // TODO
+    if args.data {}
+    if args.projects { overwrite_dir(Dirs::Projects)?; }
+    if args.templates { overwrite_dir(Dirs::Templates)?; }
+    if args.tags { overwrite_dir(Dirs::Tags)?; }
+
+    if args.config { overwrite_config()?; }
+
 
     Ok(())
 }
