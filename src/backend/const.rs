@@ -22,7 +22,7 @@ impl Dirs {
         Ok(HashMap::from([
             (Dirs::Wut, home.join(".wut")),
             (Dirs::Config, home.join(".config/wut")),
-            (Dirs::Data, home.join(".wut/data"))
+            (Dirs::Data, home.join(".wut/data")),
         ]))
     }
 }

@@ -1,7 +1,7 @@
 mod backend;
 mod cli;
 
-use crate::backend::{Dirs, init};
+use crate::backend::{init, Dirs};
 use crate::cli::{Cli, Commands};
 use anyhow::Result;
 use clap::Parser;

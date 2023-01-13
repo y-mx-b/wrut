@@ -1,5 +1,5 @@
-use crate::cli::subcommands::InitArgs;
 use crate::backend::{Dirs, WutError};
+use crate::cli::subcommands::InitArgs;
 use log::info;
 use std::fs;
 
@@ -30,7 +30,7 @@ pub fn init(args: &InitArgs) -> Result<(), WutError> {
     }
 
     if exists.len() != 0 {
-       // err if dirs already exist 
+        // err if dirs already exist
         Err(WutError::InitDirAlreadyExists(exists))
     } else {
         // create dirs
@@ -41,5 +41,4 @@ pub fn init(args: &InitArgs) -> Result<(), WutError> {
 
         Ok(())
     }
-
 }
