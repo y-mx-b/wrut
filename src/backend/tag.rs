@@ -21,7 +21,7 @@ impl Tag {
     /// If the provided tag does not exist, this function will create a new tag directory under
     /// `~/.wrut/tags`. All entries in `templates` and `projects` will be added to their respective
     /// directories.
-    pub fn init(&self, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
+    pub fn init(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
         let tag_data_dir = dir(Dirs::Tags)?;
         let tag_dir = tag_data_dir.join(&self.name);
         let tag_templates_dir = &tag_dir.join("templates");
@@ -40,14 +40,18 @@ impl Tag {
         for template in templates {
             let template_path = &templates_dir.join(&template).canonicalize()?;
             let tag_template_symlink = &tag_templates_dir.join(&template);
-            symlink(template_path, tag_template_symlink)?;
+            if !tag_template_symlink.is_symlink() {
+                symlink(template_path, tag_template_symlink)?;
+            }
         }
 
         let projects_dir = dir(Dirs::Projects)?;
         for project in projects {
             let project_path = &projects_dir.join(&project).canonicalize()?;
             let tag_project_symlink = &tag_projects_dir.join(&project);
-            symlink(project_path, tag_project_symlink)?;
+            if !tag_project_symlink.is_symlink() {
+                symlink(project_path, tag_project_symlink)?;
+            }
         }
 
         Ok(())
@@ -69,13 +73,13 @@ impl Tag {
         Ok(std::str::from_utf8(&output.stdout)?.to_string())
     }
 
-    pub fn remove(&self, templates: &Vec<String>, projects: &Vec<String>) -> Result<()> {
+    pub fn remove(&self, templates: &Vec<&str>, projects: &Vec<&str>) -> Result<()> {
         if templates.len() == 0 && projects.len() == 0 {
             unregister(Type::Tag, &self.name)
         } else {
             let tag_templates_dir = dir(Dirs::Tags)?.join(&self.name).join("templates");
             let tag_projects_dir = dir(Dirs::Tags)?.join(&self.name).join("projects");
-            
+
             for template in templates {
                 let template_link = tag_templates_dir.join(template);
                 if template_link.is_symlink() {
