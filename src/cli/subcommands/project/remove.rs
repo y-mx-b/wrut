@@ -5,7 +5,7 @@ use wrut::Type;
 #[derive(Args, Debug)]
 pub struct RemoveArgs {
     /// The project to delete.
-    #[clap(long, short, hide_possible_values = true)]
-    #[clap(value_parser = PossibleValuesParser::new(get_values(Type::Project)))]
+    #[clap(hide_possible_values = true,
+        value_parser = PossibleValuesParser::new(get_values(Type::Project)))]
     pub project: String,
 }

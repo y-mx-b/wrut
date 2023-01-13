@@ -5,6 +5,8 @@ use std::io::Write;
 use std::os::unix::fs::symlink;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
+use std::collections::HashSet;
+use core::option::Iter;
 
 pub fn init_template(dir: PathBuf, name: &Option<String>) -> Result<()> {
     // register template
@@ -41,14 +43,7 @@ pub fn init_project(
         .into_iter();
     let template_config = Config::from_file(template_dir.join(".wut.toml"))?;
     // traverse template directory
-    for entry in walker.filter_entry(|e| {
-        // check template config firwt
-        !ignore_dir(e, &template_config.template.ignore_dirs)
-            || !ignore_file(e, &template_config.template.ignore_files)
-        // check global config
-            || !ignore_dir(e, &config.template.ignore_dirs)
-            || !ignore_file(e, &config.template.ignore_files)
-    }) {
+    for entry in walker.filter_entry(|e| !ignore(e, &config, &template_config)) {
         // source file/directory
         let source = entry?.path().canonicalize()?;
         // path to copy source to
@@ -66,36 +61,55 @@ pub fn init_project(
     Ok(())
 }
 
-fn ignore_dir(entry: &DirEntry, dirs: &Vec<String>) -> bool {
-    let mut b = false;
-    for dir in dirs.iter() {
-        b = entry.path().is_dir()
-            && entry
-                .file_name()
-                .to_str()
-                .map(|s| s.starts_with(dir))
-                .unwrap_or(false);
-        if b == true {
-            break;
+fn ignore(entry: &DirEntry, global_config: &Config, template_config: &Config) -> bool {
+    fn ignore_dir(entry: &DirEntry, dirs: impl Iterator<Item=String>) -> bool {
+        let mut b = false;
+        for dir in dirs {
+            b = entry.path().is_dir()
+                && entry
+                    .file_name()
+                    .to_str()
+                    .map(|s| s.starts_with(&dir))
+                    .unwrap_or(false);
+            if b == true {
+                break;
+            }
         }
+        b
     }
-    b
-}
 
-fn ignore_file(entry: &DirEntry, files: &Vec<String>) -> bool {
-    let mut b = false;
-    for file in files.iter() {
-        b = entry.path().is_file()
-            && entry
-                .file_name()
-                .to_str()
-                .map(|s| s.starts_with(file))
-                .unwrap_or(false);
-        if b == true {
-            break;
+    fn ignore_file(entry: &DirEntry, files: impl Iterator<Item=String>) -> bool {
+        let mut b = false;
+        for file in files {
+            b = entry.path().is_file()
+                && entry
+                    .file_name()
+                    .to_str()
+                    .map(|s| s.starts_with(&file))
+                    .unwrap_or(false);
+            if b == true {
+                break;
+            }
         }
+        b
     }
-    b
+
+    // merge ignore lists to reduce the number of comparisons
+    let ignore_dirs: HashSet<String> = {
+        let mut ignore_dirs = global_config.template.ignore_dirs.clone();
+        ignore_dirs.append(&mut template_config.template.ignore_dirs.clone());
+
+        ignore_dirs.into_iter().collect()
+    };
+    let ignore_files: HashSet<String> = {
+        let mut ignore_files = global_config.template.ignore_files.clone();
+        ignore_files.append(&mut template_config.template.ignore_files.clone());
+
+        ignore_files.into_iter().collect()
+    };
+
+    ignore_dir(entry, ignore_dirs.into_iter())
+    || ignore_file(entry, ignore_files.into_iter())
 }
 
 fn get_name(name: &Option<String>, dir: &PathBuf) -> Result<String> {
