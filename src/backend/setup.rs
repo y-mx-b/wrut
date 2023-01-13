@@ -1,6 +1,6 @@
-use crate::cli::subcommands::{SetupArgs, SetupOverwrite, InitType};
+use crate::backend::{config::default_config, WutError};
+use crate::cli::subcommands::{InitType, SetupArgs, SetupOverwrite};
 use crate::cli::Type;
-use crate::backend::{WutError, config::default_config};
 use anyhow::{Context, Result};
 use home::home_dir;
 use std::collections::HashMap;
@@ -82,15 +82,19 @@ pub fn file(file: Files) -> Result<PathBuf> {
 
 fn overwrite_dir(d: Dirs) -> Result<()> {
     let dir_path = dir(d)?;
-    if dir_path.is_dir() { fs::remove_dir_all(&dir_path)?; }
+    if dir_path.is_dir() {
+        fs::remove_dir_all(&dir_path)?;
+    }
     fs::create_dir(&dir_path)?;
-    
+
     Ok(())
 }
 
 fn overwrite_config() -> Result<()> {
     let config_path = file(Files::Config)?;
-    if config_path.is_file() { fs::remove_file(&config_path)?; }
+    if config_path.is_file() {
+        fs::remove_file(&config_path)?;
+    }
 
     let config_string = default_config()?;
     let mut config_file = fs::File::create(&config_path)?;
