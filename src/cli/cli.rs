@@ -14,21 +14,39 @@ pub struct Cli {
     #[command(subcommand)]
     pub type_: Option<CommandType>,
 
-    /// A configuration file [default: ~/.config/wut/config.toml]
+    /// A configuration file to use for configurations [default: ~/.config/wrut/config.toml]
     #[clap(short, long, hide_default_value = true)]
     // TODO figure out how to make this safer
-    #[clap(default_value = setup::file(setup::Files::Config).unwrap().into_os_string())]
+    #[clap(default_value = setup::file(setup::Files::Config)
+            .expect("Could not get home directory.")
+            .to_str()
+            .expect("Could not get string")
+            .to_string())]
     pub config: PathBuf,
     #[command(flatten)]
     pub verbose: Verbosity,
 
-    /// Setup directories
-    #[clap(exclusive = true, long, short, value_delimiter = ',')]
-    pub setup: Vec<SetupFlags>,
-
     /// Generate shell completions
     #[clap(exclusive = true, long, short = 'z')]
     pub sh: Option<Shell>,
+
+    /// Setup and/or restore directories to their defaults.
+    ///
+    /// Arguments are provided in the following format:
+    ///
+    /// `--setup projects,templates,config`
+    ///
+    /// Alternatively, you can use the shorter aliases:
+    ///
+    /// `--setup p,t,c`
+    #[clap(
+        exclusive = true,
+        long,
+        short,
+        value_delimiter = ',',
+        value_name = "DIRECTORIES"
+    )]
+    pub setup: Vec<SetupFlags>,
 }
 
 #[derive(Subcommand, Debug)]
