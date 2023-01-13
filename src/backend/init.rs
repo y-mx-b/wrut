@@ -45,7 +45,6 @@ fn register(type_: InitType, dir: &PathBuf, name: &String) -> Result<()> {
         std::fs::remove_file(&file)?;
     }
 
-    println!("registering symlink {:?} as {:?}", &dir, &file);
     // create the symlink
     symlink(&dir, &file).with_context(|| {
         format!(
@@ -78,13 +77,10 @@ fn init_project(template: PathBuf, dir: PathBuf) -> Result<()> {
         let dest = dir.join(&source.strip_prefix(source_dir)?);
 
         if source.is_dir() {
-            println!("directory: {}", source_dir.display());
             fs::create_dir(&dest)?;
         }
 
         if source.is_file() {
-            println!("{:?}", source);
-            println!("{:?}", &dest);
             fs::copy(&source, &dest)?;
         }
     }
