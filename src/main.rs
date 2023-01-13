@@ -1,11 +1,10 @@
-mod backend;
 mod cli;
 
-use crate::backend::{comp, setup};
-use crate::cli::Cli;
+use crate::cli::{Cli, subcommands::comp};
 use anyhow::Result;
 use clap::{CommandFactory, Parser};
 use log::info;
+use wrut::setup;
 
 fn main() -> Result<()> {
     let cli = Cli::parse();

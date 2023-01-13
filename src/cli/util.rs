@@ -1,5 +1,5 @@
-use crate::backend::list::list;
-use crate::cli::Type;
+use wrut::list::list;
+use wrut::Type;
 use clap::builder::PossibleValue;
 
 /// Returns a vector of possible values for the given type.

@@ -1,5 +1,5 @@
 use crate::cli::util::get_values;
-use crate::cli::Type;
+use wrut::Type;
 use clap::{builder::PossibleValuesParser, Args};
 
 #[derive(Args, Debug)]

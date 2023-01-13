@@ -1,19 +1,10 @@
-use crate::backend::setup;
-use crate::cli::subcommands::SetupFlag;
 use crate::cli::subcommands::{project, tag, template};
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 use clap_complete::Shell;
 use clap_verbosity_flag::Verbosity;
 use std::path::PathBuf;
-
-/// Types to operate on
-#[derive(Debug)]
-pub enum Type {
-    Project,
-    Tag,
-    Template,
-}
+use wrut::{setup, Type};
 
 ///A utility to manage project templates.
 #[derive(Parser, Debug)]
@@ -55,7 +46,7 @@ pub struct Cli {
         value_delimiter = ',',
         value_name = "DIRECTORIES"
     )]
-    pub setup: Vec<SetupFlag>,
+    pub setup: Vec<setup::SetupFlag>,
 }
 
 #[derive(Subcommand, Debug)]
