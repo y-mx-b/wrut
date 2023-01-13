@@ -6,23 +6,26 @@ use std::path::PathBuf;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum Dirs {
-    Wut,
     Config,
-    Data,
+    Projects,
+    Tags,
+    Templates,
+    Obj,
 }
 
 impl Dirs {
     pub fn dirs() -> Result<HashMap<Dirs, PathBuf>, WutError> {
-        // TODO use actual errors instead of expect
         let home;
         match home_dir() {
             Some(path) => home = path,
             None => return Err(WutError::HomeDirectoryNotFound),
         }
         Ok(HashMap::from([
-            (Dirs::Wut, home.join(".wut")),
             (Dirs::Config, home.join(".config/wut")),
-            (Dirs::Data, home.join(".wut/data")),
+            (Dirs::Projects, home.join(".wut/projects")),
+            (Dirs::Tags, home.join(".wut/tags")),
+            (Dirs::Templates, home.join(".wut/templates")),
+            (Dirs::Obj, home.join(".wut/.obj")),
         ]))
     }
 }
