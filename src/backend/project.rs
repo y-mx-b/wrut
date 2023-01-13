@@ -32,14 +32,14 @@ impl Project {
     ///
     /// If no such project exists, it will return an error.
     pub fn get(name: &str) -> Result<Self> {
-        let projects_dir = dir(Dirs::Projects)?;
-        let project = projects_dir.join(name);
+        let project = dir(Dirs::Projects)?.join(name);
+        let project_link = project.join("path").canonicalize()?;
         let name = get_name(&None, &project)?;
 
-        if project.is_symlink() {
+        if project.is_dir() {
             Ok(Project {
                 name,
-                path: project,
+                path: project_link,
             })
         } else {
             Err(WrutError::NoSuchProject(project, name))?
@@ -65,7 +65,7 @@ impl Project {
         register(Type::Project, &self.path, &self.name)?;
 
         // get full template directory, initialize directory walker
-        let template_dir = dir(Dirs::Templates)?.join(template).canonicalize()?;
+        let template_dir = dir(Dirs::Templates)?.join(template).join("path").canonicalize()?;
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)
