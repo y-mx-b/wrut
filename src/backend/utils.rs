@@ -1,10 +1,10 @@
-use std::path::PathBuf;
-use anyhow::{Result, Context};
-use crate::{WrutError, Type, config::Config};
 use crate::setup::dir;
-use std::os::unix::fs::symlink;
-use walkdir::DirEntry;
+use crate::{config::Config, Type, WrutError};
+use anyhow::{Context, Result};
 use std::collections::HashSet;
+use std::os::unix::fs::symlink;
+use std::path::PathBuf;
+use walkdir::DirEntry;
 
 /// Acquire the name to use. If `name` is `None`, the name of the directory provided by `dir` will
 /// be used.

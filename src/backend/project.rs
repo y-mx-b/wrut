@@ -1,11 +1,11 @@
+use crate::backend::utils::{get_name, ignore, register, unregister};
+use crate::list::list;
 use crate::setup::{dir, Dirs};
-use crate::{Type, WrutError, config::Config};
+use crate::{config::Config, Type, WrutError};
 use anyhow::Result;
 use std::env::current_dir;
 use std::path::PathBuf;
 use walkdir::WalkDir;
-use crate::backend::utils::{unregister, get_name, register, ignore};
-use crate::list::list;
 
 /// A struct representing a `wrut` project.
 pub struct Project {
@@ -65,9 +65,7 @@ impl Project {
         register(Type::Project, &self.path, &self.name)?;
 
         // get full template directory, initialize directory walker
-        let template_dir = dir(Dirs::Templates)?
-            .join(template)
-            .canonicalize()?;
+        let template_dir = dir(Dirs::Templates)?.join(template).canonicalize()?;
         let walker = WalkDir::new(&template_dir)
             .min_depth(1)
             .follow_links(true)

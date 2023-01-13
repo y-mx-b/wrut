@@ -1,20 +1,17 @@
 pub mod config;
 mod error;
-pub mod init;
 pub mod list;
-pub mod remove;
 pub mod setup;
 
-pub use error::*;
-
 mod project;
-mod template;
 mod tag;
+mod template;
 mod utils;
 
-pub use project::*;
-pub use template::*;
-pub use tag::*;
+pub use error::WrutError;
+pub use project::Project;
+pub use tag::Tag;
+pub use template::Template;
 
 /// Types to operate on
 #[derive(Debug)]

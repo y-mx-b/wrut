@@ -1,11 +1,10 @@
-use std::path::PathBuf;
-use anyhow::Result;
+use crate::backend::utils::{get_name, register, unregister};
 use crate::list::list;
-use crate::backend::utils::{get_name, unregister, register};
 use crate::setup::{dir, Dirs};
-use crate::{WrutError, Type};
+use crate::{config::Config, Type, WrutError};
+use anyhow::Result;
 use std::io::Write;
-use crate::config::Config;
+use std::path::PathBuf;
 
 /// A struct representing a `wrut` template.
 pub struct Template {
@@ -27,7 +26,6 @@ impl Template {
 
         Ok(Self { name, path })
     }
-
 
     /// Get an existing `Template` struct given its name.
     ///
