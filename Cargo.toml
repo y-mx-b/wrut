@@ -14,7 +14,7 @@ anyhow = "1.0"
 thiserror = "1.0"
 
 # cli
-clap-verbosity-flag = "1.0"
+clap-verbosity-flag = "2.0"
 log = "0.4"
 clap_complete = "4.0"
 termion = "2.0"
