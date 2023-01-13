@@ -66,12 +66,7 @@ impl Project {
         register(Type::Project, &self.path, &self.name)?;
 
         // add tags to the project
-        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
-        for tag in tags {
-            let tag_dir = dir(Dirs::Tags)?.join(&tag);
-            symlink(&tag_dir, project_tags_dir.join(&tag))?;
-            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
-        }
+        self.add_tags(tags)?;
 
         // get full template directory, initialize directory walker
         let template_dir = dir(Dirs::Templates)?.join(template).join("path").canonicalize()?;
@@ -115,6 +110,18 @@ impl Project {
 
         // call normal init
         self.init(template, tags, config)
+    }
+
+    /// Add tags to a project.
+    pub fn add_tags(&self, tags: &Vec<String>) -> Result<()> { 
+        let project_tags_dir = dir(Dirs::Projects)?.join(&self.name).join("tags");
+        for tag in tags {
+            let tag_dir = dir(Dirs::Tags)?.join(&tag);
+            symlink(&tag_dir, project_tags_dir.join(&tag))?;
+            Tag::from(&tag).init(&vec![], &vec![&self.name])?;
+        }
+
+        Ok(())
     }
 
     /// Remove the given project.
