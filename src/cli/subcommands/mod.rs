@@ -1,5 +1,5 @@
-mod init;
+mod setup;
 mod list;
 
-pub use init::*;
+pub use setup::*;
 pub use list::*;

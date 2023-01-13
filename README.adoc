@@ -26,7 +26,7 @@ toc::[]
 
 == Structure
 
-The `wut init` command will initialize two directories: `~/.wut` and `~/.config/wut`.
+The `wut setup` command will initialize two directories: `~/.wut` and `~/.config/wut`.
 The `~/.wut` directory is used to store application data (also referred to as the "data 
 directory") and the `~/.config/wut` directory is used to store configuration data (also
 referred to as the "configuration directory," or just the "config directory").

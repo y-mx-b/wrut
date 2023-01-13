@@ -1,4 +1,4 @@
-use crate::cli::subcommands::{InitArgs, ListArgs};
+use crate::cli::subcommands::{SetupArgs, ListArgs};
 use clap::{Parser, Subcommand, ValueEnum};
 use clap_verbosity_flag::Verbosity;
 
@@ -20,7 +20,7 @@ pub enum Commands {
     /// List all items of the given type
     List(ListArgs),
     /// Initialize data/config directories
-    Init(InitArgs),
+    Setup(SetupArgs),
 }
 
 /// Types to operate on
