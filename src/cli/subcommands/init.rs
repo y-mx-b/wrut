@@ -29,6 +29,7 @@ pub struct InitArgs {
     pub template: Option<String>,
 }
 
+// TODO figure out how to remove this, it's redundant and annoying
 /// The types allowed to be initialized from directories
 #[derive(ValueEnum, Debug, PartialEq, Eq, Clone, Copy)]
 pub enum InitType {
