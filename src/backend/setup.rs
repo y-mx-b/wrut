@@ -1,12 +1,12 @@
-use crate::backend::{WutError, config::config};
+use crate::backend::{config::config, WutError};
 use crate::cli::subcommands::SetupArgs;
-use crate::cli::{Type, subcommands::InitType};
+use crate::cli::{subcommands::InitType, Type};
 use anyhow::{Context, Result};
 use home::home_dir;
 use std::collections::HashMap;
 use std::fs;
-use std::path::PathBuf;
 use std::io::Write;
+use std::path::PathBuf;
 
 /// Each variant refers to a specific directory required for `wut` to function
 #[derive(Hash, Eq, PartialEq, Debug)]
@@ -56,9 +56,10 @@ pub enum Files {
 
 pub fn files() -> Result<HashMap<Files, PathBuf>> {
     let home = home_dir().ok_or(WutError::HomeDirectoryNotFound)?;
-    Ok(HashMap::from([
-        (Files::Config, home.join(".config/wut/config.toml")),
-    ]))
+    Ok(HashMap::from([(
+        Files::Config,
+        home.join(".config/wut/config.toml"),
+    )]))
 }
 
 /// Initializes all prerequisites for `wut` to function
