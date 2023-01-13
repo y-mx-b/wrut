@@ -22,7 +22,7 @@ pub enum Command {
     #[clap(alias = "n")]
     New(NewArgs),
 
-    /// Deregister and/or delete the given project.
+    /// Unregister and/or delete the given project.
     #[clap(alias = "rm")]
     Remove(RemoveArgs),
 }
