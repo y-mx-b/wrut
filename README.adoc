@@ -1,0 +1,93 @@
+= wut
+:toc: macro
+:toc-title: 
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:warning-caption: :warning:
+endif::[]
+
+A utility to manage project templates.
+
+NOTE: This document does not reflect the current state of the project, which is undergoing a complete rewrite.
+
+[discrete]
+== Table of Contents 
+
+toc::[]
+
+== Feature Overview
+
+* Project template creation and management.
+* Project creation and management.
+* Macro expansion when creating new projects from existing templates.
+* Tags to better organize and filter templates and projects.
+
+== Structure
+
+The `wut init` command will initialize two directories: `~/.wut` and `~/.config/wut`.
+The `~/.wut` directory is used to store application data (also referred to as the "data 
+directory") and the `~/.config/wut` directory is used to store configuration data (also
+referred to as the "configuration directory," or just the "config directory").
+
+=== Data Storage 
+
+The data directory contains the `templates`, `projects`, `tags`, and `.obj` subdirectories.
+The `.obj` directory is used by `wut` to store internal representations of templates for 
+faster project generation. The other three are used to store data regarding templates,
+projects, and tags respectively.
+
+The `templates` and `projects` directories contain symbolic links to actual template or project
+directories. The `tags` directory is a little more complex, in that it stores directories named
+after each tag, and each of these directories contains a `templates` and `projects` directory,
+which each contain an empty file named after the appropriate template/project.
+
+Example `~/.wut` directory structure:
+[source,sh]
+----
+.wut
+├── projects
+│   ├── Essay         # symlink; could point to ~/foo/bar, doesn't matter
+│   └── wut           # file name and real path are considered separately
+├── tags
+│   ├── Programming 
+│   │   ├── projects
+│   │   │   └── wut
+│   │   └── templates
+│   │       └── Rust
+│   └── Writing
+│       ├── projects
+│       │   └── Essay
+│       └── templates
+│           └── LaTeX
+└── templates
+    ├── Rust          # symlink; same as with projects
+    └── LaTeX
+----
+
+=== Configuration
+
+WARNING: Not yet implemented.
+
+Configuration files are stored in the `~/.config/wut` configuration directory.
+
+== Command-Line Usage
+
+You can run `wut --help` to get a short help message.
+
+You can also run `wut <COMMAND> --help` to get more detailed information about a given
+command.
+
+=== Basic Template Usage
+
+=== Basic Project Generation
+
+WARNING: Not yet implemented.
+
+=== Macros 
+
+WARNING: Not yet implemented.
+
+=== Tags
+
