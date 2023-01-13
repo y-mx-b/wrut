@@ -13,6 +13,10 @@ pub fn remove_template(name: &String) -> Result<()> {
     // TODO remove `.wrut.toml` file as well
 }
 
+pub fn remove_tag(name: &String) -> Result<()> {
+    unregister(Type::Tag, name)
+}
+
 /// Delete the symlink to a project/template or delete a tag directory.
 fn unregister(type_: Type, name: &String) -> Result<()> {
     let target = setup::dir(type_.into())?.join(name);
