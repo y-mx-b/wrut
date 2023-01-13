@@ -10,12 +10,19 @@ pub struct CommandParser {
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
+    /// List projects.
     #[clap(alias = "ls")]
     List,
+
+    /// Initialize and register a new project in the current directory.
     #[clap(alias = "i")]
     Init(InitArgs),
+
+    /// Create and register a new project with a given name.
     #[clap(alias = "n")]
     New(NewArgs),
+
+    /// Deregister and/or delete the given project.
     #[clap(alias = "rm")]
     Remove(RemoveArgs),
 }

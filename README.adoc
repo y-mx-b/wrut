@@ -24,24 +24,28 @@ toc::[]
 * Macro expansion when creating new projects from existing templates.
 * Tags to better organize and filter templates and projects.
 
-== Structure
+== Setup
 
-The `wrut setup` command will initialize two directories: `~/.wrut` and `~/.config/wrut`.
-The `~/.wrut` directory is used to store application data (also referred to as the "data 
-directory") and the `~/.config/wrut` directory is used to store configuration data (also
-referred to as the "configuration directory," or just the "config directory").
+The `wrut --setup a` command will initialize two directories: `~/.wrut` and
+`~/.config/wrut`. The `~/.wrut` directory is used to store application data
+(also referred to as the "data directory") and the `~/.config/wrut` directory
+is used to store configuration data (also referred to as the "configuration
+directory," or just the "config directory").
 
-=== Data Storage 
+See `wrut --help` for more information about the `--setup` command.
 
-The data directory contains the `templates`, `projects`, `tags`, and `.obj` subdirectories.
-The `.obj` directory is used by `wrut` to store internal representations of templates for 
-faster project generation. The other three are used to store data regarding templates,
-projects, and tags respectively.
+== Data Storage 
 
-The `templates` and `projects` directories contain symbolic links to actual template or project
-directories. The `tags` directory is a little more complex, in that it stores directories named
-after each tag, and each of these directories contains a `templates` and `projects` directory,
-which each contain an empty file named after the appropriate template/project.
+The data directory contains the `templates`, `projects`, `tags`, and `.obj`
+subdirectories. The `.obj` directory is used by `wrut` to store internal
+representations of templates for faster project generation. The other three are
+used to store data regarding templates, projects, and tags respectively.
+
+The `templates` and `projects` directories contain symbolic links to actual
+template or project directories. The `tags` directory is a little more complex,
+in that it stores directories named after each tag, and each of these
+directories contains a `templates` and `projects` directory, which each contain
+an empty file named after the appropriate template/project.
 
 Example `~/.wrut` directory structure:
 [source,sh]
@@ -74,10 +78,10 @@ Configuration files are stored in the `~/.config/wrut` configuration directory.
 
 == Command-Line Usage
 
-You can run `wrut --help` to get a short help message.
+You can run `wrut --help` to get the full help message.
 
-You can also run `wrut <COMMAND> --help` to get more detailed information about a given
-command.
+You can also run `wrut <TYPE> <COMMAND> --help` to get more detailed
+information about a given command.
 
 === Basic Template Usage
 
