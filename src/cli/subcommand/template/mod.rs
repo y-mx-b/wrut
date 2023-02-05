@@ -1,7 +1,7 @@
+use crate::utils;
 use clap::{Args, Subcommand};
 use std::env::current_dir;
 use wrut::WrutError;
-use crate::utils;
 
 #[derive(Subcommand)]
 pub enum TemplateCommand {
@@ -28,4 +28,3 @@ impl TemplateCommand {
         }
     }
 }
-

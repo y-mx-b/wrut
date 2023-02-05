@@ -1,6 +1,6 @@
+use std::ffi::OsString;
 use std::path::PathBuf;
 use thiserror::Error;
-use std::ffi::OsString;
 
 #[derive(Error, Debug)]
 pub enum WrutError {

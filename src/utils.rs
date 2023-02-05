@@ -1,6 +1,6 @@
+use std::env::current_dir;
 use std::path::PathBuf;
 use wrut::WrutError;
-use std::env::current_dir;
 
 pub fn check_path(p: Option<PathBuf>) -> Result<PathBuf, WrutError> {
     let path = p.unwrap_or(current_dir()?).canonicalize()?;
@@ -15,7 +15,9 @@ pub fn check_name(n: Option<String>, p: &PathBuf) -> Result<String, WrutError> {
     match n {
         Some(str) => Ok(str),
         None => {
-            let dir_name = p.file_name().expect("canonicalized path and check if directory");
+            let dir_name = p
+                .file_name()
+                .expect("canonicalized path and check if directory");
             if let Some(str) = dir_name.to_str() {
                 Ok(str.to_string())
             } else {

@@ -1,7 +1,7 @@
 pub mod subcommand;
 
-use crate::cli::subcommand::{template::TemplateCommand, SubcommandParser};
-use clap::{Parser, Subcommand};
+use crate::cli::subcommand::CommandType;
+use clap::Parser;
 use clap_verbosity_flag::Verbosity;
 use wrut::WrutError;
 
@@ -16,18 +16,5 @@ pub struct Cli {
 impl Cli {
     pub fn run(self) -> Result<(), WrutError> {
         self.command_type.run()
-    }
-}
-
-#[derive(Subcommand)]
-pub enum CommandType {
-    Template(SubcommandParser<TemplateCommand>),
-}
-
-impl CommandType {
-    pub fn run(self) -> Result<(), WrutError> {
-        match self {
-            CommandType::Template(parser) => parser.command.run(),
-        }
     }
 }
